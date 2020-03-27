@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bergen ByParaply</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Open Sans';
+        }
+        #mapid {
+            width: 100vw;
+            height: 100vh;
+        }
+        #selectedLocation {
+            visibility: hidden;
+            position: absolute;
+            bottom: 0;
+            width: 90vw;
+            max-width: 700px;
+            left: 50%;
+            transform: translate(-50%);
+            background-color: aliceblue;
+            z-index: 999;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 30px;
+        }
+
+        .locationHeader {
+            margin-bottom: 0;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: xx-large;
+        }
+        .locationDetails {
+            flex-direction: column;
+            font-size: large;
+        }
+        button {
+          color: #fff;
+          text-transform: uppercase;
+          text-decoration: none;
+          background: #60a3bc;
+          padding: 20px;
+          border-radius: 50px;
+          display: inline-block;
+          border: none;
+          transition: all 0.4s ease 0s;
+          font-size: 15px;
+        }
+        button:hover {
+          text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.6);
+          -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+          -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+          transition: all 0.4s ease 0s;
+          font-weight: bold;
+        }
+        .btnDeactivated {
+          background: none;
+          border: 2px solid black;
+          color: black;
+        }
+    </style>
+</head>
+<body>
+    <main id="selectedLocation">
+
+    </main>
+    <div id="mapid"></div>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+
+<script>
+const selectedLocationDom = document.getElementById('selectedLocation');
+const mymap = L.map('mapid').setView([60.38858, 5.329399], 13);
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoibWF0aGlhc2g5OCIsImEiOiJjamhycm9oc3owNHRpMzZvMWF6MWt0d2M0In0.bWTSABuuRPEcyzEqAR7Hqw'
+}).addTo(mymap);
+
+const umbrellaIcon = L.icon({
+  iconUrl: './umbrella.svg',
+  iconSize: [48, 48], // size of the icon
+});
+const selfLocationIcon = L.icon({
+  iconUrl: './placeholder.svg',
+  iconSize: [48, 48], // size of the icon
+});
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+const locations = [
+  {
+    "id": 0,
+    "latlng": {
+      "lat": 60.37523960256104,
+      "lng": 5.339913368225098
+    },
+    "name": "Location0",
+    "totalSpots": 32,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 1,
+    "latlng": {
+      "lat": 60.369209019375596,
+      "lng": 5.350255966186524
+    },
+    "name": "Location1",
+    "totalSpots": 36,
+    "availableUmbrellas": 1
+  },
+  {
+    "id": 2,
+    "latlng": {
+      "lat": 60.3817807541373,
+      "lng": 5.332853794097901
+    },
+    "name": "Location2",
+    "totalSpots": 18,
+    "availableUmbrellas": 9
+  },
+  {
+    "id": 3,
+    "latlng": {
+      "lat": 60.38153419218883,
+      "lng": 5.331646800041199
+    },
+    "name": "Location3",
+    "totalSpots": 23,
+    "availableUmbrellas": 20
+  },
+  {
+    "id": 4,
+    "latlng": {
+      "lat": 60.38103841143868,
+      "lng": 5.33189356327057
+    },
+    "name": "Location4",
+    "totalSpots": 19,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 5,
+    "latlng": {
+      "lat": 60.38160842609011,
+      "lng": 5.329785346984864
+    },
+    "name": "Location5",
+    "totalSpots": 22,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 6,
+    "latlng": {
+      "lat": 60.382088291156194,
+      "lng": 5.324909090995789
+    },
+    "name": "Location6",
+    "totalSpots": 29,
+    "availableUmbrellas": 7
+  },
+  {
+    "id": 7,
+    "latlng": {
+      "lat": 60.384781767164455,
+      "lng": 5.331035256385803
+    },
+    "name": "Location7",
+    "totalSpots": 12,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 8,
+    "latlng": {
+      "lat": 60.38376643770014,
+      "lng": 5.3317487239837655
+    },
+    "name": "Location8",
+    "totalSpots": 44,
+    "availableUmbrellas": 23
+  },
+  {
+    "id": 9,
+    "latlng": {
+      "lat": 60.38441593408612,
+      "lng": 5.329517126083375
+    },
+    "name": "Location9",
+    "totalSpots": 26,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 10,
+    "latlng": {
+      "lat": 60.3850017952253,
+      "lng": 5.328701734542847
+    },
+    "name": "Realfagsbygget",
+    "totalSpots": 21,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 11,
+    "latlng": {
+      "lat": 60.38636434553252,
+      "lng": 5.331437587738038
+    },
+    "name": "St. Jakobs plass",
+    "totalSpots": 30,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 12,
+    "latlng": {
+      "lat": 60.387880579635755,
+      "lng": 5.33388376235962
+    },
+    "name": "Bergen Togstasjon",
+    "totalSpots": 48,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 13,
+    "latlng": {
+      "lat": 60.39021045913416,
+      "lng": 5.332515835762024
+    },
+    "name": "Location13",
+    "totalSpots": 22,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 14,
+    "latlng": {
+      "lat": 60.38840011214518,
+      "lng": 5.324297547340393
+    },
+    "name": "SV Fakultet",
+    "totalSpots": 14,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 15,
+    "latlng": {
+      "lat": 60.388307339090694,
+      "lng": 5.323455333709718
+    },
+    "name": "Diskuterbar",
+    "totalSpots": 10,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 16,
+    "latlng": {
+      "lat": 60.387814312138,
+      "lng": 5.321663618087769
+    },
+    "name": "Universitetsaulaen",
+    "totalSpots": 17,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 17,
+    "latlng": {
+      "lat": 60.38840541345459,
+      "lng": 5.318906307220459
+    },
+    "name": "Sydneshaugen skole",
+    "totalSpots": 33,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 18,
+    "latlng": {
+      "lat": 60.39004612725057,
+      "lng": 5.314968824386598
+    },
+    "name": "Location18",
+    "totalSpots": 32,
+    "availableUmbrellas": 14
+  },
+  {
+    "id": 19,
+    "latlng": {
+      "lat": 60.39242885839109,
+      "lng": 5.320150852203369
+    },
+    "name": "Location19",
+    "totalSpots": 11,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 20,
+    "latlng": {
+      "lat": 60.39444834491852,
+      "lng": 5.324281454086305
+    },
+    "name": "Location20",
+    "totalSpots": 16,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 21,
+    "latlng": {
+      "lat": 60.399324278907024,
+      "lng": 5.305114388465882
+    },
+    "name": "Location21",
+    "totalSpots": 39,
+    "availableUmbrellas": 10
+  },
+  {
+    "id": 22,
+    "latlng": {
+      "lat": 60.39600130315663,
+      "lng": 5.307737588882446
+    },
+    "name": "Location22",
+    "totalSpots": 45,
+    "availableUmbrellas": 31
+  },
+  {
+    "id": 23,
+    "latlng": {
+      "lat": 60.39882346934388,
+      "lng": 5.323841571807861
+    },
+    "name": "Location23",
+    "totalSpots": 20,
+    "availableUmbrellas": 0
+  }
+];
+
+class Location {
+    constructor (id, latlng, name) {
+        this.id = id;
+        this.latlng = latlng,
+        this.name = name;
+        this.totalSpots = getRandomInt(10, 50);
+        this.availableUmbrellas = getRandomInt(0, this.availableUmbrellas);
+    }
+}
+
+const myLocation = L.latLng({lat: 60.3882207, lng: 5.32443881});
+
+let selectedMarker = undefined;
+
+function renderSelectedMarker(locationMarker) {
+    const location = locationMarker.data;
+    distance = Math.round(locationMarker.getLatLng().distanceTo(myLocation));
+    selectedLocationDom.style.visibility = "visible";
+    selectedLocationDom.innerHTML = `
+        <h3 class="locationHeader">${location.name}</h3>
+        <p class="locationDetails">
+            ${distance}m unna
+            <br>
+            ${location.availableUmbrellas} av ${location.totalSpots} ledige paraplyer.
+        </p>
+        <button class="${distance > 100 ? "btnDeactivated" : "btnActivated"}">${distance > 100 ? "For langt unna" : "Lås opp paraply"}</button>
+    `;
+}
+
+function onMapClick(e) {
+    console.log(e.latlng);
+}
+
+function onClickMarker(e) {
+    const targetMarker = e.target;
+    
+    renderSelectedMarker(targetMarker);
+}
+
+function placeSelf() {
+  L.marker(myLocation, {icon: selfLocationIcon, zIndexOffset: 100}).addTo(mymap);
+}
+
+locations.forEach(location => {
+    placeLocation(location);
+});
+
+function placeLocation(location) {
+    const marker = L.marker([location.latlng.lat, location.latlng.lng], {icon: umbrellaIcon}).addTo(mymap);
+    marker.on('click', onClickMarker);
+    marker.data = location;
+}
+
+mymap.on('click', onMapClick);
+placeSelf();
+</script>
+</body>
+</html>
+
