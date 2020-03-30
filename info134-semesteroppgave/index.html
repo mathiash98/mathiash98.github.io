@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFO134 Semesteroppgave</title>
+    
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="./script/dataset/Dataset.js"></script>
+    <script src="./script/dataset/Befolkning.js"></script>
+    <script src="./script/dataset/Sysselsatte.js"></script>
+    <script src="./script/dataset/Utdanning.js"></script>
+    <script src="./script/main.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <nav id="mainNav" class="nav">
+            <ul>
+                <li><a href="/#introduksjon">Introduksjon</a></li>
+                <li><a href="/#oversikt">Oversikt</a></li>
+                <li><a href="/#detaljer">Detaljer</a></li>
+                <li><a href="/#sammenligning">Sammenligning</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main">
+
+        <!-- ========================== Introduksjon ==================================== -->
+        <div id="introduksjon" class="mainContainer visible">
+            <h1>Introduksjon</h1>
+            <p>Dette er en side som viser info om kommuner. Data som vises er:
+                <ul>
+                    <li>Navn</li>
+                    <li>Kommunenummer</li>
+                    <li>Befolkning</li>
+                    <li>Sysselsetting</li>
+                    <li>Utdanningsnivå</li>
+                </ul> 
+                Dataene er modifisert og hentet fra <a href="https://www.ssb.no/">https://www.ssb.no/</a>, de kan inneholde feil, så sjekk opp info på egen hånd.</p>
+
+            <h3>Oppbygging av side</h3>
+            </div>
+            
+        <!-- ========================== Oversikt ==================================== -->
+        <div id="oversikt" class="mainContainer hidden">
+            <h1>Oversikt</h1>
+            <p>Alle kommuner med navn, kommunenummer og siste måling av total befolkning.</p>
+            <table id="oversiktTable">
+                <thead>
+                    <th>Navn</th>
+                    <th>Kommunenummer</th>
+                    <th>Befolkning</th>
+                </thead>
+                <tbody id="oversiktTableBody">
+                    
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- ========================== Detaljer ==================================== -->
+        <div id="detaljer" class="mainContainer hidden">
+            <h1>Detaljer</h1>
+            <h3>Søk etter kommune, med kommunenummer eller navn.</h3>
+            <form id="searchForm">
+                <input type="text" name="search" id="searchInput" placeholder="Søk..." autocomplete="off">
+                <input type="submit" id="searchBtn" value="Søk">
+                <ul id="searchResult"></ul>
+            </form>
+
+            <div id="detaljerKommuneData">
+
+            </div>
+        </div>
+        
+        <!-- ========================== Sammenligning ==================================== -->
+        <div id="sammenligning" class="mainContainer hidden">
+            <h1>Sammenligning</h1>
+            <p>Skriv inn to kommuner (kommunenummer eller kommunenavn) og få en sammenligning over sysselsetting.</p>
+            <form id="sammenligningSearchForm">
+                Kommune 1: <input type="text" name="search1" id="searchInput1" placeholder="Kommune">
+                <br>
+                Kommune 2: <input type="text" name="search2" id="searchInput2" placeholder="Kommune">
+                <br>
+                <input type="submit" id="searchBtn" value="Søk">
+            </form>
+
+            <div id="compareContainer">
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Semesteroppgave INFO134 - Universitet i Bergen vår 2019</p>
+    </footer>
+</body>
+</html>

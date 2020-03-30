@@ -1,0 +1,180 @@
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+/* ======================= Navbar ======================= */
+header {
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #483d3f;
+}
+
+.nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    list-style: none;
+}
+
+.nav li a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #f4ebd9;
+    padding: 0.1vw;
+    border-radius: 1vw;
+    padding: 1vw;
+    transition: all 0.2s ease;
+}
+
+.nav li a:hover {
+    color: white;
+}
+/* ======================= Navbar-end ======================= */
+
+
+/* ======================= Footer ======================= */
+footer {
+    display: flex;
+    height: 60px;
+    width: 100%;
+    background-color: #483d3f;
+    color: #f4ebd9;
+    justify-content: center;
+}
+/* ======================= Footer-end ======================= */
+
+
+/* ======================= Main ======================= */
+main {
+    flex-grow: 1;
+}
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+}
+
+.mainContainer {
+    max-width: 900px;
+    margin: auto;
+    padding: 1vw;
+    margin-top: 1vh;
+}
+/* ======================= Main-end ======================= */
+
+/* ======================= Oversikt ======================= */
+#oversiktTableBody td:hover {
+    cursor: pointer;
+}
+/* ======================= Oversikt-end ======================= */
+
+/* ======================= Detaljer ======================= */
+#searchinput {
+    width: 100%;
+}
+
+#searchForm {
+    max-width: 200px;
+}
+
+#searchResult {
+    list-style: none;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#searchResult li {
+    font-weight: 600;
+    padding: 0.2vw;
+    color: #058ed9;
+    margin-bottom: 3px;
+}
+
+#searchResult li:hover {
+    cursor: pointer;
+}
+/* ======================= Detaljer-end ======================= */
+
+
+/* ======================= Tables ======================= */
+@media only screen and (max-width: 899px) {
+    .tablesContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .tablesContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+    .table {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .table thead tr {
+        display: flex;
+        flex-direction: column;
+    }
+    .table tbody {
+        display: flex;
+        flex-direction: row;
+    }
+    .table tbody tr {
+        display: flex;
+        flex-direction: column;
+    }
+    .table th{
+        height: 25px;
+    }
+    .table td {
+        width: 60px;
+    }
+}
+
+.container {
+    text-align: center;
+}
+
+.table {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+.table tbody td{
+    border: 1px solid lightgrey;
+    padding: 3px;
+}
+
+.table tbody tr:nth-child(even){
+    background-color: #eee;
+}
+
+/* Used in comparing employement in different kommuner. */
+.larger {
+    background-color: lightgreen;
+}
+.smaller {
+    background-color: lightcoral;
+}
+/* ======================= Tables-end ======================= */
