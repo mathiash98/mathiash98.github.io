@@ -50,6 +50,10 @@ La meg prøve å visualisere med en html knapp med litt css stiler: (trykk og ho
 		0 1px 2px rgba(0,0,0,0.2),
 		inset 0 -2px 0 rgba(0,0,0,0.25),
 		inset 0 -30px 30px -30px rgba(0,0,0,0.15);
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */ 
 }
 .kjedelig:active {
     transform: translateY(4px);
