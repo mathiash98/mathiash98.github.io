@@ -34,8 +34,18 @@ Men hva gjør denne knappen så spesiell? Spør du kanskje. Da har du rett og sl
 La meg prøve å visualisere med en html knapp med litt css stiler: (trykk og hold for å se effekten)
 
 {{< rawhtml >}}
+
+<script>
+function vibrate(){
+    console.debug("Vibrate");
+    setTimeout(function(){
+        window.navigator.vibrate(50);
+    }, 150);
+}
+</script>
+
 <button class="knapp kjedelig">Kjedelig</button>
-<button class="knapp perfekt">Perfekt</button>
+<button class="knapp perfekt" onmousedown="vibrate()">Perfekt</button>
 
 <style>
 .knapp {
