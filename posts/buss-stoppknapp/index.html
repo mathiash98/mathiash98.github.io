@@ -3,24 +3,21 @@
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
 <meta name=robots content="index, follow">
-<title>Skyss Buss Stoppknapp | Mathias sin blogg</title>
+<title>Skyss Buss Stoppknapp | Mathias Haugsbø's blog</title>
 <meta name=keywords content="norsk,design,knapp">
 <meta name=description content="En hyllest til skyss osbussen sin stopp knapp">
 <meta name=author content="Mathias Haugsbø">
 <link rel=canonical href=https://mathiash98.github.io/posts/buss-stoppknapp/>
-<meta name=google-site-verification content="XYZabc">
-<meta name=yandex-verification content="XYZabc">
-<meta name=msvalidate.01 content="XYZabc">
 <link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
 <script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
-<link rel=icon href=https://mathiash98.github.io/%3Clink%20/%20abs%20url%3E>
-<link rel=icon type=image/png sizes=16x16 href=https://mathiash98.github.io/%3Clink%20/%20abs%20url%3E>
-<link rel=icon type=image/png sizes=32x32 href=https://mathiash98.github.io/%3Clink%20/%20abs%20url%3E>
-<link rel=apple-touch-icon href=https://mathiash98.github.io/%3Clink%20/%20abs%20url%3E>
-<link rel=mask-icon href=https://mathiash98.github.io/%3Clink%20/%20abs%20url%3E>
+<link rel=icon href=https://mathiash98.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=https://mathiash98.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=https://mathiash98.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=https://mathiash98.github.io/apple-icon-72x72.png>
+<link rel=mask-icon href=https://mathiash98.github.io/safari-pinned-tab.svg>
 <meta name=theme-color content="#2e2e33">
 <meta name=msapplication-TileColor content="#2e2e33">
-<meta name=generator content="Hugo 0.90.1">
+<meta name=generator content="Hugo 0.91.0">
 <noscript>
 <style>#theme-toggle,.top-link{display:none}</style>
 <style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
@@ -37,14 +34,14 @@
 <meta name=twitter:title content="Skyss Buss Stoppknapp">
 <meta name=twitter:description content="En hyllest til skyss osbussen sin stopp knapp">
 <script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":2,"name":"Posts","item":"https://mathiash98.github.io/posts/"},{"@type":"ListItem","position":3,"name":"Skyss Buss Stoppknapp","item":"https://mathiash98.github.io/posts/buss-stoppknapp/"}]}</script>
-<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Skyss Buss Stoppknapp","name":"Skyss Buss Stoppknapp","description":"En hyllest til skyss osbussen sin stopp knapp","keywords":["norsk","design","knapp"],"articleBody":"Jeg har ikke vært noe engasjert i knapper tidligere. Men det endret seg på en tur hjem til foreldrene mine på osbussen. Når stoppet nærmet seg trykket jeg som vanlig på stoppknappen. Det var rett og slett kjærlighet ved første trykk!\nLa oss begynne med et bilde av en kjedelig vanlig knapp. Denne knappen er helt ålreit:\n (Et raskt søk på punktskrift på Store Norske Leksikon (https://snl.no/punktskrift), så ser man at prikkene står for “STOP”)  Og så har vi et bilde av en perfekt stoppknapp. Denne er helt nydelig:\nMen er ikke knappene helt like da? Jo de er ganske like og oppfyller viktige krav for en stoppknapp:\n   Krav Kjedelig knapp Perfekt knapp     Synlighet ✔️ ✔️   Blindeskrift ✔️ ✔️   Lett å trykke på ✔️ ✔️   Haptic feedback ❌ ✔️    Men hva gjør denne knappen så spesiell? Spør du kanskje. Da har du rett og slett ikke prøvd denne knappen. Når man trykker på den får man umiddelbar feedback på trykkingen iform av et klikk og at man spretter litt når man har trykket langt nok. Vanskelig å forklare. Mens den normale kjedelige knappen ikke har en slik klikk, som fører til at du ikke vet hvor langt ned du må trykke for å få respons.\nLa meg prøve å visualisere med en html knapp med litt css stiler: (trykk og hold for å se effekten)\n function vibrate(){ console.debug(\"Vibrate\"); setTimeout(function(){ window.navigator.vibrate(50); }, 150); }  Kjedelig Perfekt  .knapp { border: 7px solid #F6D922; border-radius: 5px; padding: 5px 10px; margin: 8px; background-color: #C74243; color: white; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 -2px 0 rgba(0,0,0,0.25), inset 0 -30px 30px -30px rgba(0,0,0,0.15); -webkit-user-select: none; /* Chrome all / Safari all */ -moz-user-select: none; /* Firefox all */ -ms-user-select: none; /* IE 10+ */ user-select: none; /* Likely future */ } .kjedelig:active { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0), inset 0 2px 2px rgba(0,0,0,0.6), inset 0 -30px 30px -30px rgba(0,0,0,0.5), 0 2px 0 rgba(255,255,255,0.5); } .perfekt:active { animation: push 0.2s; } @keyframes push{ 0% { transform: translateY(3px); } 75% { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0), inset 0 2px 2px rgba(0,0,0,0.6), inset 0 -30px 30px -30px rgba(0,0,0,0.5), 0 2px 0 rgba(255,255,255,0.5); } 100% {transform: translateY(3px);} }   Legg merke til hvordan den gode knappen gir en form for haptic feedback når du trykker på den. Mens den kjedelige bare synker ned til du ikke kan trykke hardere lenger.  Merker du at noe mangler når du trykker på den kjedelige knappen? Jeg lurer ihvertfall på når jeg skal slutte å trykke. Det er dette som gjør den perfekte knappen til en perfekt knapp i mine øyne.    Håper du har fått litt interesse for knapper rundt deg etter dette innlegget. Det er mye annet man kan si om brukervennlig design generelt sett. Men jeg tror jeg stopper innlegget her.\nPs. følg RSS feeden min for å få varsel neste gang jeg legger ut et innlegg.\n","wordCount":"482","inLanguage":"en","datePublished":"2021-11-28T15:03:18+01:00","dateModified":"2021-11-28T15:03:18+01:00","author":{"@type":"Person","name":"Mathias Haugsbø"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://mathiash98.github.io/posts/buss-stoppknapp/"},"publisher":{"@type":"Organization","name":"Mathias sin blogg","logo":{"@type":"ImageObject","url":"https://mathiash98.github.io/%3Clink%20/%20abs%20url%3E"}}}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Skyss Buss Stoppknapp","name":"Skyss Buss Stoppknapp","description":"En hyllest til skyss osbussen sin stopp knapp","keywords":["norsk","design","knapp"],"articleBody":"Jeg har ikke vært noe engasjert i knapper tidligere. Men det endret seg på en tur hjem til foreldrene mine på osbussen. Når stoppet nærmet seg trykket jeg som vanlig på stoppknappen. Det var rett og slett kjærlighet ved første trykk!\nLa oss begynne med et bilde av en kjedelig vanlig knapp. Denne knappen er helt ålreit:\n (Et raskt søk på punktskrift på Store Norske Leksikon (https://snl.no/punktskrift), så ser man at prikkene står for “STOP”)  Og så har vi et bilde av en perfekt stoppknapp. Denne er helt nydelig:\nMen er ikke knappene helt like da? Jo de er ganske like og oppfyller viktige krav for en stoppknapp:\n   Krav Kjedelig knapp Perfekt knapp     Synlighet ✔️ ✔️   Blindeskrift ✔️ ✔️   Lett å trykke på ✔️ ✔️   Haptic feedback ❌ ✔️    Men hva gjør denne knappen så spesiell? Spør du kanskje. Da har du rett og slett ikke prøvd denne knappen. Når man trykker på den får man umiddelbar feedback på trykkingen iform av et klikk og at man spretter litt når man har trykket langt nok. Vanskelig å forklare. Mens den normale kjedelige knappen ikke har en slik klikk, som fører til at du ikke vet hvor langt ned du må trykke for å få respons.\nLa meg prøve å visualisere med en html knapp med litt css stiler: (trykk og hold for å se effekten)\n function vibrate(){ console.debug(\"Vibrate\"); setTimeout(function(){ window.navigator.vibrate(50); }, 150); }  Kjedelig Perfekt  .knapp { border: 7px solid #F6D922; border-radius: 5px; padding: 5px 10px; margin: 8px; background-color: #C74243; color: white; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 -2px 0 rgba(0,0,0,0.25), inset 0 -30px 30px -30px rgba(0,0,0,0.15); -webkit-user-select: none; /* Chrome all / Safari all */ -moz-user-select: none; /* Firefox all */ -ms-user-select: none; /* IE 10+ */ user-select: none; /* Likely future */ } .kjedelig:active { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0), inset 0 2px 2px rgba(0,0,0,0.6), inset 0 -30px 30px -30px rgba(0,0,0,0.5), 0 2px 0 rgba(255,255,255,0.5); } .perfekt:active { animation: push 0.2s; } @keyframes push{ 0% { transform: translateY(3px); } 75% { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0), inset 0 2px 2px rgba(0,0,0,0.6), inset 0 -30px 30px -30px rgba(0,0,0,0.5), 0 2px 0 rgba(255,255,255,0.5); } 100% {transform: translateY(3px);} }   Legg merke til hvordan den gode knappen gir en form for haptic feedback når du trykker på den. Mens den kjedelige bare synker ned til du ikke kan trykke hardere lenger.  Merker du at noe mangler når du trykker på den kjedelige knappen? Jeg lurer ihvertfall på når jeg skal slutte å trykke. Det er dette som gjør den perfekte knappen til en perfekt knapp i mine øyne.    Håper du har fått litt interesse for knapper rundt deg etter dette innlegget. Det er mye annet man kan si om brukervennlig design generelt sett. Men jeg tror jeg stopper innlegget her.\nPs. følg RSS feeden min for å få varsel neste gang jeg legger ut et innlegg.\n","wordCount":"482","inLanguage":"en","datePublished":"2021-11-28T15:03:18+01:00","dateModified":"2021-11-28T15:03:18+01:00","author":{"@type":"Person","name":"Mathias Haugsbø"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://mathiash98.github.io/posts/buss-stoppknapp/"},"publisher":{"@type":"Organization","name":"Mathias Haugsbø's blog","logo":{"@type":"ImageObject","url":"https://mathiash98.github.io/favicon.ico"}}}</script>
 </head>
 <body id=top>
 <script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
 <header class=header>
 <nav class=nav>
 <div class=logo>
-<a href=https://mathiash98.github.io accesskey=h title="Mathias sin blogg (Alt + H)">Mathias sin blogg</a>
+<a href=https://mathiash98.github.io accesskey=h title="Mathias Haugsbø's blog (Alt + H)">Mathias Haugsbø's blog</a>
 <span class=logo-switches>
 <button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 </button>
@@ -147,6 +144,11 @@ En hyllest til skyss osbussen sin stopp knapp
 <li><a href=https://mathiash98.github.io/tags/knapp/>knapp</a></li>
 </ul>
 <nav class=paginav>
+<a class=prev href=https://mathiash98.github.io/posts/i-dont-read-news/>
+<span class=title>« Prev Page</span>
+<br>
+<span>I Dont Read News</span>
+</a>
 <a class=next href=https://mathiash98.github.io/posts/my-first-post/>
 <span class=title>Next Page »</span>
 <br>
@@ -171,7 +173,7 @@ En hyllest til skyss osbussen sin stopp knapp
 </article>
 </main>
 <footer class=footer>
-<span>&copy; 2021 <a href=https://mathiash98.github.io>Mathias sin blogg</a></span>
+<span>&copy; 2021 <a href=https://mathiash98.github.io>Mathias Haugsbø's blog</a></span>
 <span>
 Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
