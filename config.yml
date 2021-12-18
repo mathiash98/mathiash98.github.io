@@ -1,6 +1,6 @@
 baseURL: "https://mathiash98.github.io"
 languageCode: en-us
-title: "Mathias sin blogg"
+title: "Mathias Haugsbø's blog"
 paginate: 5
 theme: PaperMod
 
@@ -17,9 +17,8 @@ params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   title: ExampleSite
   description: "Mathias Haugsbø's blog about various stuff that interest me"
-  keywords: [Blog, Technology, Mapping]
+  keywords: [Blog, Technology, Mapping, Investing, Life]
   author: Mathias Haugsbø
-  # author: ["Me", "You"] # multiple authors
   images: ["<link or path of image for opengraph, twitter-cards>"]
   DateFormat: "2. January 2021"
   defaultTheme: auto # dark, light
@@ -41,11 +40,10 @@ params:
   assets:
     # disableHLJS: true # to disable highlight.js
     # disableFingerprinting: true
-    favicon: "<link / abs url>"
-    favicon16x16: "<link / abs url>"
-    favicon32x32: "<link / abs url>"
-    apple_touch_icon: "<link / abs url>"
-    safari_pinned_tab: "<link / abs url>"
+    favicon: "favicon.ico"
+    favicon16x16: "favicon-16x16.png"
+    favicon32x32: "favicon-32x32.png"
+    apple_touch_icon: "apple-icon-72x72.png"
 
   # profile-mode
   profileMode:
@@ -65,19 +63,21 @@ params:
   # home-info mode
   homeInfoParams:
     Title: "Hi there \U0001F44B"
-    Content: "Welcome to my blog about different stuff"
+    Content: "Welcome to my blog about different stuff that interest me, like technology, finance, life, mapping, and other random stuff. Feel free to contact me if anything is of special interest."
 
   socialIcons:
     - name: github
       url: "https://github.com/mathiash98"
+    - name: email
+      url: "mailto:mathiash98@gmail.com"
 
-  analytics:
-    google:
-      SiteVerificationTag: "XYZabc"
-    bing:
-      SiteVerificationTag: "XYZabc"
-    yandex:
-      SiteVerificationTag: "XYZabc"
+  # analytics:
+  #   google:
+  #     SiteVerificationTag: "XYZabc"
+  #   bing:
+  #     SiteVerificationTag: "XYZabc"
+  #   yandex:
+  #     SiteVerificationTag: "XYZabc"
 
   cover:
     hidden: true # hide everywhere but not in structured data

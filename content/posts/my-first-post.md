@@ -1,7 +1,7 @@
 ---
 title: "My 1st post"
 description: "Testing out my new blog"
-date: 2021-11-28T13:17:03+00:00Z
+date: 2021-11-28T13:17:03+00:00
 tags: ["general"]
 categories: ["general", "english"]
 author: "Mathias Haugsbø"
