@@ -20,7 +20,6 @@ params:
   keywords: [Blog, Technology, Mapping, Investing, Life]
   author: Mathias Haugsbø
   images: ["<link or path of image for opengraph, twitter-cards>"]
-  DateFormat: "2. January 2021"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
 
