@@ -5,6 +5,7 @@ paginate: 5
 theme: PaperMod
 
 enableRobotsTXT: true
+canonifyUrls: true
 buildDrafts: false
 buildFuture: false
 buildExpired: false
@@ -70,13 +71,13 @@ params:
     - name: email
       url: "mailto:mathiash98@gmail.com"
 
-  # analytics:
-  #   google:
-  #     SiteVerificationTag: "XYZabc"
-  #   bing:
-  #     SiteVerificationTag: "XYZabc"
-  #   yandex:
-  #     SiteVerificationTag: "XYZabc"
+  analytics:
+    google:
+      SiteVerificationTag: "2h37QsYGyC7ORebIWNt28eEJnEAUZ6SGymTQPeY1V6A"
+    # bing:
+    #   SiteVerificationTag: "XYZabc"
+    yandex:
+      SiteVerificationTag: "3ff0493bf8cbdd36"
 
   cover:
     hidden: true # hide everywhere but not in structured data
