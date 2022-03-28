@@ -96,7 +96,11 @@ out body qt;
 
 Og så hentet jeg alle hills ved å bytte ut `natural=peak` med `natural=hill`.
 
-Deretter hentet jeg alle skiløyper ved å spørre etter tagen `piste:type=*`
+Deretter hentet jeg alle skiløyper ved å spørre etter tagen `piste:type=*`. Gangveier hentet jeg med `highway=path`.
+
+Lokaliteter hentet jeg ut med å spørre etter `place=farm`, `place=hamlet`, `place=neighborhood`.
+
+- Disse dataene inneholdt et par duplikater hvor gården og nabolaget har samme navn. Disee fjernet jeg i JOSM før jeg lastet opp.
 
 Til slutt hentet jeg alle byggninger i Eidfjord med `building=*`
 
