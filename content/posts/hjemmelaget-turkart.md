@@ -1,12 +1,12 @@
 ---
 title: "Hvordan lage ditt eget turkart"
 date: 2022-02-14T21:58:00+01:00
-description: "En liten guide til hvordan designe ditt eget kart i Mapbox Studio med OpenStreetMap data"
+description: "En liten guide til hvordan designe ditt eget turkart i Mapbox Studio med OpenStreetMap data"
 tags: ["kart", "norsk"]
 categories: ["design", "maps"]
 author: "Mathias Haugsbø"
-showToc: false
-draft: true
+showToc: true
+draft: false
 ---
 
 {{< rawhtml >}}
@@ -14,6 +14,8 @@ draft: true
 <iframe width='100%' height='400px' src="https://api.mapbox.com/styles/v1/mathiash98/ckz5xaxx8001w14qig119f4jr.html?title=false&access_token=pk.eyJ1IjoibWF0aGlhc2g5OCIsImEiOiJjazh1cW4zeXIwOGplM2ZwaHBvMDlsNjBkIn0.CRNICu-ha9HWO4-G1DNuiw&zoomwheel=false#10.89/60.4183/7.2841" title="Skikart" style="border:none;"></iframe>
 
 {{< /rawhtml >}}
+
+- ^^-> Digital versjon av mitt turkart laget i Mapbox Studio med OpenStreetMap data. Dra rundt og se hvordan det kanskje ser ut i ditt område. (Jeg har bare lastet opp data for Eidfjord)
 
 - [Mapbox studio style link om du vil kopiere min stil](https://api.mapbox.com/styles/v1/mathiash98/ckz5xaxx8001w14qig119f4jr.html?title=copy&access_token=pk.eyJ1IjoibWF0aGlhc2g5OCIsImEiOiJjazh1cW4zeXIwOGplM2ZwaHBvMDlsNjBkIn0.CRNICu-ha9HWO4-G1DNuiw&zoomwheel=true&fresh=true#10.89/60.4183/7.2841)
 
@@ -43,6 +45,8 @@ Her så jeg på de aller fleste karttjeneste jeg kunne finne om det var noen som
 - [opensnowmap.org](https://www.opensnowmap.org/#map=14/7.298/60.413&b=snowmap) -> Innholdsrikt kart med infoen jeg vil vise, men litt mindre dekorativt enn mapy.cz og skrift er fortsatt ganske liten.
 
 ### Lage nyt stil i Mapbox studio:
+
+Om du liker designet jeg endte opp med er det letteste å trykke på stillinken i toppen av artikkelen og kopiere den. Deretter hopper du til `Samle data`. Og laster opp data for ditt ønskede område. Om du vil ha en rask introduksjon i Mapbox Studio kan du fortsette å lese videre.
 
 Jeg valgte å bruke Mapbox studio til å designe kartet fordi jeg har brukt det før og de har et veldig bra redigeringsverktøy hvor du kan redigere stil på egentlig absolutt alt. For spesielt interesserte så er dette mulig fordi Mapbox bruker vektorer istedenfor bilder til å tegne kart på skjermen din. Da lastes hvert element (hver bygning og vei) ned fra serveren og blir deretter rendret til skjermen din basert på stilark. Normalt lastest det ned mange små bilder som så blir satt sammen til et stort bilde, men da må bildet lages på server og stilen kan ikke endres med et tastetrykk.
 
@@ -93,3 +97,22 @@ out body qt;
 Og så hentet jeg alle hills ved å bytte ut `natural=peak` med `natural=hill`.
 
 Deretter hentet jeg alle skiløyper ved å spørre etter tagen `piste:type=*`
+
+Til slutt hentet jeg alle byggninger i Eidfjord med `building=*`
+
+Når all data er hentet inn kan jeg lagre dataene som geojson og laste opp i mapbox studio og deretter stilere det slik jeg vil.
+
+### Konvertere til bilde
+
+Mapbox har en innebygget printfunksjon som jeg brukte. Denne funksjonen finner man helt oppe til høyre i Mapbox studio ved siden av `Share`. Her ønsket jeg selvsagt maksimalt antall piksler for best printkvalitet.
+
+- Siden Mapbox har begrensning på 8000x8000px endte jeg opp med å hente ned 4 bilder på samme zoom nivå og satt de sammen med [Image Composite Editor](https://www.microsoft.com/en-us/research/product/computational-photography-applications/image-composite-editor/). Programvaren ble lagt ned for mange år siden, men man finner fortsatt installasjonsfiler. For eksempel via webarchive i denne forumposten https://docs.microsoft.com/en-us/answers/questions/252274/how-to-download-image-composite-editor-20.html
+  - Deretter redigerte jeg det ferdige bildet i paint.net til å ha det utsnittet jeg ønsket og definerte størrelse til 50x70cm.
+
+### Printe bilde
+
+Jeg sjekket ut alle nettsider jeg kunne finne som leverte print av store bilder. De fleste lå på rundt 600kr, men så fant jeg [Photowall](https://www.photowall.no/) som i tillegg støttet opplasting av bilder opp til 1GB størrelse. Her ble prisen på 261kr, men tror det var tilbud. I skrivende stundt koster liknende print 400kr. Her kan man og kjøpe bilderamme, men det finner man mye billigere på ikea eller andre plasser.
+
+## Sukess!
+
+Jeg ble veldig fornøyd med resultatet og vil anbefale flere å prøve liknende. Det tok en del tid å finne inspirasjon, lære seg Mapbox studio og finne ut hvilke data jeg måtte laste ned. Men når plakaten kom inn i rammen på veggen var det verdt det. Det som føltes best var nok at jeg endelig fikk brukt alle mine timer i OpenStreetMap til noe nyttig.
