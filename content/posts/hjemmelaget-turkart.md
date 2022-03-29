@@ -44,11 +44,11 @@ Her så jeg på de aller fleste karttjeneste jeg kunne finne om det var noen som
   - Hadde de hatt mulighet for å zoome og velge område selv hadde jeg nok endt opp med å kjøpe fra dem.
 - [opensnowmap.org](https://www.opensnowmap.org/#map=14/7.298/60.413&b=snowmap) -> Innholdsrikt kart med infoen jeg vil vise, men litt mindre dekorativt enn mapy.cz og skrift er fortsatt ganske liten.
 
-### Lage nyt stil i Mapbox studio:
+### Lage ny kartstil i Mapbox studio:
 
 Om du liker designet jeg endte opp med er det letteste å trykke på stillinken i toppen av artikkelen og kopiere den. Deretter hopper du til `Samle data`. Og laster opp data for ditt ønskede område. Om du vil ha en rask introduksjon i Mapbox Studio kan du fortsette å lese videre.
 
-Jeg valgte å bruke Mapbox studio til å designe kartet fordi jeg har brukt det før og de har et veldig bra redigeringsverktøy hvor du kan redigere stil på egentlig absolutt alt. For spesielt interesserte så er dette mulig fordi Mapbox bruker vektorer istedenfor bilder til å tegne kart på skjermen din. Da lastes hvert element (hver bygning og vei) ned fra serveren og blir deretter rendret til skjermen din basert på stilark. Normalt lastest det ned mange små bilder som så blir satt sammen til et stort bilde, men da må bildet lages på server og stilen kan ikke endres med et tastetrykk.
+Jeg valgte å bruke Mapbox studio til å designe kartet fordi jeg har brukt det før og de har et veldig bra redigeringsverktøy hvor du kan redigere stil på egentlig absolutt alt. For spesielt interesserte så er dette mulig fordi Mapbox bruker vektorer istedenfor bilder til å tegne kart på skjermen din. Da lastes hvert element (hver bygning og vei) ned fra serveren og blir deretter rendret til skjermen din basert på stilark. Normalt lastes det ned mange små bilder som så blir satt sammen til et stort bilde, men da må bildet lages på server og stilen kan ikke endres med et tastetrykk.
 
 - Et annet alternativ til Mapbox er [Maptiler](maptiler.com) der kan alt det samme designes, men grensesnittet er ikke like pent som hos Mapbox.
 
@@ -58,14 +58,14 @@ Jeg valgte å bruke Mapbox studio til å designe kartet fordi jeg har brukt det 
 4. Nå er du i studio editoren hvor magien skjer.
 
 - Legg til komponentene:
-  - Terain
+  - Terrain
     - Her slår du på høydekurver ved å slå på `Contours`
   - Road Network
   - Land, water & sky
   - Natural features
 - Flytt kartet til dit du ønsker å lage kart
 
-5. Nå har vi et blankt svart kart som vi kan starte med å modifisere. Dette gjøres ved å gå til `Layers`. Nå kan du trykke hvor som helst på kartet og få opp hvilke datakilder som er plasssert der du trykker.
+5. Nå har vi et blankt svart kart som vi kan starte med å modifisere. Dette gjøres ved å gå til `Layers`. Nå kan du trykke hvor som helst på kartet og få opp hvilke datakilder som er plassert der du trykker.
    ![Skjermdump av mapbox studio hvor jeg har valgt en feature i kartet og endrer fargen](/turkart/Edit-layer-color.png)
    - Gjør dette for vann, høydekurver og land til kartet ser mer ut som noe du liker.
 
@@ -102,7 +102,7 @@ Lokaliteter hentet jeg ut med å spørre etter `place=farm`, `place=hamlet`, `pl
 
 - Disse dataene inneholdt et par duplikater hvor gården og nabolaget har samme navn. Disee fjernet jeg i JOSM før jeg lastet opp.
 
-Til slutt hentet jeg alle byggninger i Eidfjord med `building=*`
+Til slutt hentet jeg alle bygninger i Eidfjord med `building=*`
 
 Når all data er hentet inn kan jeg lagre dataene som geojson og laste opp i mapbox studio og deretter stilere det slik jeg vil.
 
@@ -115,7 +115,7 @@ Mapbox har en innebygget printfunksjon som jeg brukte. Denne funksjonen finner m
 
 ### Printe bilde
 
-Jeg sjekket ut alle nettsider jeg kunne finne som leverte print av store bilder. De fleste lå på rundt 600kr, men så fant jeg [Photowall](https://www.photowall.no/) som i tillegg støttet opplasting av bilder opp til 1GB størrelse. Her ble prisen på 261kr, men tror det var tilbud. I skrivende stundt koster liknende print 400kr. Her kan man og kjøpe bilderamme, men det finner man mye billigere på ikea eller andre plasser.
+Jeg sjekket ut alle nettsider jeg kunne finne som leverte print av store bilder. De fleste lå på rundt 600kr, men så fant jeg [Photowall](https://www.photowall.no/) som i tillegg støttet opplasting av bilder opp til 1GB størrelse. Her ble prisen på 261kr, men tror det var tilbud. I skrivende stund koster liknende print 400kr. Her kan man og kjøpe bilderamme, men det finner man mye billigere på ikea eller andre plasser.
 
 ## Sukess!
 
