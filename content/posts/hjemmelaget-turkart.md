@@ -98,7 +98,7 @@ Og så hentet jeg alle hills ved å bytte ut `natural=peak` med `natural=hill`.
 
 Deretter hentet jeg alle skiløyper ved å spørre etter tagen `piste:type=*`. Gangveier hentet jeg med `highway=path`.
 
-Lokaliteter hentet jeg ut med å spørre etter `place=farm`, `place=hamlet`, `place=neighborhood`.
+Lokaliteter hentet jeg ut med å spørre etter `place=farm`, `place=hamlet` og `place=neighborhood`.
 
 - Disse dataene inneholdt et par duplikater hvor gården og nabolaget har samme navn. Disee fjernet jeg i JOSM før jeg lastet opp.
 
@@ -110,7 +110,7 @@ Når all data er hentet inn kan jeg lagre dataene som geojson og laste opp i map
 
 Mapbox har en innebygget printfunksjon som jeg brukte. Denne funksjonen finner man helt oppe til høyre i Mapbox studio ved siden av `Share`. Her ønsket jeg selvsagt maksimalt antall piksler for best printkvalitet.
 
-- Siden Mapbox har begrensning på 8000x8000px endte jeg opp med å hente ned 4 bilder på samme zoom nivå og satt de sammen med [Image Composite Editor](https://www.microsoft.com/en-us/research/product/computational-photography-applications/image-composite-editor/). Programvaren ble lagt ned for mange år siden, men man finner fortsatt installasjonsfiler. For eksempel via webarchive i denne forumposten https://docs.microsoft.com/en-us/answers/questions/252274/how-to-download-image-composite-editor-20.html
+- Siden Mapbox har begrensning på 8000x8000px endte jeg opp med å hente ned 4 bilder på samme zoom nivå og satt de sammen med [Image Composite Editor](https://www.microsoft.com/en-us/research/product/computational-photography-applications/image-composite-editor/). Programvaren ble lagt ned for mange år siden, men man finner fortsatt installasjonsfiler. For eksempel via webarchive i denne forumposten [https://docs.microsoft.com/en-us/answers/questions/252274/how-to-download-image-composite-editor-20.html](https://docs.microsoft.com/en-us/answers/questions/252274/how-to-download-image-composite-editor-20.html)
   - Deretter redigerte jeg det ferdige bildet i paint.net til å ha det utsnittet jeg ønsket og definerte størrelse til 50x70cm.
 
 ### Printe bilde
@@ -120,3 +120,9 @@ Jeg sjekket ut alle nettsider jeg kunne finne som leverte print av store bilder.
 ## Sukess!
 
 Jeg ble veldig fornøyd med resultatet og vil anbefale flere å prøve liknende. Det tok en del tid å finne inspirasjon, lære seg Mapbox studio og finne ut hvilke data jeg måtte laste ned. Men når plakaten kom inn i rammen på veggen var det verdt det. Det som føltes best var nok at jeg endelig fikk brukt alle mine timer i OpenStreetMap til noe nyttig.
+
+## Neste steg
+
+Selvom dette er en stor forbedring fra å tegne og stilere kart manuelt i photoshop eller lignende, ønsker jeg å gjøre løsningen enda mer generell.
+
+Jeg har derfor som ønske å lage en generell nettside hvor man kan laste opp lag (stier, fjelltopper etc) manuelt eller laste ned fra Overpass og endre på stilen selv. Og så trykke på en knapp for å laste ned bilde. Jeg får se om jeg finner tid og inspirasjon til dette en gang i fremtiden.
