@@ -5,12 +5,31 @@
     <link>https://mathiash98.github.io/categories/</link>
     <description>Recent content in Categories on Mathias Haugsbø&#39;s blog</description>
     <image>
+      <title>Mathias Haugsbø&#39;s blog</title>
       <url>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Sep 2022 23:52:00 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 11 Jun 2023 13:17:03 +0000</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>general</title>
+      <link>https://mathiash98.github.io/categories/general/</link>
+      <pubDate>Sun, 11 Jun 2023 13:17:03 +0000</pubDate>
+      
+      <guid>https://mathiash98.github.io/categories/general/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>monthly-recap</title>
+      <link>https://mathiash98.github.io/categories/monthly-recap/</link>
+      <pubDate>Sun, 11 Jun 2023 13:17:03 +0000</pubDate>
+      
+      <guid>https://mathiash98.github.io/categories/monthly-recap/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>electronics</title>
       <link>https://mathiash98.github.io/categories/electronics/</link>
@@ -35,15 +54,6 @@
       <pubDate>Mon, 14 Feb 2022 21:58:00 +0100</pubDate>
       
       <guid>https://mathiash98.github.io/categories/maps/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>general</title>
-      <link>https://mathiash98.github.io/categories/general/</link>
-      <pubDate>Sat, 18 Dec 2021 21:58:00 +0100</pubDate>
-      
-      <guid>https://mathiash98.github.io/categories/general/</guid>
       <description></description>
     </item>
     
