@@ -96,7 +96,7 @@ out body qt;
 
 Og så hentet jeg alle hills ved å bytte ut `natural=peak` med `natural=hill`.
 
-Deretter hentet jeg alle skiløyper ved å spørre etter tagen `piste:type=*`. Gangveier hentet jeg med `highway=path`.
+Deretter hentet jeg alle skiløyper ved å spørre etter tagen `nwr["piste:type"]`. Gangveier hentet jeg med `nwr[highway=path]`.
 
 Lokaliteter hentet jeg ut med å spørre etter `place=farm`, `place=hamlet` og `place=neighborhood`.
 
