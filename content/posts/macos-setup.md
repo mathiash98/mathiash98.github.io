@@ -22,6 +22,7 @@ Here is a list of programs and settings I use on my Macbook Pro.
 - Raycast https://www.raycast.com/ (Better "cmd+space" search tool)
 - iterm2 https://iterm2.com/ (Nice terminal)
 - Zsh https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#macos (Shell for the terminal)
+- Fig https://fig.io/ (Automatic command completion in terminal)
 - Stats https://github.com/exelban/stats (CPU, Battery etc. in top menu bar)
 
 ```bash
@@ -37,7 +38,7 @@ brew install spotify slack visual-studio-code
 brew install mattermost signal steam josm gimp discord
 
 # Useful for people using terminal
-brew install iterm2 zsh stats
+brew install iterm2 zsh fig stats
 
 # Developer tools
 brew install postman github docker gh
