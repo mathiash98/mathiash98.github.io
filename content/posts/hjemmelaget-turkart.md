@@ -9,6 +9,8 @@ showToc: true
 draft: false
 ---
 
+Edit: Jeg har nå utviklet en nettside som utfører alle steg i denne guiden automatisk. Se [mitt nye blogginnlegg](/posts/trail-map-generator/) for den nye løsningen jeg har laget!
+
 {{< rawhtml >}}
 
 <iframe width='100%' height='400px' src="https://api.mapbox.com/styles/v1/mathiash98/ckz5xaxx8001w14qig119f4jr.html?title=false&access_token=pk.eyJ1IjoibWF0aGlhc2g5OCIsImEiOiJjazh1cW4zeXIwOGplM2ZwaHBvMDlsNjBkIn0.CRNICu-ha9HWO4-G1DNuiw&zoomwheel=false#10.89/60.4183/7.2841" title="Skikart" style="border:none;"></iframe>
@@ -126,3 +128,7 @@ Jeg ble veldig fornøyd med resultatet og vil anbefale flere å prøve liknende.
 Selvom dette er en stor forbedring fra å tegne og stilere kart manuelt i photoshop eller lignende, ønsker jeg å gjøre løsningen enda mer generell.
 
 Jeg har derfor som ønske å lage en generell nettside hvor man kan laste opp lag (stier, fjelltopper etc) manuelt eller laste ned fra Overpass og endre på stilen selv. Og så trykke på en knapp for å laste ned bilde. Jeg får se om jeg finner tid og inspirasjon til dette en gang i fremtiden.
+
+### Neste steg oppfyllt!
+
+Se [mitt nye blogginnlegg](/posts/trail-map-generator/) for den halvautomatiske løsningen jeg har laget!
