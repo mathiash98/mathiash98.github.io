@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>maps on Mathias Haugsbø&#39;s blog</title>
-    <link>https://mathiash98.github.io/categories/maps/</link>
+    <link>https://mathiash98.github.io/tags/maps/</link>
     <description>Recent content in maps on Mathias Haugsbø&#39;s blog</description>
     <image>
       <title>Mathias Haugsbø&#39;s blog</title>
@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Jul 2023 14:43:40 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/maps/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 27 Jul 2023 14:43:40 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/tags/maps/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Trailmap Generator</title>
       <link>https://mathiash98.github.io/posts/trail-map-generator/</link>
@@ -19,15 +19,6 @@
       
       <guid>https://mathiash98.github.io/posts/trail-map-generator/</guid>
       <description>Generate your own trail map for any location in the world!</description>
-    </item>
-    
-    <item>
-      <title>Hvordan lage ditt eget turkart</title>
-      <link>https://mathiash98.github.io/posts/hjemmelaget-turkart/</link>
-      <pubDate>Mon, 14 Feb 2022 21:58:00 +0100</pubDate>
-      
-      <guid>https://mathiash98.github.io/posts/hjemmelaget-turkart/</guid>
-      <description>En liten guide til hvordan designe ditt eget turkart i Mapbox Studio med OpenStreetMap data</description>
     </item>
     
   </channel>
