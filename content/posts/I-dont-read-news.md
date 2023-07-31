@@ -31,24 +31,39 @@ I must say that news are no worse than any other thing we spend time on, news ar
 
 ### Full list of news sources I follow in my rss reader Feedly:
 
-- Norwegia
-  - 5080.no - https://www.5080.no
-  - David Skaufjord forklarer alt - https://davidskaufjord.com
+- Norwegian news
   - Tu.no - http://www.tu.no
   - NRKbeta - http://nrkbeta.no
+  - Årstadposten - http://www.arstadposten.no
+  - Tek.no - https://www.tek.no/
+  - Digi.no - http://www.digi.no
+  - kode24 - https://www.kode24.no
 - Economy
   - Portfolio Charts - "https://portfoliocharts.com
   - Pengeblogg - https://pengeblogg.bloggnorge.com
   - Peter Warrens Finansblogg - https://www.peterwarren.no
-- Interesting
-  - TED Talks Daily - https://www.ted.com/talks
-  - Kevin Kelly - https://kk.org
+- Blogs by friends, mostly tech related
   - Tim Hårek - https://timharek.no
-  - Wait But Why - https://waitbutwhy.com
-  - The Technium - https://kk.org/thetechnium
+  - Christian Engelsen - https://cengelsen.no/
+  - Sindre Kjelsrud - https://kjelsrud.dev/
+- Other interesting blogs I have found, usually on HackerNews
+  - David Heinemeier Hansson - https://world.hey.com/dhh - Lots of great business tech leadership related posts
+  - Computers Are Bad - https://computer.rip/ - In depth stories about interesting tech related topics
+  - Felix Krause - https://krausefx.com/
+  - Julia Evans - https://jvns.ca/
+  - Tom MacWright - https://macwright.com/
+  - Aaron Parecki - https://aaronparecki.com/articles
+  - Alex Molas - https://www.alexmolas.com/blog
+- Interesting
+  - Hacker News - https://news.ycombinator.com/
+  - TED Talks Daily - https://www.ted.com/talks
+  - Wait But Why - https://waitbutwhy.com - Long in depth articles about everything from Life, Elon Musk to how brains work
+- Purerly programming
+  - Martin Fowler - https://martinfowler.com/ - Great articles on building software effectively.
+  - Channel 9 - https://channel9.msdn.com/
+  - .NET Blog - https://devblogs.microsoft.com/dotnet/ - .NET related news
 - Maps
   - somethingaboutmaps - https://somethingaboutmaps.wordpress.com
-  - OpenStreetMap Forum / users: Norway - https://forum.openstreetmap.oindex.php
 - Comics
   - The Oatmeal - http://theoatmeal.com/
   - Explosm - http://explosm.net
@@ -56,13 +71,7 @@ I must say that news are no worse than any other thing we spend time on, news ar
   - The Perry Bible Fellowship - https://pbfcomics.com
   - xkcd.com - https://xkcd.com/
   - Tim Whyatt - http://whyatt.com.au
-- Tech
-  - Tek.no - https://www.tek.no/
-  - Digi.no - http://www.digi.no
-  - kode24 - https://www.kode24.no
-  - Channel 9 - https://channel9.msdn.com/
-- Local news
-  - Årstadposten - http://www.arstadposten.no
+  - David Skaufjord forklarer alt - https://davidskaufjord.com
 
 Thanks for reading my second blog post, my writing and thought process is already maturing. I feel like there could be much more written about this topic. Maybe I will revisit this topic some time later with better visualization of news and maybe show lots of “big news” from the past that nobody remembers.
 
