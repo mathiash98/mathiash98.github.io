@@ -48,6 +48,13 @@ brew install node
 brew install ffmpeg imagemagick nmap keeweb
 ```
 
+# Browser extensions:
+I have a small set of extensions that I have used for many years:
+
+- Bitwarden (Password manager, crucial to have and sync )
+- Feedly Notifier (RSS reader)
+- Wappanalyzer (See what tech each website uses)
+
 # Settings
 
 Not sure how to automate settings backup and restore, but here is a list of settings I like to change.
