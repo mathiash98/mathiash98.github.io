@@ -24,6 +24,7 @@ Here is a list of programs and settings I use on my Macbook Pro.
 - Zsh https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#macos (Shell for the terminal)
 - Fig https://fig.io/ (Automatic command completion in terminal)
 - Stats https://github.com/exelban/stats (CPU, Battery etc. in top menu bar)
+- BetterDisplay https://github.com/waydabber/BetterDisplay#readme (A quick way to change resolution of screens)
 
 ```bash
 # Open terminal and run following to install brew
