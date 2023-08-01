@@ -11,7 +11,16 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Jul 2023 14:43:40 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/general/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Aug 2023 18:50:03 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/general/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2023 July recap</title>
+      <link>https://mathiash98.github.io/posts/2023-july/</link>
+      <pubDate>Tue, 01 Aug 2023 18:50:03 +0200</pubDate>
+      
+      <guid>https://mathiash98.github.io/posts/2023-july/</guid>
+      <description>What I&amp;#39;ve been up to in July 2023</description>
+    </item>
+    
     <item>
       <title>Trailmap Generator</title>
       <link>https://mathiash98.github.io/posts/trail-map-generator/</link>
