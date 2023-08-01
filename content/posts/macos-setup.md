@@ -51,7 +51,7 @@ brew install ffmpeg imagemagick nmap keeweb
 # Browser extensions:
 I have a small set of extensions that I have used for many years:
 
-- Bitwarden (Password manager, crucial to have and sync )
+- Bitwarden (Password manager, crucial to have and syncs nicely across all my devices)
 - Feedly Notifier (RSS reader)
 - Wappanalyzer (See what tech each website uses)
 
