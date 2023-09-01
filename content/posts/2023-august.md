@@ -20,6 +20,14 @@ Then I spent 5 days in spain, in Torrevieja or "Tørrevigå" as we called it. 35
 
 Other than that my friends that study are coming back to Bergen so the usual quiz, bar, [friByte](https://fribyte.no) and going to the gym is finally getting back to normal again.
 
+## Monthly principle
+
+I'll try something new here. List one of my principles that I try to follow in my daily life:
+
+    "Live for the weekdays not just the weekend."
+
+I find it very important to do stuff everyday, and not just go on autopilot on the weekdays while waiting for the weekend. So I try to always find something to do every evening.
+
 ## Finances
 
 August have been pretty bad as the NOK has deprecated in value against EUR and USD. So my strategy of buying forex secured index fund put me back around 3.3% this month. I cross my fingers for sronger NOK in the future.
