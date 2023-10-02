@@ -26,7 +26,7 @@ It's a nice habit to build, even though I don't always follow it. But it's nice 
 
 ## Notable reads
 
-Subscribing to the (hackernews RSS feed)[https://news.ycombinator.com/] provides me with loads of interesting articles. This month I found this very interesting article; (Don't mess with a genius)[https://shreevatsa.wordpress.com/2010/06/04/dont-mess-with-a-genius/]. It tells the story about sir Isaac Newton's career as "Warden of the mint". In this position he brought down the money counterfeiter William Chaloner. It's a very interesting read and I would recommend it to anyone.
+Subscribing to the [hackernews RSS feed](https://news.ycombinator.com/) provides me with loads of interesting articles. This month I found this very interesting article; [Don't mess with a genius](https://shreevatsa.wordpress.com/2010/06/04/dont-mess-with-a-genius/). It tells the story about sir Isaac Newton's career as "Warden of the mint". In this position he brought down the money counterfeiter William Chaloner. It's a very interesting read and I would recommend it to anyone.
 
 ## Finances & spendings
 
