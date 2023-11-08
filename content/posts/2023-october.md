@@ -32,9 +32,9 @@ The last principle is about providing all neccessary context and information in 
 
 These are classic examples in the daily work life, the problem with the messages is that they do not provide any context or information about what the message is about. So the recipient needs to ask back for more information, which is a waste of time. Instead try to write something like this:
 
-> - "LinkedIn Post: New post about the new awesome FeatureBlaster 3000, check it out! <Link to Post>"
-> - "<CustomerName>: Not Resolved - Reports nothing is working when clicking the button 'Do something'.Can you look at it? <URL to support Ticket>"
-> - "FeatureBlaster3000 - 1.20.2: <ReleaseNotes-URL> - Brief description of most important changes."
+> - "LinkedIn Post: New post about the new awesome FeatureBlaster 3000, check it out! <-Link to Post->"
+> - "<-Customer Name->: Not Resolved - Reports nothing is working when clicking the button 'Do something'.Can you look at it? <-URL to support Ticket->"
+> - "FeatureBlaster3000 - 1.20.2: <-ReleaseNotes-URL-> - Brief description of most important changes."
 
 One should never assume that the recipient knows what you are talking about or where to find additional info. The suggested messages also includes links to the relevant information, which is very useful.
 
