@@ -54,9 +54,9 @@ Other than that I have started painting my apartment, I'm done with the bathroom
 
 ## Daylio recap
 
-Average happiness 4.1/5.0 and increase by 0.2.
+Average happiness 4.1/5.0 an increase by 0.2.
 
-### Activites done in July 2023
+### Activites done in August 2023
 
 | Activity          | Number of days |
 | ----------------- | -------------- |
