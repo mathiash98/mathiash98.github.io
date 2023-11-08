@@ -14,27 +14,27 @@ October, my birthday month 🎉 is over and it's time to recap what I've been do
 
 ## Monthly principle
 
-    "Never start a chat with 'Hi'."
-    "Reduce use of this and that, be clear and consise."
-    "Include full context in chat/email messages."
+> "Never start a chat with 'Hi'."
+> "Reduce use of this and that, be clear and consise."
+> "Include full context in chat/email messages."
 
 This months principles is about making communication more effective.
-As a friend of me wrote on hos blog; [timharek.no/blog/no-hello](https://timharek.no/blog/no-hello), starting a chat with "Hi" and then waiting for answer, is a waste of time. It's better to just write the question you want to send right away and let the recipient answer when they have time.
+As a friend of me wrote on hos blog [timharek.no/blog/no-hello](https://timharek.no/blog/no-hello), starting a chat with "Hi" and then waiting for an answer, is a waste of time. It's better to just write the question you want to send right away and let the recipient answer when they have time.
 
 I have also noticed that the use of "this" and "that" in work chat application, PR review comments, daily tech discussion is reducing the quality of the communication.
 It is not always clear what "This can be replaced with the shared function we have." means. Instead I try to say "The function `getAverage` can be replaced with the shared function in `utils.ts`".
 
 The last principle is about providing all neccessary context and information in a question or support ticket in order to improve respone time and reduce number of messages needed back and forth.
 
-    - "There is a new post on LinkedIn, check it out."
-    - "Customer reports that the app does not work. Can you look at it?"
-    - "We just released a new feature, release notes are in confluence."
+> - "There is a new post on LinkedIn, check it out."
+> - "Customer reports that the app does not work. Can you look at it?"
+> - "We just released a new feature, release notes are in confluence."
 
 These are classic examples in the daily work life, the problem with the messages is that they do not provide any context or information about what the message is about. So the recipient needs to ask back for more information, which is a waste of time. Instead try to write something like this:
 
-    - "LinkedIn Post: New post about the new awesome FeatureBlaster 3000, check it out! <Link to Post>"
-    - "<CustomerName>: Not Resolved - Reports nothing is working when clicking the button 'Do something'. Can you look at it? <URL to support Ticket>"
-    - "FeatureBlaster3000 - 1.20.2: <ReleaseNotes-URL> - Brief description of most important changes."
+> - "LinkedIn Post: New post about the new awesome FeatureBlaster 3000, check it out! <Link to Post>"
+> - "<CustomerName>: Not Resolved - Reports nothing is working when clicking the button 'Do something'.Can you look at it? <URL to support Ticket>"
+> - "FeatureBlaster3000 - 1.20.2: <ReleaseNotes-URL> - Brief description of most important changes."
 
 One should never assume that the recipient knows what you are talking about or where to find additional info. The suggested messages also includes links to the relevant information, which is very useful.
 
