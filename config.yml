@@ -114,3 +114,10 @@ outputs:
     - HTML
     - RSS
     - JSON
+
+# Allow iframe
+markup:
+  defaultMarkdownHandler: goldmark
+  goldmark:
+    renderer:
+      unsafe: true
