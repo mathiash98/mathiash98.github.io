@@ -11,7 +11,16 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Nov 2023 10:20:03 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Nov 2023 23:45:45 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Unlock City Bike With Siri</title>
+      <link>https://mathiash98.github.io/posts/2023-11-unlock-city-bike-with-siri/</link>
+      <pubDate>Tue, 21 Nov 2023 23:45:45 +0100</pubDate>
+      
+      <guid>https://mathiash98.github.io/posts/2023-11-unlock-city-bike-with-siri/</guid>
+      <description>A quick introduction to reverse engineering the Bergen BySykkel app and unlocking bikes with Siri.</description>
+    </item>
+    
     <item>
       <title>2023 October recap</title>
       <link>https://mathiash98.github.io/posts/2023-october/</link>
