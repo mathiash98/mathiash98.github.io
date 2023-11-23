@@ -114,13 +114,7 @@ IOS has a nice feature called "Shortcuts" which allows you to create custom acti
 
 ## Short video example
 
-<iframe
- width="720"
- height="576"
- src="https://youtube.com/embed/o7qmNPRfscQ?feature=share"
- title="YouTube video player"
- frameborder="0"
-></iframe>
+https://youtube.com/shorts/o7qmNPRfscQ
 
 # Next Steps
 
