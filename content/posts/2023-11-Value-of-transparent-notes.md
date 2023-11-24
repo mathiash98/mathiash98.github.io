@@ -42,9 +42,11 @@ Here are some widely used tools that can be used in most businesses:
 - Use an online wiki tool like:
   - Confluence
     - Good for people already in the Atlassian ecosystem
+    - Support integration with https://office.com search box
   - https://loop.microsoft.com
     - A new tool from Microsoft which mimics the look and feel of Confluence, notion and other modern note tools
     - Good for people already in the Microsoft ecosystem
+    - Support integration with https://office.com search box
   - https://www.notion.so/
     - Good for people who want a more modern tool
 - If you like word or text files better:
