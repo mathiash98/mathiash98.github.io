@@ -1,6 +1,6 @@
 ---
 title: "MDM - An unnecessary evil?"
-date: 2023-09-01T19:58:00+01:00
+date: 2024-09-01T19:58:00+01:00
 description: "My thoughts on MDM and why I would never accept it"
 tags: ["general", "MDM"]
 categories: ["general"]
@@ -8,7 +8,7 @@ author: "Mathias Haugsbø"
 showToc: false
 ---
 
-This post is mostly a draft I had laying around since april when management wanted to implement MDM on all devices. So I had to note down my thoughts somewhere. The post was not finished, but I still think it's worth a post.
+This post is mostly a draft I had laying around since april 2023 when management wanted to implement MDM on all devices. So I had to note down my thoughts somewhere. The post was not finished, but I still think it's worth a post.
 
 # What and why I will not accept MDM on my work devices
 
