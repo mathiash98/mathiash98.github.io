@@ -6,7 +6,6 @@ tags: ["general", "MDM"]
 categories: ["general"]
 author: "Mathias Haugsbø"
 showToc: false
-draft: true
 ---
 
 This post is mostly a draft I had laying around since april when management wanted to implement MDM on all devices. So I had to note down my thoughts somewhere. The post was not finished, but I still think it's worth a post.
