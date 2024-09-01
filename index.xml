@@ -11,7 +11,16 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Feb 2024 16:56:37 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 01 Sep 2024 19:58:00 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MDM - An unnecessary evil?</title>
+      <link>https://mathiash98.github.io/posts/2024-mdm-what-and-why-i-do-not-like-it/</link>
+      <pubDate>Sun, 01 Sep 2024 19:58:00 +0100</pubDate>
+      
+      <guid>https://mathiash98.github.io/posts/2024-mdm-what-and-why-i-do-not-like-it/</guid>
+      <description>My thoughts on MDM and why I would never accept it</description>
+    </item>
+    
     <item>
       <title>2023 Recap</title>
       <link>https://mathiash98.github.io/posts/2023-recap/</link>
@@ -64,15 +73,6 @@
       
       <guid>https://mathiash98.github.io/posts/2023-september/</guid>
       <description>What I&amp;#39;ve been up to in September 2023</description>
-    </item>
-    
-    <item>
-      <title>MDM - An unnecessary evil?</title>
-      <link>https://mathiash98.github.io/posts/2024-mdm-what-and-why-i-do-not-like-it/</link>
-      <pubDate>Fri, 01 Sep 2023 19:58:00 +0100</pubDate>
-      
-      <guid>https://mathiash98.github.io/posts/2024-mdm-what-and-why-i-do-not-like-it/</guid>
-      <description>My thoughts on MDM and why I would never accept it</description>
     </item>
     
     <item>
@@ -172,6 +172,15 @@
       
       <guid>https://mathiash98.github.io/posts/my-first-post/</guid>
       <description>Testing out my new blog</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://mathiash98.github.io/posts/2023-10-punycode/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://mathiash98.github.io/posts/2023-10-punycode/</guid>
+      <description></description>
     </item>
     
     

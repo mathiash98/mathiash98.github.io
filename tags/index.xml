@@ -11,13 +11,22 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Feb 2024 16:56:37 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 01 Sep 2024 19:58:00 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>General</title>
       <link>https://mathiash98.github.io/tags/general/</link>
-      <pubDate>Sat, 10 Feb 2024 16:56:37 +0100</pubDate>
+      <pubDate>Sun, 01 Sep 2024 19:58:00 +0100</pubDate>
       
       <guid>https://mathiash98.github.io/tags/general/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MDM</title>
+      <link>https://mathiash98.github.io/tags/mdm/</link>
+      <pubDate>Sun, 01 Sep 2024 19:58:00 +0100</pubDate>
+      
+      <guid>https://mathiash98.github.io/tags/mdm/</guid>
       <description></description>
     </item>
     
@@ -27,15 +36,6 @@
       <pubDate>Fri, 01 Dec 2023 17:20:03 +0200</pubDate>
       
       <guid>https://mathiash98.github.io/tags/monthly-recap/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>MDM</title>
-      <link>https://mathiash98.github.io/tags/mdm/</link>
-      <pubDate>Fri, 01 Sep 2023 19:58:00 +0100</pubDate>
-      
-      <guid>https://mathiash98.github.io/tags/mdm/</guid>
       <description></description>
     </item>
     
