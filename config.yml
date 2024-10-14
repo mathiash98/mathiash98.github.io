@@ -1,7 +1,7 @@
 baseURL: "https://mathiash98.github.io"
 languageCode: en-us
 title: "Mathias Haugsbø's blog"
-paginate: 5
+paginate: 30
 theme: PaperMod
 
 enableRobotsTXT: true
