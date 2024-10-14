@@ -9,71 +9,58 @@
       <url>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Oct 2024 22:40:21 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Oct 2024 22:40:21 +0200</lastBuildDate>
+    <atom:link href="https://mathiash98.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>General</title>
       <link>https://mathiash98.github.io/categories/general/</link>
       <pubDate>Mon, 14 Oct 2024 22:40:21 +0200</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/general/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Monthly-Recap</title>
       <link>https://mathiash98.github.io/categories/monthly-recap/</link>
       <pubDate>Fri, 01 Dec 2023 17:20:03 +0200</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/monthly-recap/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Maps</title>
       <link>https://mathiash98.github.io/categories/maps/</link>
       <pubDate>Thu, 27 Jul 2023 14:43:40 +0200</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/maps/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Electronics</title>
       <link>https://mathiash98.github.io/categories/electronics/</link>
       <pubDate>Wed, 28 Sep 2022 23:52:00 +0100</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/electronics/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Design</title>
       <link>https://mathiash98.github.io/categories/design/</link>
       <pubDate>Mon, 14 Feb 2022 21:58:00 +0100</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/design/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Interesting</title>
       <link>https://mathiash98.github.io/categories/interesting/</link>
       <pubDate>Sun, 28 Nov 2021 15:03:18 +0100</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/interesting/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>English</title>
       <link>https://mathiash98.github.io/categories/english/</link>
       <pubDate>Sun, 28 Nov 2021 13:17:03 +0000</pubDate>
-      
       <guid>https://mathiash98.github.io/categories/english/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

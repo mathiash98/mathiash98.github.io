@@ -9,26 +9,23 @@
       <url>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Jul 2023 14:43:40 +0200</lastBuildDate><atom:link href="https://mathiash98.github.io/categories/maps/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 27 Jul 2023 14:43:40 +0200</lastBuildDate>
+    <atom:link href="https://mathiash98.github.io/categories/maps/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Trailmap Generator</title>
       <link>https://mathiash98.github.io/posts/trail-map-generator/</link>
       <pubDate>Thu, 27 Jul 2023 14:43:40 +0200</pubDate>
-      
       <guid>https://mathiash98.github.io/posts/trail-map-generator/</guid>
       <description>Generate your own trail map for any location in the world!</description>
     </item>
-    
     <item>
       <title>Hvordan lage ditt eget turkart</title>
       <link>https://mathiash98.github.io/posts/hjemmelaget-turkart/</link>
       <pubDate>Mon, 14 Feb 2022 21:58:00 +0100</pubDate>
-      
       <guid>https://mathiash98.github.io/posts/hjemmelaget-turkart/</guid>
       <description>En liten guide til hvordan designe ditt eget turkart i Mapbox Studio med OpenStreetMap data</description>
     </item>
-    
   </channel>
 </rss>

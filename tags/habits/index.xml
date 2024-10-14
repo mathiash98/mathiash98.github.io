@@ -9,17 +9,16 @@
       <url>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://mathiash98.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Dec 2021 21:58:00 +0100</lastBuildDate><atom:link href="https://mathiash98.github.io/tags/habits/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Dec 2021 21:58:00 +0100</lastBuildDate>
+    <atom:link href="https://mathiash98.github.io/tags/habits/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>I Dont Read News</title>
       <link>https://mathiash98.github.io/posts/i-dont-read-news/</link>
       <pubDate>Sat, 18 Dec 2021 21:58:00 +0100</pubDate>
-      
       <guid>https://mathiash98.github.io/posts/i-dont-read-news/</guid>
       <description>A brief explanation of why I don&amp;#39;t read news</description>
     </item>
-    
   </channel>
 </rss>
