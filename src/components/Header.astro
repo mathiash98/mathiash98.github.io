@@ -1,0 +1,49 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+import { SITE_TITLE } from "../consts";
+import SocialLinks from "./SocialLinks.astro";
+---
+
+<header>
+  <nav>
+    <h2><a href="/">{SITE_TITLE}</a></h2>
+    <div class="internal-links">
+      <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/about">About</HeaderLink>
+    </div>
+    <span class="header-social-links">
+      <SocialLinks size={24} />
+    </span>
+  </nav>
+</header>
+
+<style>
+  header {
+    padding: 0 0.7em;
+  }
+  nav {
+    width: 100%;
+    height: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  a {
+    border-bottom: 4px solid transparent;
+  }
+  a.active {
+    border-bottom-color: var(--accent);
+  }
+  .internal-links {
+    display: inline-flex;
+    gap: 0.6rem;
+    flex-wrap: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .header-social-links {
+      display: none;
+    }
+  }
+</style>

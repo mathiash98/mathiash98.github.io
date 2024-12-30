@@ -1,20 +1,15 @@
 # My blog
 
-## Quick guide
+[https://mathiash98.github.io/](https://mathiash98.github.io/)
 
-### New post:
+## New post:
 
-1. `hugo new posts/{Name-Of-Post}.md`
-2. Edit basic settings
-3. Write markdown
-4. `hugo serve`
+1. Copy an existing post in `src/content/blog/`
+2. Edit basic settings and file name
+3. `npm run dev` to see it live
+4. Write markdown
 5. Commit and push -> Success
-
-## Useful links
-
-- Hugo functions - https://gohugo.io/functions/
 
 ## Powered by:
 
-1. Hugo - https://gohugo.io/
-2. PaperMod - https://github.com/adityatelange/hugo-PaperMod
+1. Astro (https://astro.build/)

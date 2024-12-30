@@ -1,0 +1,28 @@
+---
+import { SOCIAL_LINKS } from "../consts";
+import { Icon } from "astro-icon/components";
+
+type Props = {
+  size?: number;
+};
+
+const { size = 32 } = Astro.props;
+---
+
+<div class="social-links">
+  {
+    Object.entries(SOCIAL_LINKS).map(([name, options]) => (
+      <a href={options.url} target="_blank">
+        <span class="sr-only">Follow me on {name}</span>
+        <Icon name={options.icon} size={size} />
+      </a>
+    ))
+  }
+</div>
+<style>
+  .social-links {
+    display: flex;
+    justify-content: space-around;
+    gap: 1em;
+  }
+</style>

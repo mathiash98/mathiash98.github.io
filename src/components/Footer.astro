@@ -1,0 +1,25 @@
+---
+import { SITE_TITLE } from "../consts";
+import FormattedDate from "./FormattedDate.astro";
+import SocialLinks from "./SocialLinks.astro";
+const dateOfBuild = new Date();
+---
+
+<footer>
+  <p>
+    Last updated <FormattedDate date={dateOfBuild} />
+    <br />
+    Greetings {SITE_TITLE}
+  </p>
+  <SocialLinks />
+</footer>
+<style>
+  footer {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2em 1em 3em 1em;
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPosts } from "../utils";
+import FormattedDate from "./FormattedDate.astro";
+
+const posts = await getPosts();
+const postsPerYear: { year: number; posts: CollectionEntry<"blog">[] }[] = [];
+posts.forEach((post) => {
+  const year = post.data.pubDate.getFullYear();
+  const yearIndex = postsPerYear.findIndex((y) => y.year === year);
+  if (yearIndex === -1) {
+    postsPerYear.push({ year, posts: [post] });
+  } else {
+    postsPerYear[yearIndex].posts.push(post);
+  }
+});
+---
+
+<h1>Blog posts:</h1>
+{
+  postsPerYear.map(({ year, posts }) => (
+      <h2 class="year-title">{year} ({posts.length})</h2>
+      <ul>
+        {posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}/`}>
+            <span style="display: inline-flex; justify-content: space-between; width: 100%; gap: 0.2em;">
+              <h4 class="title">{post.data.title}</h4>
+              <FormattedDate date={post.data.pubDate} />
+            </span>
+              <p class="description">
+                {post.data.description}
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+  ))
+}
+
+<style>
+  .year-title {
+    margin-top: 1.5em;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  li > * {
+    text-decoration: none;
+    transition: 0.2s ease;
+    line-height: 1;
+  }
+  a {
+    border-left: 4px solid var(--primary);
+    padding: 0.1rem 0 0.1rem 0.7rem;
+  }
+
+  .description {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+  a:hover {
+    background-color: unset;
+  }
+  a:hover .title {
+    color: var(--color-background);
+    background: var(--primary);
+  }
+</style>

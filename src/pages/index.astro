@@ -1,0 +1,11 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import PageLayout from "../layouts/PageLayout.astro";
+import BlogList from "../components/BlogList.astro";
+---
+
+<PageLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <h1>{SITE_TITLE}</h1>
+  <p>{SITE_DESCRIPTION}</p>
+  <BlogList />
+</PageLayout>
