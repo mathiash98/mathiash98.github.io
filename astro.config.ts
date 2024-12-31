@@ -14,9 +14,9 @@ export default defineConfig({
       status: 301,
       destination: "/blog/[...slug]",
     },
-    "index.xml": {
-      status: 301,
-      destination: "/rss.xml",
-    },
+    // "index.xml": {
+    //   status: 301,
+    //   destination: "/rss.xml",
+    // },
   },
 });

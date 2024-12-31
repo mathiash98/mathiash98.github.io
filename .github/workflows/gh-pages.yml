@@ -28,8 +28,17 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v2
-      - name: Install, build, and upload your site output
-        uses: withastro/action@v0
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Support old rss subscriptions
+        run: cp ./dist/old-rss.xml ./dist/index.xml
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./dist/
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
