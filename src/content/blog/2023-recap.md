@@ -97,7 +97,7 @@ Overall I am neutral to the spendings, I have had a good year and the amount of 
 
 | Category                                  | 2022 | 2023 | Difference |
 | ----------------------------------------- | ---- | ---- | ---------- |
-| Trekronerene sausages                     | 15   | 42   | +27        |
+| Trekroneren sausages                      | 15   | 42   | +27        |
 | Beers at Akademiske Kvarter approximately | 75   | 120  | +45        |
 | Kebab                                     | 41   | 34   | -4         |
 
