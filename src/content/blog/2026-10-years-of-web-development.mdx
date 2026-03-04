@@ -1,0 +1,88 @@
+---
+title: "18 år med koding: fra script kiddie til AI prompt master"
+pubDate: 2026-03-04T22:10:00+01:00
+description: "Fra FreeCodeCamp og verdens vanskeligste HTML til å prompte frem hele backends på sekunder. Hva skjedde?"
+tags: ["general", "dev", "ai"]
+author: "Mathias Haugsbø"
+showToc: false
+---
+
+import BatAnimationSlideshow from "../../components/BatAnimationSlideshow.astro";
+
+
+Hei igjen! Tenkte å gjøre en lite comeback etter at [Sindre](https://kjelsrud.dev/) spurte etter nytt innlegg.
+
+Det er nå ca. 18-19 år siden jeg startet med servere, hacking og koding, rart å tenke på at det har gått så lang tid, og blir fortsatt like gira av å bygge og lære ting.
+
+Jeg skriver ikke 18års erfaring på CVen, men 10 år siden jeg startet [FreeCodeCamp](https://freecodecamp.org), da gikk jeg på Amalie Skram VGS og satt meg som mål at jeg nå faktisk skal lære meg webutvikling og lage noe fornuftig. Uten FreeCodeCamp hadde jeg ikke vært der jeg er i dag, men alt henger sammen og jeg ser en tydelig linje i alt jeg har gjort, som startet allerede i barneskolen.
+
+- Barneskolen 2008 -> 2011:
+    - Satt opp Minecraft servere
+    - "Hacket" folk på Habbo hotel med falske nettsteder for å stjele passord
+    - knotet ukesvis med Habbo "retro server" (uoffisiell self hosted server)
+    - Lærte After Effects og lagde YouTube videoer
+    - Skrev mine første kodescripts i .bat for å lage enkle animasjoner og automatisk logge ut brukeren 2 minutter etter de logget inn.
+
+Her en liten godtepose av mine første scripts som jeg skrev på barneskolen, som jeg fant på MegaSync skyen min:
+
+<BatAnimationSlideshow />
+
+
+- Ungdomsskolen 2011 -> 2014:
+    - Lærte meg om virus, hacking og social engineering -> infiserte folk uti verden med RATs (remote administration tools) og trojanere
+    - Første smak på programmering ved å lage en kalkulator i Python. Å lage denne kalkulatoren uten internett hos Bestefar var helt utrolig vanskelig og ga enorm mestringsfølelse når jeg klarte det.
+    - Lærte om kretskort, lodding, Arduino, Raspberry Pi og LUA programmering for å styre lys og med http web sider på mobilen.
+- VGS 2014 -> 2017:
+    - For alvor startet med webutvikling, og lærte meg HTML, CSS og JS
+    - Første kommersielle prosjekt nibarnehage.no
+    - Gründet NaturallMat -> Laget MVP multi vendor matmarked marketplace i MEAN stacken (MongoDB, Express, Angular, NodeJs). Tok sin tid, men endte opp med å bare bruke Shopify for å teste produktet og finne ut at det ikke skalerte så godt i Bergen.
+- Forsvaret 2017 -> 2018:
+    - Litt mer NaturallMat, ellers drev jeg dank og gikk på byn.
+- Universitetet 2018 -> 2020:
+    - Lærte lite på skolen
+    - CanEat -> Laget MVP app for selskapet som ble brukt i flere år for å teste konseptet.
+- ScanReach 2019 -> 2025:
+    - Her havna jeg utelukkende fordi jeg tidligere hadde gründet NaturallMat og deltatt på gründerkonkurranser. Og NaturallMat hadde jeg aldri deltatt i om jeg ikke hadde gjort NiBarnehage prosjektet, som jeg aldri hadde gjort om jeg ikke hadde hatt FreeCodeCamp.
+
+
+
+FreeCodeCamp førte til mitt første prosjekt i 2017, en nettside for barnehagen jeg gikk i som barn, [NIBarnehage](https://nibarnehage.no). Denne var svært enkel (i dagens øyne) men ekstremt kompleks for Mathias med 1 års erfaring innen webutvikling.
+
+Med flere års erfaring med Wordpress visste jeg at siden må være generisk og gjenbrukbar over tid så jeg lagde selvfølgelig en helt custom CMS løsning for barnehagen, med følgende funksjonalitet:
+- Generisk hjemmeside med HTML og CSS
+- Admin side for å redigere tekst på forsiden
+- Admin side for å laste opp bilder og dokumenter
+- Login side for foresatte hvor de kunne se bilder og dokumenter
+
+På denne tiden laget jeg selvfølgelig backend i det aller heteste, NodeJs og Mongodb, sammen med handlebars for å rendre frontend. Dette brukte jeg veldig mye tid på, men den ble til slutt levert og jeg var sånn passe fornøyd. Dette hostet jeg på en VM hos Webhuset med npm pakken `forever` til å holde nettsiden kjørende.
+
+
+![nibarnehage.no 2018](/nibarnehage/nibarnehage.no-2018.png)
+
+https://web.archive.org/web/20180809100709/https://nibarnehage.no/
+
+    "It ain't much but it's honest work"
+
+
+I januar 2026 når VMen hadde krasjet av en eller annen grunn tenkte jeg: "Nei nå er det på tide å forenkle denne siden dramatisk lettere å vedlikeholde", bildemodulen var ikke i bruk lenger og teksten hadde aldri blir endret av styreren. Så da kunne nettsiden like godt vært en statisk html side.
+
+Da gjorde jeg det alle utviklere i 2026 ville gjort; fyrt opp Claude Code og sa:
+
+    "Create a joyful static html website for NIBarnehage,
+    pull images from existing webpage using wayback machine
+    - Make no mistakes"
+    
+etter litt fintuning var den nye nettsiden født, `"Hey claude make a github action to deploy the website to GitHub pages"`. Og vipps sparte barnehagen 300kr i serverkostnader i måneden (ja det er drøyt, men webhuset hadde endret stats og latt oss som ikke følger med kjøre en legacy vm type på gammel pris), og en flunkende ny nettside.
+
+![nibarnehage.no 2026](/nibarnehage/nibarnehage.no-2026.png)
+
+I dag bruker jeg AI til alt jeg koder og mer og mer av min daglige PC bruk. For eksempel https://proptonomy.ai landingssiden til min bedrift er 100% AI generert med Claude, vi bruker brand guideline til å lage investor pitch decks, eiendomsanalyser og claude i Excel for å analysere data og lage rapporter. Det er helt fantastisk hvor mye vi kan få gjort automatisk i dag.
+
+AI-verktøy er drøyt gode i dag og det gjør oss mye mer kraftige. Men hvordan skal nye utviklere lære seg ting om de ikke sitter timesvis på youtube videoer, StackOverflow osv for å lære seg hvordan man krypterer passord med bcrypt i NodeJs lenger? Det er jo bare å spørre Claudie og få servert noe som virker innen 30 sekunder. Men kanskje det ikke er så viktig? Det er jo bare å be AI kjøre en security review på koden og fikse problemer.
+
+Som med alt annet tenker jeg det løser seg til slutt, men det er viktig å lage noe manuelt for å forstå hvordan ting henger sammen. Skål for 10 nye tekniske år, jeg har mye mer avanserte prosjekter gående i dag, men i dag er det ikke koden som er det vanskeligste.
+
+Det vanskelige er å vite hva man skal bygge og hvordan det skal fungere.
+
+
+Ser frem til 18 nye år innenfor teknologi og problemløsing!

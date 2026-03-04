@@ -1,27 +1,221 @@
 ---
+import cv from "../data/cv.json";
 import Layout from "../layouts/BlogPost.astro";
 ---
 
 <Layout
-  title="About Me"
-  description="Lorem ipsum dolor sit amet"
+  title="About Mathias"
+  description="Entrepreneur and developer based in Bergen, Norway"
   pubDate={new Date("1998-10-05")}
 >
-  <p>
-    Hallaisiken kedegis? ✌🏻
+  <!-- About -->
+  <p>Hey! I'm Mathias — builder, founder, and life enthusiast. 👋</p>
+  <ul>
+    <li>
+      🏠 Founder of <a href="https://proptonomy.ai" target="_blank"
+        >Proptonomy</a
+      > — AI-native property management
+    </li>
+    <li>
+      🛏️ Running <a href="#">Heimby</a> — short-term rental operations in Bergen,
+      Odda and the rest of Norway
+    </li>
+    <li>🗺️ Big fan of Open Data, OpenStreetMap, and maps</li>
+    <li>
+      🤖 Interested in AI and automation — I like building tools that do the
+      boring stuff
+    </li>
+    <li>🌍 Spontaneous traveler — always planning the next adventure</li>
+    <li>🍺 Enthusiastic beer drinker</li>
+  </ul>
 
-    <ul>
-      <li>
-        🌍 Like to find great adventures everywhere, and pretty spontaneous
-      </li>
-      <li>🗺️ I have a big interest in Open Data and OpenStreetMap</li>
-      <li>🍻 For some reason I like beer quite a lot</li>
-      <li>
-        💻 Currently working as Head of Products <a
-          href="https://scanreach.com"
-          target="_blank">@ScanReach</a
-        > with life saving technologies for the maritime sector
-      </li>
-    </ul>
-  </p>
+  <hr />
+
+  <!-- Experience -->
+  <h2>Work life</h2>
+  {
+    cv.experience.map((job) => (
+      <div class="cv-entry">
+        <div class="cv-header">
+          <div>
+            <strong>{job.role}</strong>
+            {" @ "}
+            {job.url ? (
+              <a href={job.url} target="_blank">
+                {job.company}
+              </a>
+            ) : (
+              job.company
+            )}
+          </div>
+          <span class="cv-dates">
+            {job.from} – {job.to}
+          </span>
+        </div>
+        <p class="cv-desc">{job.description}</p>
+        <div class="cv-tags">
+          {job.tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+
+  <hr />
+
+  <!-- Projects -->
+  <h2>Projects</h2>
+  {
+    cv.projects.map((project) => (
+      <div class="cv-entry">
+        <div class="cv-header">
+          <strong>
+            {project.url ? (
+              <a href={project.url} target="_blank">
+                {project.name}
+              </a>
+            ) : (
+              project.name
+            )}
+          </strong>
+          {project.github && (
+            <a href={project.github} target="_blank" class="cv-dates">
+              GitHub →
+            </a>
+          )}
+        </div>
+        <p class="cv-desc">{project.description}</p>
+        <div class="cv-tags">
+          {project.tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+
+  <hr />
+
+  <!-- Properties -->
+  <h2>Real Estate</h2>
+  {
+    cv.properties.map((prop) => (
+      <div class="cv-entry">
+        <div class="cv-header">
+          <div>
+            <strong>{prop.name}</strong>
+            {" — "}
+            {prop.location}
+            {prop.entity && <span class="cv-dates"> ({prop.entity})</span>}
+          </div>
+          <span class="cv-dates">Acquired {prop.acquired}</span>
+        </div>
+        <p class="cv-desc">{prop.description}</p>
+        <div class="cv-tags">
+          {prop.url && (
+            <a href={prop.url} target="_blank" class="tag">
+              More info →
+            </a>
+          )}
+          <a
+            href={`https://www.openstreetmap.org/?mlat=${prop.lat}&mlon=${prop.lng}&zoom=16`}
+            target="_blank"
+            class="tag"
+          >
+            📍 Map
+          </a>
+        </div>
+      </div>
+    ))
+  }
+
+  <hr />
+
+  <!-- Education -->
+  <h2>Education</h2>
+  {
+    cv.education.map((edu) => (
+      <div class="cv-entry">
+        <div class="cv-header">
+          <div>
+            <strong>{edu.field}</strong>
+            {" — "}
+            {edu.url ? (
+              <a href={edu.url} target="_blank">
+                {edu.institution}
+              </a>
+            ) : (
+              edu.institution
+            )}
+          </div>
+          <span class="cv-dates">
+            {edu.from} – {edu.to}
+          </span>
+        </div>
+        <p class="cv-desc" style="color: #888; font-size: 0.9rem;">
+          {edu.degree}
+        </p>
+      </div>
+    ))
+  }
+
+  <hr />
+
+  <!-- Skills -->
+  <h2>Skills</h2>
+  <div class="cv-skills">
+    {cv.skills.map((skill) => <span class="tag">{skill}</span>)}
+  </div>
+
+  <hr />
+
+  <!-- Links -->
+  <h2>Find me</h2>
+  <ul>
+    <li><a href={cv.links.github} target="_blank">GitHub</a></li>
+    <li><a href={cv.links.linkedin} target="_blank">LinkedIn</a></li>
+    <li><a href={cv.links.website} target="_blank">Proptonomy</a></li>
+  </ul>
 </Layout>
+
+<style>
+  hr {
+    margin: 2rem 0;
+    border: none;
+    border-top: 1px solid #eee;
+  }
+  .cv-entry {
+    margin-bottom: 1.75rem;
+  }
+  .cv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .cv-dates {
+    font-size: 0.85rem;
+    color: #888;
+    white-space: nowrap;
+  }
+  .cv-desc {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 0.95rem;
+  }
+  .cv-skills,
+  .cv-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag {
+    background: #f3f4f6;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: #444;
+  }
+</style>

@@ -1,0 +1,211 @@
+{
+	"name": "Mathias Haugsbø",
+	"title": "CTO & Entrepreneur",
+	"location": "Bergen, Norway",
+	"email": "mathiash98@gmail.com",
+	"summary": "Full stack developer and entrepreneur. Building AI-native tools for property management and short-term rentals. I like solving real problems with simple, scalable software.",
+	"links": {
+		"github": "https://github.com/mathiash98",
+		"linkedin": "https://www.linkedin.com/in/mathias-haugsbo/",
+		"website": "https://proptonomy.ai"
+	},
+	"experience": [
+		{
+			"company": "Proptonomy",
+			"role": "CTO",
+			"from": "2026-01",
+			"to": "present",
+			"location": "Bergen, Norway",
+			"description": "Building an AI-native property management system. Starting with documentation and processes in the short-term rental industry to automatically resolve issues using AI. We've lived the problem ourselves managing one of Norway's largest rental portfolios.",
+			"url": "https://proptonomy.ai",
+			"logo": null,
+			"tags": ["AI", "PropTech", "Startup"]
+		},
+		{
+			"company": "Heimby",
+			"role": "Technical Director",
+			"from": "2025-02",
+			"to": "present",
+			"location": "Bergen, Norway",
+			"description": "Short term rental manager in Norway. Handled 60 units in Bergen 2025, expanding to Odda and the rest of Norway in 2026. Built internal tools for operations, logistics and customer service, and integrated AI to automate routine tasks.",
+			"url": "https://heimby.no",
+			"logo": null,
+			"tags": ["PropTech", "Short-term rental", "AI"]
+		},
+		{
+			"company": "DigiCar",
+			"role": "CTO",
+			"from": "2025-06",
+			"to": "2026-02",
+			"location": "Bergen, Norway",
+			"description": "Built the digital sales platform for digicar.no — one of Norway's leading companies in commission sales of used cars.",
+			"url": "https://digicar.no",
+			"logo": null,
+			"tags": ["Platform", "Automotive"]
+		},
+		{
+			"company": "DigiSale",
+			"role": "CTO",
+			"from": "2025-06",
+			"to": "2026-01",
+			"location": "Bergen, Norway",
+			"description": "Part of an ambition to build small market leaders in niche verticals using technology and AI. DigiSale was parked before it took off, but the vision — and lessons — live on.",
+			"url": null,
+			"logo": null,
+			"tags": ["Startup", "AI", "Platform"]
+		},
+		{
+			"company": "ScanReach",
+			"role": "Head of Product",
+			"from": "2024-09",
+			"to": "2025-05",
+			"location": "Bergen, Norway",
+			"description": "Drove long-term product vision and strategy aligned with business goals. Technical guidance and mentorship, cross-functional collaboration, and overseeing product lifecycle from development to production.",
+			"url": "https://scanreach.com",
+			"logo": null,
+			"tags": ["Product", "Maritime", "IoT"]
+		},
+		{
+			"company": "ScanReach",
+			"role": "Senior Software Engineer",
+			"from": "2022-08",
+			"to": "2024-10",
+			"location": "Bergen, Norway",
+			"description": "Backend in C#/.NET, frontend in TypeScript/Vue. Azure deployments via GitHub pipelines, Docker and Terraform. IoT software deployed to vessels worldwide via Azure IoT Hub. Responsible for hiring and mentoring junior developers.",
+			"url": "https://scanreach.com",
+			"logo": null,
+			"tags": ["C#", ".NET", "Vue", "Azure", "IoT"]
+		},
+		{
+			"company": "ScanReach",
+			"role": "Full Stack Engineer",
+			"from": "2019-09",
+			"to": "2022-08",
+			"location": "Bergen, Norway",
+			"description": "Life-saving technologies for the maritime sector. Architecture, backend and frontend development, Azure cloud services, IoT Hub, Linux server management.",
+			"url": "https://scanreach.com",
+			"logo": null,
+			"tags": ["Full Stack", "Azure", "Maritime", "IoT"]
+		},
+		{
+			"company": "friByte",
+			"role": "Chair / Volunteer",
+			"from": "2020-08",
+			"to": "2025-05",
+			"location": "Bergen, Norway",
+			"description": "Student organisation for Linux, server management and open source. Introduced Docker, maintained backup systems, hosted services for student organisations in Bergen. Also served as Vice Chair and Finance Officer.",
+			"url": "https://fribyte.no",
+			"logo": null,
+			"tags": ["Linux", "Docker", "Open Source", "Volunteer"]
+		},
+		{
+			"company": "CanEat",
+			"role": "CTO & Founder",
+			"from": "2020-11",
+			"to": "2021-08",
+			"location": "Bergen, Norway",
+			"description": "Built an MVP food product scanner helping allergy sufferers quickly check if products are safe to eat.",
+			"url": null,
+			"logo": null,
+			"tags": ["Startup", "Mobile", "Health"]
+		},
+		{
+			"company": "Naturallmat",
+			"role": "Co-founder",
+			"from": "2017-02",
+			"to": "2019-07",
+			"location": "Bergen, Norway",
+			"description": "Started a business connecting local food producers to consumers. Weekly deliveries, attended Angel Challenge Bergen. Great lessons in sales and entrepreneurship.",
+			"url": null,
+			"logo": null,
+			"tags": ["Startup", "E-commerce", "FoodTech"]
+		}
+	],
+	"properties": [
+		{
+			"name": "Jonsvollsgaten 3",
+			"location": "Bergen, Norway",
+			"acquired": "2025-06",
+			"entity": null,
+			"lat": 60.3915,
+			"lng": 5.3271,
+			"description": "Residential property with 3 apartments + Malinka Kebab kiosk acquired spring 2025 via Heimfond AS.",
+			"url": null
+		},
+		{
+			"name": "Hardangerheimen — 3 eiendommer i Odda",
+			"location": "Odda, Norway",
+			"acquired": "2026-02",
+			"entity": "Hardangerheimen AS",
+			"lat": 60.0693,
+			"lng": 6.5461,
+			"description": "Three properties with 8 apartments in Odda acquired in February 2026 via Hardangerheimen AS.",
+			"url": null
+		}
+	],
+	"projects": [
+		{
+			"name": "Bergen BySykkel × Siri",
+			"description": "Reverse-engineered the Bergen BySykkel app API to unlock city bikes using a Siri Shortcut. No app needed.",
+			"url": "https://mathiash98.github.io/blog/2023-11-unlock-city-bike-with-siri/",
+			"github": null,
+			"tags": ["Reverse Engineering", "iOS", "Siri Shortcuts"]
+		},
+		{
+			"name": "Trail Map Generator",
+			"description": "Generate a beautiful custom trail map for any location in the world using OpenStreetMap data and Mapbox Studio.",
+			"url": "https://mathiash98.github.io/blog/trail-map-generator/",
+			"github": null,
+			"tags": ["OpenStreetMap", "Mapbox", "Maps"]
+		},
+		{
+			"name": "Proptonomy",
+			"description": "AI-native property management system. Automates logistics, documentation and customer service for short-term rentals.",
+			"url": "https://proptonomy.ai",
+			"github": null,
+			"tags": ["AI", "PropTech", "SaaS"]
+		}
+	],
+	"education": [
+		{
+			"institution": "Universitetet i Bergen",
+			"degree": "Bachelor",
+			"field": "Informatikk (Computer Science)",
+			"from": "2018",
+			"to": "2020",
+			"url": "https://uib.no"
+		},
+		{
+			"institution": "Universitetet i Bergen",
+			"degree": "Bachelor",
+			"field": "Samfunnsøkonomi (Economics)",
+			"from": "2019",
+			"to": "2021",
+			"url": "https://uib.no"
+		},
+		{
+			"institution": "Free Code Camp",
+			"degree": "Certificate",
+			"field": "Full Stack Web Development",
+			"from": "2016",
+			"to": "2016",
+			"url": "https://freecodecamp.org"
+		}
+	],
+	"certifications": [],
+	"skills": [
+		"AI / LLM Integration",
+		"C# / .NET",
+		"TypeScript",
+		"Vue",
+		"React",
+		"Azure",
+		"Docker",
+		"Terraform",
+		"GitHub Actions",
+		"Product Management",
+		"OpenStreetMap",
+		"IoT",
+		"PostgreSQL"
+	]
+}

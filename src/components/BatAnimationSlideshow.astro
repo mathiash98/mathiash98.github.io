@@ -1,0 +1,785 @@
+---
+import { batFiles } from "../data/batFiles";
+---
+
+<!-- Hidden source data elements (set:text handles all HTML escaping) -->{
+    batFiles.map((file, i) => (
+        <pre
+            id={`bat-src-${i}`}
+            class="bat-source-data"
+            style="display:none"
+            data-name={file.name}
+            set:text={file.source}
+        />
+    ))
+}
+
+<div class="bat-slideshow">
+    <div class="bat-window">
+        <div class="bat-titlebar">
+            <div class="bat-titlebar-text">
+                <span class="bat-icon">■</span>
+                C:\WINDOWS\system32\cmd.exe
+            </div>
+            <div class="bat-titlebar-buttons">
+                <span class="bat-btn-min">_</span>
+                <span class="bat-btn-max">□</span>
+                <span class="bat-btn-close">×</span>
+            </div>
+        </div>
+
+        <div class="bat-nav">
+            <button id="bat-prev" class="bat-nav-btn" title="Forrige fil"
+                >◀</button
+            >
+            <button
+                id="bat-auto-toggle"
+                class="bat-nav-btn bat-auto-btn bat-auto-active"
+                title="Pause/spill av automatisk filbytte">||</button
+            >
+            <span id="bat-filename" class="bat-nav-filename"></span>
+            <span id="bat-counter" class="bat-nav-counter"></span>
+            <button id="bat-next" class="bat-nav-btn" title="Neste fil"
+                >▶</button
+            >
+        </div>
+
+        <div class="bat-screen-wrapper">
+            <pre id="bat-display" class="bat-screen"></pre>
+        </div>
+
+        <div class="bat-controls">
+            <button id="bat-play-pause" class="bat-ctrl-btn" title="Play/Pause"
+                >▶ Spill av</button
+            >
+            <button id="bat-restart" class="bat-ctrl-btn" title="Start på nytt"
+                >↺ Start på nytt</button
+            >
+            <button
+                id="bat-toggle-source"
+                class="bat-ctrl-btn"
+                title="Vis/skjul kildekode">{} Vis kildekode</button
+            >
+        </div>
+    </div>
+</div>
+
+<style>
+    .bat-source-data {
+        display: none !important;
+    }
+
+    .bat-slideshow {
+        margin: 1.5rem 0;
+        font-family: inherit;
+    }
+
+    .bat-window {
+        border: 2px solid #808080;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        max-width: 720px;
+    }
+
+    .bat-titlebar {
+        background: linear-gradient(to right, #000080, #1084d0);
+        color: white;
+        padding: 3px 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        font-size: 12px;
+        user-select: none;
+    }
+
+    .bat-titlebar-text {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: bold;
+    }
+
+    .bat-icon {
+        font-size: 10px;
+    }
+
+    .bat-titlebar-buttons {
+        display: flex;
+        gap: 2px;
+    }
+
+    .bat-titlebar-buttons span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 14px;
+        background: #c0c0c0;
+        border: 1px outset #dfdfdf;
+        font-size: 10px;
+        color: black;
+        cursor: default;
+        line-height: 1;
+    }
+
+    .bat-nav {
+        background: #1a1a2e;
+        border-bottom: 1px solid #333;
+        padding: 6px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .bat-nav-btn {
+        background: #2a2a4a;
+        color: #00ff00;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 2px 10px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.15s;
+    }
+
+    .bat-nav-btn:hover {
+        background: #3a3a6a;
+    }
+
+    .bat-auto-btn {
+        font-family: "Consolas", "Courier New", monospace;
+        font-weight: bold;
+        font-size: 13px;
+        letter-spacing: 1px;
+        padding: 2px 8px;
+        min-width: 28px;
+        text-align: center;
+        border: 2px solid #444;
+        box-shadow:
+            inset 0 0 4px rgba(0, 255, 0, 0.15),
+            0 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .bat-auto-active {
+        color: #55ff55;
+        border-color: #55ff55;
+        box-shadow:
+            inset 0 0 6px rgba(85, 255, 85, 0.2),
+            0 0 4px rgba(85, 255, 85, 0.3);
+    }
+
+    .bat-nav-filename {
+        color: #ffff00;
+        font-family: "Consolas", "Courier New", monospace;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .bat-nav-counter {
+        color: #888;
+        font-family: "Consolas", "Courier New", monospace;
+        font-size: 12px;
+    }
+
+    .bat-screen-wrapper {
+        background: #000;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .bat-screen {
+        background: #000;
+        color: #aaaaaa;
+        font-family: "Consolas", "Courier New", "Lucida Console", monospace;
+        font-size: 13px;
+        line-height: 1.3;
+        padding: 8px 10px;
+        margin: 0;
+        min-height: 260px;
+        max-height: 460px;
+        white-space: pre;
+        overflow-x: auto;
+        overflow-y: auto;
+        border: none;
+        tab-size: 8;
+    }
+
+    .bat-controls {
+        background: #1a1a2e;
+        border-top: 1px solid #333;
+        padding: 8px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .bat-ctrl-btn {
+        background: #2a2a4a;
+        color: #ccc;
+        border: 1px solid #555;
+        border-radius: 3px;
+        padding: 4px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: "Consolas", "Courier New", monospace;
+        transition: all 0.15s;
+    }
+
+    .bat-ctrl-btn:hover {
+        background: #3a3a6a;
+        color: #fff;
+    }
+
+    .bat-ctrl-btn.active {
+        background: #4a4a8a;
+        color: #fff;
+        border-color: #7777ff;
+    }
+
+    @media (max-width: 600px) {
+        .bat-screen {
+            font-size: 10px;
+            min-height: 200px;
+        }
+        .bat-nav-filename {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<script is:inline>
+    (function () {
+        // --- DOS COLOR PALETTE ---
+        const DOS_COLORS = {
+            "0": "#000000",
+            "1": "#0000AA",
+            "2": "#00AA00",
+            "3": "#00AAAA",
+            "4": "#AA0000",
+            "5": "#AA00AA",
+            "6": "#AA5500",
+            "7": "#AAAAAA",
+            "8": "#555555",
+            "9": "#5555FF",
+            a: "#55FF55",
+            b: "#55FFFF",
+            c: "#FF5555",
+            d: "#FF55FF",
+            e: "#FFFF55",
+            f: "#FFFFFF",
+        };
+
+        function getDosColor(code) {
+            if (!code) return { fg: "#AAAAAA", bg: "#000000" };
+            code = code.toLowerCase();
+            if (code.length === 1) {
+                return { fg: DOS_COLORS[code] || "#AAAAAA", bg: "#000000" };
+            }
+            if (code.length >= 2) {
+                return {
+                    bg: DOS_COLORS[code[0]] || "#000000",
+                    fg: DOS_COLORS[code[1]] || "#AAAAAA",
+                };
+            }
+            return { fg: "#AAAAAA", bg: "#000000" };
+        }
+
+        // --- READ BAT DATA FROM HIDDEN ELEMENTS ---
+        var batFiles = [];
+        var els = document.querySelectorAll(".bat-source-data");
+        for (var i = 0; i < els.length; i++) {
+            batFiles.push({
+                name: els[i].dataset.name,
+                source: els[i].textContent,
+            });
+        }
+
+        // --- PARSER: extract frames from bat source ---
+        function parseBatFrames(source) {
+            var lines = source.split("\n");
+            var frames = [];
+            var currentLines = [];
+            var currentColor = null;
+            var currentDelay = 20;
+            var globalColor = null;
+
+            for (var i = 0; i < lines.length; i++) {
+                var raw = lines[i];
+                var line = raw.trim();
+                var lineLower = line.toLowerCase();
+
+                // Handle cls: push current frame and start new one
+                if (lineLower === "cls") {
+                    if (currentLines.length > 0) {
+                        frames.push({
+                            lines: currentLines.slice(),
+                            color: currentColor || globalColor,
+                            delay: currentDelay,
+                        });
+                    }
+                    currentLines = [];
+                    currentColor = globalColor;
+                    currentDelay = 20;
+                    continue;
+                }
+
+                // Handle color command
+                if (/^color\s+/i.test(line)) {
+                    var colorVal = line
+                        .replace(/^color\s+/i, "")
+                        .trim()
+                        .toLowerCase();
+                    globalColor = colorVal;
+                    currentColor = colorVal;
+                    continue;
+                }
+
+                // Handle echo commands
+                if (/^@?echo$/i.test(line)) {
+                    // bare echo = blank line
+                    currentLines.push("");
+                    continue;
+                }
+
+                if (/^@?echo\s/i.test(line)) {
+                    var content = line.replace(/^@?echo\s/i, "");
+                    if (content.toLowerCase() === "off") continue;
+                    // Replace %random% with actual random numbers
+                    content = content.replace(/%random%/gi, function () {
+                        return String(Math.floor(Math.random() * 32768));
+                    });
+                    currentLines.push(content);
+                    continue;
+                }
+
+                // Handle Echo (capitalized differently)
+                if (/^Echo\s/i.test(line) && !/^@?echo/i.test(line)) {
+                    var echoContent = line.replace(/^Echo\s/i, "");
+                    currentLines.push(echoContent);
+                    continue;
+                }
+
+                // Handle ping delay
+                if (/^ping\s+localhost/i.test(line)) {
+                    var match = line.match(/-n\s+\.?(\d+)/);
+                    if (match) {
+                        var n = parseInt(match[1]);
+                        if (n >= 5) currentDelay = 260;
+                        else if (n >= 1) currentDelay = 65;
+                        else currentDelay = 20;
+                    }
+                    continue;
+                }
+
+                // Handle pause (acts as frame delimiter for some files like SOL and Juletre)
+                if (lineLower === "pause") {
+                    if (currentLines.length > 0) {
+                        frames.push({
+                            lines: currentLines.slice(),
+                            color: currentColor || globalColor,
+                            delay: 170,
+                        });
+                        currentLines = [];
+                        currentColor = globalColor;
+                        currentDelay = 20;
+                    }
+                    continue;
+                }
+
+                // Skip other commands (title, goto, start, shutdown, etc.)
+            }
+
+            // Push last frame if any
+            if (currentLines.length > 0) {
+                frames.push({
+                    lines: currentLines.slice(),
+                    color: currentColor || globalColor,
+                    delay: currentDelay,
+                });
+            }
+
+            return frames;
+        }
+
+        // --- SPECIAL HANDLERS ---
+
+        // For RAINBOW.bat: generate fresh random frames
+        function generateRainbowFrames() {
+            var colors = ["5", "13", "15", "22", "0", "27"];
+            var frames = [];
+            // Generate 3 "loops" worth of lines displayed as building up
+            var accumulated = [];
+            for (var loop = 0; loop < 3; loop++) {
+                for (var c = 0; c < colors.length; c++) {
+                    var nums = [];
+                    for (var n = 0; n < 12; n++)
+                        nums.push(String(Math.floor(Math.random() * 32768)));
+                    accumulated.push({
+                        text: " " + nums.join(" "),
+                        color: colors[c],
+                    });
+                    // Show last 12 lines
+                    var visible = accumulated.slice(-12);
+                    var frameLines = visible.map(function (v) {
+                        return v.text;
+                    });
+                    frames.push({
+                        lines: frameLines,
+                        color: colors[c],
+                        delay: 17,
+                    });
+                }
+            }
+            return frames;
+        }
+
+        // For trolololol.bat: build up the face line by line
+        function generateTrololFrames() {
+            var linesData = [
+                {
+                    color: "2",
+                    text: " Trolololololololololololololoooooololololololololololololololo",
+                },
+                {
+                    color: "1",
+                    text: " Trolololololololololololooooooooooooololololololololololololol",
+                },
+                {
+                    color: "3",
+                    text: " Trolololololololololoollllooooooollllooolololololololololololo",
+                },
+                {
+                    color: "4",
+                    text: " Trolololololololololoollllooooooollllooolololololololololololo",
+                },
+                {
+                    color: "5",
+                    text: " Trolololololololololoooooooooooooooooooolololololololololololo",
+                },
+                {
+                    color: "6",
+                    text: " Trolololololololololooooo---------ooooooololololololololololol",
+                },
+                {
+                    color: "7",
+                    text: " Trolololololololololooooooooooooooooooooololololololololololol",
+                },
+                {
+                    color: "8",
+                    text: " Trolololololololololololooooooooooooooolololololololololololol",
+                },
+                {
+                    color: "9",
+                    text: " Trololololololololololololoooooooooooololololololololololololo",
+                },
+                {
+                    color: "a",
+                    text: " Trolololololololololololololololololololololololololololololol",
+                },
+                {
+                    color: "b",
+                    text: " Trolololololololololololololololololololololololololololololol",
+                },
+            ];
+
+            var frames = [];
+            for (var i = 0; i < linesData.length; i++) {
+                var frameLines = [];
+                for (var j = 0; j <= i; j++) {
+                    frameLines.push(linesData[j].text);
+                }
+                frames.push({
+                    lines: frameLines,
+                    color: linesData[i].color,
+                    delay: 33,
+                });
+            }
+            // Hold the full face for a moment then loop
+            frames.push({
+                lines: linesData.map(function (l) {
+                    return l.text;
+                }),
+                color: "b",
+                delay: 200,
+            });
+            return frames;
+        }
+
+        // --- STATE ---
+        var state = {
+            currentFile: 0,
+            currentFrame: 0,
+            isPlaying: false,
+            showingSource: false,
+            autoAdvance: true,
+            timer: null,
+            parsedFrames: {}, // cache: index -> frames array
+        };
+
+        // --- DOM ELEMENTS ---
+        var display = document.getElementById("bat-display");
+        var filenameEl = document.getElementById("bat-filename");
+        var counterEl = document.getElementById("bat-counter");
+        var playPauseBtn = document.getElementById("bat-play-pause");
+        var restartBtn = document.getElementById("bat-restart");
+        var toggleSourceBtn = document.getElementById("bat-toggle-source");
+        var prevBtn = document.getElementById("bat-prev");
+        var nextBtn = document.getElementById("bat-next");
+        var autoToggleBtn = document.getElementById("bat-auto-toggle");
+        var screenWrapper = display.parentElement;
+
+        // --- FUNCTIONS ---
+
+        function getFrames(index) {
+            if (state.parsedFrames[index]) return state.parsedFrames[index];
+
+            var file = batFiles[index];
+            var frames;
+
+            // Special handling for specific files
+            if (file.name === "RAINBOW.bat") {
+                frames = generateRainbowFrames();
+            } else if (file.name === "trolololol.bat") {
+                frames = generateTrololFrames();
+            } else {
+                frames = parseBatFrames(file.source);
+            }
+
+            // Extra speed boost for long animations
+            var speedFiles = { "Basket.bat": 0.5, "bla.bat": 0.5 };
+            if (speedFiles[file.name]) {
+                var mult = speedFiles[file.name];
+                for (var s = 0; s < frames.length; s++) {
+                    frames[s].delay = Math.max(
+                        5,
+                        Math.round(frames[s].delay * mult),
+                    );
+                }
+            }
+
+            // For files with no visual frames, create a source-only frame
+            if (frames.length === 0) {
+                frames = [
+                    {
+                        lines: [
+                            "C:\\> " + file.name,
+                            "",
+                            "Denne filen har ingen visuell animasjon.",
+                            'Trykk "{ } Vis kildekode" for å se innholdet.',
+                        ],
+                        color: "7",
+                        delay: 330,
+                    },
+                ];
+            }
+
+            state.parsedFrames[index] = frames;
+            return frames;
+        }
+
+        function renderFrame(frame) {
+            if (!frame) return;
+            var colors = getDosColor(frame.color);
+            display.style.color = colors.fg;
+            screenWrapper.style.backgroundColor = colors.bg;
+            display.style.backgroundColor = colors.bg;
+            display.textContent = frame.lines.join("\n");
+        }
+
+        function showSource() {
+            var file = batFiles[state.currentFile];
+            display.style.color = "#00AA00";
+            screenWrapper.style.backgroundColor = "#000000";
+            display.style.backgroundColor = "#000000";
+            display.textContent = file.source;
+        }
+
+        function loadFile(index) {
+            stopAnimation();
+            state.currentFile = index;
+            state.currentFrame = 0;
+
+            filenameEl.textContent = batFiles[index].name;
+            counterEl.textContent =
+                "(" + (index + 1) + "/" + batFiles.length + ")";
+
+            if (state.showingSource) {
+                showSource();
+            } else {
+                var frames = getFrames(index);
+                renderFrame(frames[0]);
+            }
+        }
+
+        function stepAnimation() {
+            if (state.showingSource) return;
+            var frames = getFrames(state.currentFile);
+            if (frames.length === 0) return;
+
+            // Special: regenerate RAINBOW frames each loop for fresh randoms
+            if (
+                batFiles[state.currentFile].name === "RAINBOW.bat" &&
+                state.currentFrame >= frames.length - 1
+            ) {
+                delete state.parsedFrames[state.currentFile];
+            }
+
+            state.currentFrame = state.currentFrame + 1;
+
+            // Auto-advance to next file when animation loops
+            if (state.currentFrame >= frames.length) {
+                state.currentFrame = 0;
+                if (state.autoAdvance && state.isPlaying) {
+                    var nextIdx = (state.currentFile + 1) % batFiles.length;
+                    state.timer = setTimeout(function () {
+                        loadFile(nextIdx);
+                        startAnimation();
+                    }, 400);
+                    return;
+                }
+                // If auto-advance off, just loop current file
+                var frame = frames[0];
+                renderFrame(frame);
+                if (state.isPlaying) {
+                    state.timer = setTimeout(stepAnimation, frame.delay);
+                }
+                return;
+            }
+
+            var frame = frames[state.currentFrame];
+            renderFrame(frame);
+
+            if (state.isPlaying) {
+                state.timer = setTimeout(stepAnimation, frame.delay);
+            }
+        }
+
+        function startAnimation() {
+            if (state.isPlaying) return;
+            state.isPlaying = true;
+            playPauseBtn.textContent = "⏸ Pause";
+            playPauseBtn.classList.add("active");
+
+            var frames = getFrames(state.currentFile);
+            if (frames.length > 0) {
+                var delay = frames[state.currentFrame].delay;
+                state.timer = setTimeout(stepAnimation, delay);
+            }
+        }
+
+        function stopAnimation() {
+            state.isPlaying = false;
+            if (state.timer) {
+                clearTimeout(state.timer);
+                state.timer = null;
+            }
+            playPauseBtn.textContent = "▶ Spill av";
+            playPauseBtn.classList.remove("active");
+        }
+
+        function restartAnimation() {
+            stopAnimation();
+            state.currentFrame = 0;
+            // Regenerate rainbow frames for fresh randoms
+            if (batFiles[state.currentFile].name === "RAINBOW.bat") {
+                delete state.parsedFrames[state.currentFile];
+            }
+            var frames = getFrames(state.currentFile);
+            if (!state.showingSource && frames.length > 0) {
+                renderFrame(frames[0]);
+            }
+            startAnimation();
+        }
+
+        function toggleSource() {
+            state.showingSource = !state.showingSource;
+            if (state.showingSource) {
+                stopAnimation();
+                toggleSourceBtn.textContent = "▶ Vis animasjon";
+                toggleSourceBtn.classList.add("active");
+                showSource();
+            } else {
+                toggleSourceBtn.textContent = "{ } Vis kildekode";
+                toggleSourceBtn.classList.remove("active");
+                var frames = getFrames(state.currentFile);
+                if (frames.length > 0) {
+                    renderFrame(frames[state.currentFrame]);
+                }
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        playPauseBtn.addEventListener("click", function () {
+            if (state.showingSource) {
+                // Switch to animation view first
+                state.showingSource = false;
+                toggleSourceBtn.textContent = "{ } Vis kildekode";
+                toggleSourceBtn.classList.remove("active");
+            }
+            if (state.isPlaying) {
+                stopAnimation();
+            } else {
+                startAnimation();
+            }
+        });
+
+        restartBtn.addEventListener("click", function () {
+            if (state.showingSource) {
+                state.showingSource = false;
+                toggleSourceBtn.textContent = "{ } Vis kildekode";
+                toggleSourceBtn.classList.remove("active");
+            }
+            restartAnimation();
+        });
+
+        toggleSourceBtn.addEventListener("click", toggleSource);
+
+        autoToggleBtn.addEventListener("click", function () {
+            state.autoAdvance = !state.autoAdvance;
+            if (state.autoAdvance) {
+                autoToggleBtn.textContent = "||";
+                autoToggleBtn.classList.add("bat-auto-active");
+                autoToggleBtn.title = "Pause automatisk filbytte";
+            } else {
+                autoToggleBtn.textContent = "|>";
+                autoToggleBtn.classList.remove("bat-auto-active");
+                autoToggleBtn.title = "Spill av automatisk filbytte";
+            }
+        });
+
+        prevBtn.addEventListener("click", function () {
+            var idx =
+                (state.currentFile - 1 + batFiles.length) % batFiles.length;
+            loadFile(idx);
+        });
+
+        nextBtn.addEventListener("click", function () {
+            var idx = (state.currentFile + 1) % batFiles.length;
+            loadFile(idx);
+        });
+
+        // Keyboard navigation
+        document.addEventListener("keydown", function (e) {
+            // Only handle if slideshow is visible in viewport
+            var rect = display.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+            if (e.key === "ArrowLeft") {
+                prevBtn.click();
+            } else if (e.key === "ArrowRight") {
+                nextBtn.click();
+            } else if (e.key === " ") {
+                e.preventDefault();
+                playPauseBtn.click();
+            }
+        });
+
+        // --- INIT ---
+        loadFile(0);
+        // Auto-play on load
+        startAnimation();
+    })();
+</script>
