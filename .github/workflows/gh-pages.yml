@@ -35,7 +35,7 @@ jobs:
       - name: Support old rss subscriptions
         run: cp ./dist/old-rss.xml ./dist/index.xml
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist/
 
