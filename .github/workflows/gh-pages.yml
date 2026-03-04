@@ -26,14 +26,24 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v2
-      - name: Install
-        run: npm install
-      - name: Build
+      - name: Checkout your repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
         run: npm run build
-      - name: Support old rss subscriptions
+
+      - name: Support old RSS subscriptions
         run: cp ./dist/old-rss.xml ./dist/index.xml
+
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v4
         with:
@@ -41,4 +51,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
