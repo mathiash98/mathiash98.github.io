@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 240" font-family="ui-sans-serif,system-ui,sans-serif" font-size="13">
+<title>GitHub commits per month 2025</title>
+<rect x="10" y="211" width="46" height="1" rx="4" fill="#0098fd"/>
+<text x="33.0" y="205" text-anchor="middle" fill="#9aa3af" font-weight="600">1</text>
+<text x="33.0" y="232" text-anchor="middle" fill="#9aa3af">Jan</text>
+<rect x="69" y="209" width="46" height="3" rx="4" fill="#0098fd"/>
+<text x="92.0" y="203" text-anchor="middle" fill="#9aa3af" font-weight="600">2</text>
+<text x="92.0" y="232" text-anchor="middle" fill="#9aa3af">Feb</text>
+<rect x="128" y="212" width="46" height="0" rx="4" fill="#0098fd"/>
+<text x="151.0" y="206" text-anchor="middle" fill="#9aa3af" font-weight="600">0</text>
+<text x="151.0" y="232" text-anchor="middle" fill="#9aa3af">Mar</text>
+<rect x="187" y="159" width="46" height="53" rx="4" fill="#0098fd"/>
+<text x="210.0" y="153" text-anchor="middle" fill="#9aa3af" font-weight="600">42</text>
+<text x="210.0" y="232" text-anchor="middle" fill="#9aa3af">Apr</text>
+<rect x="246" y="184" width="46" height="28" rx="4" fill="#0098fd"/>
+<text x="269.0" y="178" text-anchor="middle" fill="#9aa3af" font-weight="600">22</text>
+<text x="269.0" y="232" text-anchor="middle" fill="#9aa3af">May</text>
+<rect x="305" y="137" width="46" height="75" rx="4" fill="#0098fd"/>
+<text x="328.0" y="131" text-anchor="middle" fill="#9aa3af" font-weight="600">59</text>
+<text x="328.0" y="232" text-anchor="middle" fill="#9aa3af">Jun</text>
+<rect x="364" y="87" width="46" height="125" rx="4" fill="#0098fd"/>
+<text x="387.0" y="81" text-anchor="middle" fill="#9aa3af" font-weight="600">99</text>
+<text x="387.0" y="232" text-anchor="middle" fill="#9aa3af">Jul</text>
+<rect x="423" y="22" width="46" height="190" rx="4" fill="#0098fd"/>
+<text x="446.0" y="16" text-anchor="middle" fill="#9aa3af" font-weight="600">150</text>
+<text x="446.0" y="232" text-anchor="middle" fill="#9aa3af">Aug</text>
+<rect x="482" y="159" width="46" height="53" rx="4" fill="#0098fd"/>
+<text x="505.0" y="153" text-anchor="middle" fill="#9aa3af" font-weight="600">42</text>
+<text x="505.0" y="232" text-anchor="middle" fill="#9aa3af">Sep</text>
+<rect x="541" y="88" width="46" height="124" rx="4" fill="#0098fd"/>
+<text x="564.0" y="82" text-anchor="middle" fill="#9aa3af" font-weight="600">98</text>
+<text x="564.0" y="232" text-anchor="middle" fill="#9aa3af">Oct</text>
+<rect x="600" y="73" width="46" height="139" rx="4" fill="#0098fd"/>
+<text x="623.0" y="67" text-anchor="middle" fill="#9aa3af" font-weight="600">110</text>
+<text x="623.0" y="232" text-anchor="middle" fill="#9aa3af">Nov</text>
+<rect x="659" y="57" width="46" height="155" rx="4" fill="#0098fd"/>
+<text x="682.0" y="51" text-anchor="middle" fill="#9aa3af" font-weight="600">122</text>
+<text x="682.0" y="232" text-anchor="middle" fill="#9aa3af">Dec</text>
+</svg>
