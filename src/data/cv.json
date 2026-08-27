@@ -27,10 +27,21 @@
 			"from": "2025-02",
 			"to": "present",
 			"location": "Bergen, Norway",
-			"description": "Short term rental manager in Norway. Handled 60 units in Bergen 2025, expanding to Odda and the rest of Norway in 2026. Built internal tools for operations, logistics and customer service, and integrated AI to automate routine tasks.",
+			"description": "Short term rental manager in Norway. Handled 60 units in Bergen 2025, expanding to Odda and the rest of Norway in 2026. Ended 2026 with 160 units managed across Norway. 110 in Bergen, 25 in Oslo and then Odda, Voss, Kvamskogen. Built internal tools for operations, logistics and customer service, and integrated AI to automate routine tasks.",
 			"url": "https://heimby.no",
 			"logo": null,
 			"tags": ["PropTech", "Short-term rental", "AI"]
+		},
+		{
+			"company": "Caps Lock Invest AS",
+			"role": "Chairman of the Board",
+			"from": "2020-12",
+			"to": "present",
+			"location": "Bergen, Norway",
+			"description": "My own holding company. Property and tech investments, and a hands-on way to learn how to actually run a limited company.",
+			"url": null,
+			"logo": null,
+			"tags": ["Investments", "Real Estate", "Holding"]
 		},
 		{
 			"company": "DigiCar",
@@ -53,6 +64,17 @@
 			"url": null,
 			"logo": null,
 			"tags": ["Startup", "AI", "Platform"]
+		},
+		{
+			"company": "DigiHome",
+			"role": "Co-founder",
+			"from": "2025-06",
+			"to": "2026-01",
+			"location": "Bergen, Norway",
+			"description": "Property management through technology. Focused on short-term and long-term rentals with automated operations, full reporting and a tenant portal for property owners. Team split up into https://proptonomy.ai and DigiHome after 6 months, where the latter focus on Norwegian long-term rentals and Proptonomy on international short term rentals and AI-native tools for property managers around the world.",
+			"url": "https://digihome.no",
+			"logo": null,
+			"tags": ["PropTech", "Startup", "Rental"]
 		},
 		{
 			"company": "ScanReach",
@@ -110,8 +132,19 @@
 			"tags": ["Startup", "Mobile", "Health"]
 		},
 		{
+			"company": "Universitetet i Bergen",
+			"role": "Teaching Assistant",
+			"from": "2019-08",
+			"to": "2019-12",
+			"location": "Bergen, Norway",
+			"description": "Weekly group sessions for INF100 (Introduction to Programming) at the Faculty of Mathematics and Natural Sciences. Helped students with Python and practical programming problems.",
+			"url": "https://uib.no",
+			"logo": null,
+			"tags": ["Python", "Teaching"]
+		},
+		{
 			"company": "Naturallmat",
-			"role": "Co-founder",
+			"role": "CTO & Founder",
 			"from": "2017-02",
 			"to": "2019-07",
 			"location": "Bergen, Norway",
@@ -119,6 +152,28 @@
 			"url": null,
 			"logo": null,
 			"tags": ["Startup", "E-commerce", "FoodTech"]
+		},
+		{
+			"company": "Forsvaret — Norwegian Armed Forces",
+			"role": "Firefighter (Conscript)",
+			"from": "2017-09",
+			"to": "2018-09",
+			"location": "Bergen, Norway",
+			"description": "Conscript service at the fire station at Haakonsvern naval base. Daily training and maintenance of fire truck and equipment, first aid and operation of fire alarm systems.",
+			"url": null,
+			"logo": null,
+			"tags": ["First Aid", "Teamwork", "Military Service"]
+		},
+		{
+			"company": "Nydal Bygg",
+			"role": "Carpenter (unskilled)",
+			"from": "2017-07",
+			"to": "2017-09",
+			"location": "Bergen, Norway",
+			"description": "Full renovation of apartments, from demolition to plastering.",
+			"url": null,
+			"logo": null,
+			"tags": ["Construction", "Renovation"]
 		}
 	],
 	"properties": [
