@@ -315,6 +315,17 @@ tbody td:first-child{font-family:var(--sans); color:var(--ink)}
 .finnres .msg.ok{color:var(--good)}
 .chip[aria-busy="true"]{opacity:.6; cursor:progress}
 
+
+/* ─── horisont-striper under formuesgrafen ──────────────────────────────── */
+.horisont{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px; background:var(--line); border-top:1px solid var(--line)}
+.horisont .h{background:var(--surface); padding:13px 18px; display:flex; flex-direction:column; gap:3px}
+.horisont .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3)}
+.horisont .v{font-size:19px; font-weight:600; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.horisont .s{font-size:11.5px; color:var(--ink-2)}
+.horisont .v.pos{color:var(--good)} .horisont .v.neg{color:var(--crit)}
+
 /* ─── prose blocks ──────────────────────────────────────────────────────── */
 .formula{
   background:var(--surface); border:1px solid var(--line); border-radius:14px;
@@ -825,6 +836,7 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
         </div>
         <div class="plot" id="plotWealth"><div class="tip" id="tipWealth"></div></div>
         <div class="legend" id="legWealth"></div>
+        <div class="horisont" id="horisontRad"></div>
         <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblWealth"></div></details>
       </div>
     </section>
@@ -1450,6 +1462,16 @@ function drawWealth(sim){
       '<span class="item"><span class="swatch" style="background:var(--s1)"></span>'+L('Bolig, etter skatt ved salg','Flat, after tax on sale')+'</span>'
     + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>'+L('Indeksfond, etter skatt','Index fund, after tax')+'</span>'
     + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.6"></span>'+L('Innskutt kapital','Capital invested')+'</span>';
+  // 1, 3, 5 og 10 år — samme horisonter som i regnearket
+  const hz = [1,3,5,10].filter(y => y <= N);
+  document.getElementById("horisontRad").innerHTML = hz.map(y => {
+    const d = b[y].v - f[y].v;
+    return '<div class="h"><span class="k">' + L("Etter " + y + " år", "After " + y + " year" + (y>1?"s":""))
+      + '</span><span class="v ' + (d>=0?"pos":"neg") + '">' + (d>=0?"+":"−") + mkr(Math.abs(d))
+      + '</span><span class="s">' + L("bolig ","flat ") + mkr(b[y].v) + L(" mot fond "," vs fund ") + mkr(f[y].v)
+      + '</span></div>';
+  }).join("");
+
   document.getElementById("wealthNote").textContent =
     L("Egenkapital ved kjøp ","Equity at purchase ") + kr(sim.EK) + L(" · lån "," · loan ") + kr(sim.laan0);
   document.getElementById("tblWealth").innerHTML = tableHtml(
