@@ -10,13 +10,14 @@ export default defineConfig({
   site: "https://mathiash98.github.io",
   integrations: [
     mdx(),
-    sitemap({
-      // Statiske sider under public/ genereres ikke av Astro og må listes manuelt
-      customPages: ["https://mathiash98.github.io/boligkalkulator/"],
-    }),
+    sitemap(),
     icon(),
   ],
   redirects: {
+    "/boligkalkulator": {
+      status: 301,
+      destination: "/bolig-vs-indeksfond",
+    },
     "/posts/[...slug]": {
       status: 301,
       destination: "/blog/[...slug]",

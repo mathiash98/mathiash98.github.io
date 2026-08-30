@@ -1,0 +1,126 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+
+type Tool = {
+  href: string;
+  title: string;
+  blurb: string;
+  tags: string[];
+  year: number;
+  external?: boolean;
+};
+
+// Legg til nye verktøy her — de dukker opp automatisk, nyeste først.
+const tools: Tool[] = [
+  {
+    href: "/bolig-vs-indeksfond/",
+    title: "Boligkalkulatoren",
+    blurb:
+      "Hvilken yield må en utleiebolig ha for å slå et indeksfond? Dra i belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige boliger målt mot terskelen. Regner også ut maks kjøpesum og pris per kvadratmeter.",
+    tags: ["Bolig", "Økonomi", "Kalkulator"],
+    year: 2026,
+  },
+];
+
+const sorted = [...tools].sort((a, b) => b.year - a.year);
+---
+
+<PageLayout
+  title="Verktøy"
+  description="Små verktøy og webapper jeg har bygget og hoster her."
+>
+  <h1>Verktøy</h1>
+  <p>
+    Små webapper jeg har bygget for å svare på et konkret spørsmål — og som
+    kjører rett i nettleseren, uten innlogging eller server.
+  </p>
+
+  <ul class="tools">
+    {
+      sorted.map((tool) => (
+        <li>
+          <a href={tool.href} rel={tool.external ? "noopener" : undefined}>
+            <span class="row">
+              <span class="name">{tool.title}</span>
+              <span class="year">{tool.year}</span>
+            </span>
+            <span class="blurb">{tool.blurb}</span>
+            <span class="tags">
+              {tool.tags.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="more">
+    Koden ligger på <a href="https://github.com/mathiash98">GitHub</a>. Har du
+    en idé til noe som burde finnes her, si fra.
+  </p>
+</PageLayout>
+
+<style>
+  .tools {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .tools a {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .tools a:hover {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+  }
+  .row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .name {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+  .year {
+    font-size: 0.8em;
+    color: var(--color-text-grey);
+    font-variant-numeric: tabular-nums;
+  }
+  .blurb {
+    font-size: 0.85em;
+    line-height: 1.6;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag {
+    font-size: 0.7em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2em 0.6em;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: var(--color-text-grey);
+  }
+  .more {
+    font-size: 0.85em;
+    color: var(--color-text-grey);
+  }
+</style>

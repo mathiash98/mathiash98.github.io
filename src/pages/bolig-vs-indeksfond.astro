@@ -1,55 +1,28 @@
-<!doctype html>
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE } from "../consts";
+
+const title = "Hvilken yield må boligen ha?";
+const description =
+  "Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige boliger målt mot terskelen.";
+---
+
 <html lang="no">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <BaseHead
+    title={title + " - " + SITE_TITLE}
+    description={description}
+    image="/bolig-vs-indeksfond/og.png"
+  />
+  <body class="calc">
+    <Header />
 
-  <title>Hvilken yield må boligen ha? — bolig mot indeksfond</title>
-  <meta name="description" content="Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige Bergens-boliger målt mot terskelen.">
-  <link rel="canonical" href="https://mathiash98.github.io/boligkalkulator/">
-  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
-  <meta name="author" content="Mathias Haugsbø">
-  <meta name="theme-color" content="#eef2f2" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0c1113" media="(prefers-color-scheme: dark)">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mathias Haugsbø">
-  <meta property="og:locale" content="nb_NO">
-  <meta property="og:url" content="https://mathiash98.github.io/boligkalkulator/">
-  <meta property="og:title" content="Hvilken yield må boligen ha?">
-  <meta property="og:description" content="Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige Bergens-boliger målt mot terskelen.">
-  <meta property="og:image" content="https://mathiash98.github.io/boligkalkulator/og.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@mathiash98">
-  <meta name="twitter:url" content="https://mathiash98.github.io/boligkalkulator/">
-  <meta name="twitter:title" content="Hvilken yield må boligen ha?">
-  <meta name="twitter:description" content="Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige Bergens-boliger målt mot terskelen.">
-  <meta name="twitter:image" content="https://mathiash98.github.io/boligkalkulator/og.png">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
-
-  <script src="https://cdn.counter.dev/script.js" data-id="b3798075-40aa-4fd7-ac58-6c2574a4892d" data-utcoffset="1" defer></script>
-</head>
-<body>
-
-<style>
-  /* tilbakelenke til bloggen — bruker kalkulatorens egne tokens */
-  .sitebar{display:flex; align-items:center; justify-content:space-between; gap:16px;
-    padding:18px 0 0; flex-wrap:wrap}
-  .sitebar a{display:inline-flex; align-items:center; gap:7px; text-decoration:none;
-    font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--ink-3)}
-  .sitebar a:hover{color:var(--accent)}
-  .wrap > .mast{padding-top:34px}
-  footer .home{color:var(--accent); text-decoration:none; font-weight:500}
-  footer .home:hover{text-decoration:underline}
-</style>
-<style>
+<style is:global>
 /* ─── tokens: light is the base, dark redefines only values ─────────────── */
 :root{
   color-scheme: light;
@@ -310,6 +283,26 @@ tbody td:first-child{font-family:var(--sans); color:var(--ink)}
 .tip .r b{color:var(--ink); font-weight:500}
 .tip .r .k{display:flex; align-items:center; gap:6px}
 
+
+/* ─── Finn-import ───────────────────────────────────────────────────────── */
+.panel textarea{
+  width:100%; font-family:var(--mono); font-size:12.5px; line-height:1.45;
+  padding:8px 9px; border:1px solid var(--line-2); border-radius:7px;
+  background:var(--surface-2); color:var(--ink); resize:vertical; display:block;
+}
+.panel textarea::placeholder{color:var(--ink-3)}
+.finnres{
+  font-size:12.5px; border:1px solid var(--line); border-radius:8px;
+  background:var(--surface-2); padding:10px 11px; display:grid; gap:4px;
+}
+.finnres .r{display:flex; justify-content:space-between; gap:10px;
+  font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink-2)}
+.finnres .r b{color:var(--ink); font-weight:500}
+.finnres .msg{color:var(--ink-2); line-height:1.45}
+.finnres .msg.warn{color:var(--crit)}
+.finnres .msg.ok{color:var(--good)}
+.chip[aria-busy="true"]{opacity:.6; cursor:progress}
+
 /* ─── prose blocks ──────────────────────────────────────────────────────── */
 .formula{
   background:var(--surface); border:1px solid var(--line); border-radius:14px;
@@ -415,14 +408,41 @@ table.bid .dash{color:var(--ink-3)}
   main{padding-bottom:56px}
 }
 footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-3); max-width:70ch}
+
+/* ─── bloggens global.css gjelder også her — nøytraliser det som kolliderer ─ */
+html body.calc{
+  font-family:var(--sans); font-size:15px; line-height:1.55;
+  background:var(--ground); color:var(--ink); text-align:left;
+}
+body.calc main{width:auto; max-width:none; margin:0; padding:0}
+/* nøytraliser kun det global.css legger til — egne marginer må overleve */
+body.calc .wrap h1, body.calc .wrap h2, body.calc .wrap h3{color:inherit; margin-bottom:0}
+body.calc .wrap p{margin-bottom:0}
+body.calc .wrap a{color:var(--accent); background:none}
+body.calc .wrap a:hover{color:var(--accent); background:none; text-decoration:underline}
+body.calc .wrap input{font-size:inherit}
+body.calc .wrap b, body.calc .wrap strong{font-weight:600}
+
+/* ─── bloggens header og footer, farget med kalkulatorens tokens ─────────── */
+body.calc > header{max-width:1360px; margin:0 auto; padding:0 24px}
+body.calc > header nav{height:66px}
+body.calc > header h2{font-family:var(--display); font-size:19px; font-weight:700; margin:0}
+body.calc > header h2 a{color:var(--ink)}
+body.calc > header a{color:var(--ink-2); text-decoration:none; background:none;
+  font-size:14px; border-bottom:3px solid transparent}
+body.calc > header a:hover{color:var(--accent); background:none}
+body.calc > header a.active{color:var(--ink); border-bottom-color:var(--accent)}
+body.calc > header svg{vertical-align:middle; color:var(--ink-3)}
+body.calc > header a:hover svg{color:var(--accent)}
+body.calc > footer{max-width:1360px; margin:0 auto; padding:22px 24px 40px;
+  font-size:13px; line-height:1.6; color:var(--ink-3); text-align:center}
+body.calc > footer p{margin:0 0 8px}
+body.calc > footer a{color:var(--ink-2)}
+body.calc > footer a:hover{color:var(--accent)}
+body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
 </style>
 
 <div class="wrap">
-
-<div class="sitebar">
-  <a href="/">← mathiash98.github.io</a>
-  <a href="/blog/">Bloggen</a>
-</div>
 
 <header class="mast">
   <div class="eyebrow">Bolig mot indeksfond · 62 boliger jeg har regnet på</div>
@@ -440,6 +460,24 @@ footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font
   <!-- ── kontrollpanel ─────────────────────────────────────────────────── -->
   <aside class="rail" id="rail" aria-label="Forutsetninger">
     <div class="railhead"><span>Forutsetninger</span><button type="button" id="railClose" aria-label="Lukk">✕</button></div>
+
+    <details class="panel" open>
+      <summary>Fra Finn.no</summary>
+      <div class="body">
+        <div class="field">
+          <div class="top"><label for="finnInn">Lenke eller kopiert annonse</label></div>
+          <textarea id="finnInn" rows="3" spellcheck="false" placeholder="Lim inn finn.no-lenken — eller marker hele annonsen med ⌘A ⌘C og lim inn teksten her"></textarea>
+        </div>
+        <div class="chips">
+          <button class="chip" id="finnGo" type="button">Fyll ut fra annonsen</button>
+          <button class="chip" id="finnClear" type="button">Tøm</button>
+        </div>
+        <div class="finnres" id="finnRes" hidden></div>
+        <div class="hint">Leser prisantydning, felleskostnader, kommunale avgifter, eieform,
+          areal og antall soverom. Leien finnes ikke i en salgsannonse — den gjettes fra
+          soveromstabellen, så den må du sjekke selv.</div>
+      </div>
+    </details>
 
     <details class="panel" open>
       <summary>Boligen</summary>
@@ -808,8 +846,6 @@ footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font
       driftskostnader og vedlikehold. Skattesatsene er 2025/2026-satser for privat eie: 22 % på
       leieoverskudd og renter, 22 % gevinstskatt på sekundærbolig, 37,84 % på aksjefondsgevinst.
       Modellen er et regneverktøy, ikke investeringsrådgivning.
-      <br><br>
-      Laget av Mathias Haugsbø · <a class="home" href="/">mathiash98.github.io</a>
     </footer>
 
   </main>
@@ -821,7 +857,7 @@ footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font
   <span class="glyph">⚙</span><span>Forutsetninger</span><span class="fnum" id="fabNum"></span>
 </button>
 
-<script>
+<script is:inline>
 "use strict";
 
 /* ═══ 1. Boligdata — 62 leiligheter regnet på gjennom årene ═══════════════════════════════════════════
@@ -1005,7 +1041,7 @@ function boligYield(b){
 }
 </script>
 
-<script>
+<script is:inline>
 "use strict";
 /* ═══ 5. Tegneverktøy ════════════════════════════════════════════════════ */
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -1210,7 +1246,7 @@ function drawScatter(th){
 }
 </script>
 
-<script>
+<script is:inline>
 "use strict";
 /* ═══ 8. Graf 3 — rente × verdistigning ══════════════════════════════════ */
 function divFill(v, D){
@@ -1439,7 +1475,7 @@ function drawFall(sim){
 }
 </script>
 
-<script>
+<script is:inline>
 "use strict";
 /* ═══ 11. Kontroller og oppdatering ══════════════════════════════════════ */
 const $ = id => document.getElementById(id);
@@ -1580,10 +1616,10 @@ function render(){
   LAST.th = th;
   drawBidTable();
   drawBidChart();
-  drawCaveats(sim, th, cfM);
+  drawCaveats(sim);
 }
 
-function drawCaveats(sim, th, cfM){
+function drawCaveats(sim){
   const wipe = sim.V0>0 ? sim.EK/sim.V0*100 : 0;
   const items = [
     ["Risiko", "Belåning forstørrer begge veier.",
@@ -1775,6 +1811,129 @@ function drawBidChart(){
       [kr(v)].concat(linjer.map(l => l.k ? kr(v*l.k) : "—"))));
 }
 
+
+/* ═══ 13. Finn.no-import ══════════════════════════════════════════════════
+   Finn sender ikke CORS-headere, så en lenke må hentes via en lese-proxy.
+   Limt inn annonsetekst parses direkte og virker alltid. */
+
+const FINN_PROXY = "https://r.jina.ai/";
+
+function fTall(t, ...labels){
+  for(const lab of labels){
+    let m = t.match(new RegExp(lab + "[^0-9]{0,40}([0-9][0-9 \u00a0\u202f]*)", "i"));
+    if(!m) m = t.match(new RegExp("([0-9][0-9 \u00a0\u202f]*)[^0-9A-Za-zÆØÅæøå]{0,4}" + lab, "i"));
+    if(m){
+      const n = parseInt(m[1].replace(/[^0-9]/g, ""), 10);
+      if(isFinite(n)) return n;
+    }
+  }
+  return null;
+}
+
+function parseFinn(t){
+  t = t.replace(/\u00a0|\u202f/g, " ");
+  const eie = /Eieform[^A-Za-zÆØÅæøå]{0,20}(Eier\s*\(Selveier\)|Selveier|Eier|Andel|Aksje|Obligasjon)/i.exec(t);
+  const eieform = eie ? eie[1].trim() : null;
+  return {
+    pris:       fTall(t, "Prisantydning", "Prisantydn"),
+    totalpris:  fTall(t, "Totalpris"),
+    omkostning: fTall(t, "Omkostninger"),
+    felles:     fTall(t, "Felleskost(?:nader)?(?:\\/mnd)?", "Felleskostnader per m"),
+    kommunale:  fTall(t, "Kommunale avg\\.?(?:ifter)?"),
+    fellesgjeld:fTall(t, "Fellesgjeld"),
+    soverom:    fTall(t, "Soverom"),
+    areal:      fTall(t, "Internt bruksareal", "Primærrom", "P-rom", "Bruksareal", "BRA"),
+    eieform
+  };
+}
+
+function anvendFinn(d){
+  const res = $("finnRes"), rows = [];
+  let endret = 0;
+
+  if(d.pris){ S.pris = Math.round(d.pris/10000)*10000; S.opp = 0; endret++;
+    rows.push(["Prisantydning", kr(d.pris)]); }
+  else if(d.totalpris && d.omkostning){
+    S.pris = Math.round((d.totalpris-d.omkostning)/10000)*10000; endret++;
+    rows.push(["Pris (totalpris − omk.)", kr(S.pris)]); }
+
+  if(d.eieform){
+    const selveier = /selveier|^eier$/i.test(d.eieform);
+    S.dokavg = selveier; endret++;
+    rows.push(["Eieform", d.eieform + (selveier ? " · 2,5 % dok." : " · ingen dok.")]);
+  }
+
+  const felles = d.felles || 0, komm = d.kommunale || 0;
+  if(felles || komm){
+    S.drift = Math.round(felles + komm/12); endret++;
+    rows.push(["Driftskostnad", kr(S.drift) + "/mnd"]);
+    if(felles) rows.push(["  felleskost", kr(felles) + "/mnd"]);
+    if(komm)   rows.push(["  kommunale", kr(komm) + "/år"]);
+  }
+
+  let leieGjett = null;
+  if(d.soverom){
+    const i = Math.min(Math.max(d.soverom, 1), SOV.length) - 1;
+    leieGjett = Math.round((SOV[i][0] + SOV[i][1]) / 2 / 500) * 500;
+    S.leie = leieGjett; endret++;
+    rows.push([d.soverom + " soverom", "leie gjettet til " + kr(leieGjett) + "/mnd"]);
+  }
+  if(d.areal && S.pris) rows.push(["Areal", d.areal + " m² · " + kr(S.pris/d.areal) + "/m²"]);
+  if(d.fellesgjeld) rows.push(["Fellesgjeld", kr(d.fellesgjeld) + " — ikke med i modellen"]);
+
+  if(!endret){
+    res.hidden = false;
+    res.innerHTML = '<div class="msg warn">Fant ingen tall å bruke. Er hele annonsen kopiert med?</div>';
+    return;
+  }
+  picked = -1; $("pick").value = "-1";
+  $("pickHint").textContent = "Hentet fra Finn-annonsen.";
+  res.hidden = false;
+  res.innerHTML = rows.map(([k, v]) =>
+      '<div class="r"><span>' + esc(k) + '</span><b>' + esc(v) + '</b></div>').join("")
+    + '<div class="msg' + (leieGjett ? ' warn' : ' ok') + '">'
+    + (leieGjett ? "Leien er et anslag fra soveromstabellen — sjekk mot faktiske leiepriser i området."
+                 : "Fant ikke antall soverom, så leien står urørt.")
+    + '</div>';
+  schedule();
+}
+
+async function importerFinn(){
+  const inn = $("finnInn").value.trim(), res = $("finnRes"), btn = $("finnGo");
+  if(!inn){
+    res.hidden = false;
+    res.innerHTML = '<div class="msg warn">Lim inn en finn.no-lenke eller teksten fra annonsen først.</div>';
+    return;
+  }
+  const erLenke = /^https?:\/\/\S+$/i.test(inn);
+  if(!erLenke) return anvendFinn(parseFinn(inn));
+
+  if(!/finn\.no/i.test(inn)){
+    res.hidden = false;
+    res.innerHTML = '<div class="msg warn">Det ser ut som en lenke, men ikke til finn.no.</div>';
+    return;
+  }
+  btn.setAttribute("aria-busy", "true");
+  btn.textContent = "Henter …";
+  res.hidden = false;
+  res.innerHTML = '<div class="msg">Henter annonsen …</div>';
+  try{
+    const r = await fetch(FINN_PROXY + inn, { headers: { Accept: "text/plain" } });
+    if(!r.ok) throw new Error("status " + r.status);
+    const txt = await r.text();
+    if(txt.length < 200) throw new Error("tomt svar");
+    anvendFinn(parseFinn(txt));
+  }catch(e){
+    res.hidden = false;
+    res.innerHTML = '<div class="msg warn">Fikk ikke hentet annonsen automatisk — '
+      + 'Finn blokkerer direkte oppslag fra nettleseren.</div>'
+      + '<div class="msg">Åpne annonsen, merk alt med ⌘A, kopier med ⌘C og lim inn teksten her i stedet. Det virker alltid.</div>';
+  }finally{
+    btn.removeAttribute("aria-busy");
+    btn.textContent = "Fyll ut fra annonsen";
+  }
+}
+
 /* ═══ 12. Oppstart ═══════════════════════════════════════════════════════ */
 (function init(){
   $("pris").step = 10000;
@@ -1812,6 +1971,14 @@ function drawBidChart(){
     SOV = SOV_DEFAULT.map(r => r.slice());
     picked = -1; sel.value = "-1";
     $("pickHint").textContent = "Medianboligen av de 62."; schedule();
+  });
+
+  $("finnGo").addEventListener("click", importerFinn);
+  $("finnClear").addEventListener("click", () => {
+    $("finnInn").value = ""; $("finnRes").hidden = true;
+  });
+  $("finnInn").addEventListener("keydown", e => {
+    if((e.metaKey || e.ctrlKey) && e.key === "Enter"){ e.preventDefault(); importerFinn(); }
   });
 
   // skuff på smale skjermer
@@ -1859,5 +2026,6 @@ function drawBidChart(){
 })();
 </script>
 
-</body>
+    <Footer />
+  </body>
 </html>
