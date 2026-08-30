@@ -1,0 +1,1863 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Hvilken yield må boligen ha? — bolig mot indeksfond</title>
+  <meta name="description" content="Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige Bergens-boliger målt mot terskelen.">
+  <link rel="canonical" href="https://mathiash98.github.io/boligkalkulator/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+  <meta name="author" content="Mathias Haugsbø">
+  <meta name="theme-color" content="#eef2f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1113" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mathias Haugsbø">
+  <meta property="og:locale" content="nb_NO">
+  <meta property="og:url" content="https://mathiash98.github.io/boligkalkulator/">
+  <meta property="og:title" content="Hvilken yield må boligen ha?">
+  <meta property="og:description" content="Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige Bergens-boliger målt mot terskelen.">
+  <meta property="og:image" content="https://mathiash98.github.io/boligkalkulator/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@mathiash98">
+  <meta name="twitter:url" content="https://mathiash98.github.io/boligkalkulator/">
+  <meta name="twitter:title" content="Hvilken yield må boligen ha?">
+  <meta name="twitter:description" content="Interaktiv kalkulator som svarer på hvilken netto yield en utleiebolig må ha for å slå et globalt indeksfond — juster belåningsgrad, rente, verdistigning og skatt, og se 62 virkelige Bergens-boliger målt mot terskelen.">
+  <meta name="twitter:image" content="https://mathiash98.github.io/boligkalkulator/og.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+
+  <script src="https://cdn.counter.dev/script.js" data-id="b3798075-40aa-4fd7-ac58-6c2574a4892d" data-utcoffset="1" defer></script>
+</head>
+<body>
+
+<style>
+  /* tilbakelenke til bloggen — bruker kalkulatorens egne tokens */
+  .sitebar{display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px 0 0; flex-wrap:wrap}
+  .sitebar a{display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-3)}
+  .sitebar a:hover{color:var(--accent)}
+  .wrap > .mast{padding-top:34px}
+  footer .home{color:var(--accent); text-decoration:none; font-weight:500}
+  footer .home:hover{text-decoration:underline}
+</style>
+<style>
+/* ─── tokens: light is the base, dark redefines only values ─────────────── */
+:root{
+  color-scheme: light;
+  --ground:#eef2f2;
+  --surface:#ffffff;
+  --surface-2:#f6f9f9;
+  --sunken:#e7edee;
+  --ink:#0f191d;
+  --ink-2:#516468;
+  --ink-3:#84959a;
+  --line:#dce4e5;
+  --line-2:#c6d2d4;
+  --accent:#12475b;
+  --accent-ink:#ffffff;
+  --accent-soft:#e0ecf0;
+
+  --s1:#2a78d6;  /* slå indeksfondet */
+  --s2:#eb6834;  /* null kontantstrøm */
+  --s3:#1baf7a;  /* dekke renten */
+  --good:#0ca30c;
+  --crit:#d03b3b;
+
+  --div-pos:#2a78d6;
+  --div-neg:#d03b3b;
+  --div-mid:#eceff0;
+
+  --grid:#e6ebec;
+  --axis:#c6d2d4;
+  --ring:rgba(15,25,29,.10);
+  --shadow:0 1px 2px rgba(15,25,29,.05), 0 10px 30px -18px rgba(15,25,29,.35);
+
+  --display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#0c1113;
+    --surface:#141c1f;
+    --surface-2:#192225;
+    --sunken:#101719;
+    --ink:#e9f1f2;
+    --ink-2:#9aacb1;
+    --ink-3:#718388;
+    --line:#232e32;
+    --line-2:#314247;
+    --accent:#74c3dc;
+    --accent-ink:#08181e;
+    --accent-soft:#15303a;
+
+    --s1:#3987e5;
+    --s2:#d95926;
+    --s3:#199e70;
+    --good:#0ca30c;
+    --crit:#d03b3b;
+
+    --div-pos:#3987e5;
+    --div-neg:#d03b3b;
+    --div-mid:#263236;
+
+    --grid:#1f2a2d;
+    --axis:#314247;
+    --ring:rgba(233,241,242,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#0c1113;
+  --surface:#141c1f;
+  --surface-2:#192225;
+  --sunken:#101719;
+  --ink:#e9f1f2;
+  --ink-2:#9aacb1;
+  --ink-3:#718388;
+  --line:#232e32;
+  --line-2:#314247;
+  --accent:#74c3dc;
+  --accent-ink:#08181e;
+  --accent-soft:#15303a;
+
+  --s1:#3987e5;
+  --s2:#d95926;
+  --s3:#199e70;
+  --good:#0ca30c;
+  --crit:#d03b3b;
+
+  --div-pos:#3987e5;
+  --div-neg:#d03b3b;
+  --div-mid:#263236;
+
+  --grid:#1f2a2d;
+  --axis:#314247;
+  --ring:rgba(233,241,242,.12);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--display); font-weight:700; text-wrap:balance; margin:0; letter-spacing:-.018em;}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important}}
+
+.wrap{max-width:1360px; margin:0 auto; padding:0 24px 80px}
+
+/* ─── masthead ──────────────────────────────────────────────────────────── */
+.mast{padding:56px 0 34px; border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+}
+.mast h1{font-size:clamp(34px,5.2vw,60px); line-height:1.02; margin:14px 0 0; max-width:15ch; font-weight:800}
+.mast .lede{margin-top:20px; max-width:64ch; color:var(--ink-2); font-size:17px}
+.mast .lede strong{color:var(--ink); font-weight:600}
+
+/* ─── layout ────────────────────────────────────────────────────────────── */
+.layout{display:grid; grid-template-columns:312px minmax(0,1fr); gap:36px; margin-top:32px; align-items:start}
+@media (max-width:1080px){ .layout{grid-template-columns:minmax(0,1fr)} }
+
+.rail{position:sticky; top:16px; display:flex; flex-direction:column; gap:14px; max-height:calc(100vh - 32px); overflow-y:auto; padding-right:4px}
+@media (max-width:1080px){ .rail{position:static; max-height:none; overflow:visible} }
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow)}
+.panel > summary{
+  list-style:none; cursor:pointer; padding:13px 16px; display:flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-2);
+}
+.panel > summary::-webkit-details-marker{display:none}
+.panel > summary::after{content:"+"; margin-left:auto; font-size:15px; color:var(--ink-3); font-family:var(--sans)}
+.panel[open] > summary::after{content:"–"}
+.panel[open] > summary{border-bottom:1px solid var(--line)}
+.panel .body{padding:16px; display:flex; flex-direction:column; gap:15px}
+
+.field{display:flex; flex-direction:column; gap:6px}
+.field .top{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.field label{font-size:13px; color:var(--ink-2); font-weight:500}
+.field .val{font-family:var(--mono); font-size:13px; font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums}
+.field .hint{font-size:11.5px; color:var(--ink-3); line-height:1.4}
+
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:18px; background:transparent; margin:0; display:block}
+input[type=range]::-webkit-slider-runnable-track{height:4px; border-radius:99px; background:var(--line-2)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:15px; height:15px; margin-top:-5.5px; border-radius:50%; background:var(--accent); border:2px solid var(--surface); box-shadow:0 0 0 1px var(--accent); cursor:grab}
+input[type=range]::-moz-range-track{height:4px; border-radius:99px; background:var(--line-2)}
+input[type=range]::-moz-range-thumb{width:13px; height:13px; border-radius:50%; background:var(--accent); border:2px solid var(--surface); box-shadow:0 0 0 1px var(--accent); cursor:grab}
+
+input[type=number], select{
+  width:100%; font-family:var(--mono); font-size:13px; font-variant-numeric:tabular-nums;
+  padding:7px 9px; border:1px solid var(--line-2); border-radius:7px;
+  background:var(--surface-2); color:var(--ink);
+}
+select{font-family:var(--sans); font-variant-numeric:normal}
+
+.switch{display:flex; align-items:center; justify-content:space-between; gap:10px; cursor:pointer}
+.switch input{position:absolute; opacity:0; width:1px; height:1px}
+.track{width:38px; height:21px; border-radius:99px; background:var(--sunken); border:1px solid var(--line-2); position:relative; flex:none; transition:background .16s}
+.track::after{content:""; position:absolute; top:2px; left:2px; width:15px; height:15px; border-radius:50%; background:var(--ink-3); transition:transform .16s, background .16s}
+.switch input:checked + .track{background:var(--accent); border-color:var(--accent)}
+.switch input:checked + .track::after{transform:translateX(17px); background:var(--accent-ink)}
+.switch input:focus-visible + .track{outline:2px solid var(--accent); outline-offset:2px}
+
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{
+  font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.03em;
+  padding:6px 10px; border-radius:99px; border:1px solid var(--line-2);
+  background:var(--surface-2); color:var(--ink-2); cursor:pointer;
+}
+.chip:hover{border-color:var(--accent); color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+.reset{
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  background:none; border:0; color:var(--ink-3); cursor:pointer; padding:4px 0; text-align:left;
+}
+.reset:hover{color:var(--accent)}
+
+/* ─── verdict band ──────────────────────────────────────────────────────── */
+.verdict{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.verdict .grid{display:grid; grid-template-columns:1.35fr 1fr 1fr 1fr; gap:1px; background:var(--line)}
+@media (max-width:1180px){ .verdict .grid{grid-template-columns:1fr 1fr} }
+@media (max-width:520px){ .verdict .grid{grid-template-columns:1fr} }
+.tile{background:var(--surface); padding:20px 22px; display:flex; flex-direction:column; gap:5px; min-width:0}
+.tile .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3)}
+.tile .v{font-size:34px; line-height:1.05; font-weight:600; letter-spacing:-.02em}
+.tile.hero .v{font-size:52px; font-weight:700}
+.tile .sub{font-size:12.5px; color:var(--ink-2); line-height:1.4}
+.tile .v.pos{color:var(--good)} .tile .v.neg{color:var(--crit)}
+.verdict .verdictline{
+  padding:14px 22px; background:var(--surface-2); border-top:1px solid var(--line);
+  font-size:14.5px; color:var(--ink-2); display:flex; gap:10px; align-items:flex-start;
+}
+.verdict .verdictline b{color:var(--ink); font-weight:600}
+.badge{
+  font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  padding:3px 8px; border-radius:5px; flex:none; margin-top:1px;
+}
+.badge.ok{background:color-mix(in srgb, var(--good) 16%, transparent); color:var(--good)}
+.badge.no{background:color-mix(in srgb, var(--crit) 16%, transparent); color:var(--crit)}
+
+/* ─── sections & cards ──────────────────────────────────────────────────── */
+.section{margin-top:52px}
+.section > .head{max-width:66ch; margin-bottom:18px}
+.section h2{font-size:clamp(21px,2.6vw,27px); margin-top:9px; line-height:1.15}
+.section .head p{margin-top:9px; color:var(--ink-2); font-size:15px}
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden}
+.card .caption{padding:16px 20px 0; display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; justify-content:space-between}
+.card .caption h3{font-size:16px; font-family:var(--sans); font-weight:600; letter-spacing:-.005em}
+.card .caption .note{font-size:12.5px; color:var(--ink-3)}
+.plot{position:relative; padding:6px 12px 12px}
+.plot svg{display:block; width:100%; height:auto; overflow:visible}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:0 20px 14px; font-size:12.5px; color:var(--ink-2)}
+.legend .item{display:flex; align-items:center; gap:7px}
+.legend .swatch{width:14px; height:3px; border-radius:99px; flex:none}
+.legend .dot{width:9px; height:9px; border-radius:50%; flex:none}
+.legend .sym{font-family:var(--mono); font-size:11px; font-weight:600}
+
+.tblwrap{border-top:1px solid var(--line)}
+.tblwrap > summary{
+  list-style:none; cursor:pointer; padding:11px 20px; font-family:var(--mono);
+  font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+}
+.tblwrap > summary::-webkit-details-marker{display:none}
+.tblwrap > summary:hover{color:var(--accent)}
+.tblscroll{max-height:340px; overflow:auto; border-top:1px solid var(--line)}
+table{width:100%; border-collapse:collapse; font-size:13px}
+th,td{padding:7px 20px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap}
+th:first-child, td:first-child{text-align:left}
+thead th{
+  position:sticky; top:0; background:var(--surface-2); color:var(--ink-3);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:500;
+}
+tbody td{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink-2)}
+tbody td:first-child{font-family:var(--sans); color:var(--ink)}
+
+/* ─── tooltip ───────────────────────────────────────────────────────────── */
+.tip{
+  position:absolute; pointer-events:none; opacity:0; transform:translate(-50%,-100%);
+  background:var(--surface); border:1px solid var(--line-2); border-radius:9px;
+  box-shadow:var(--shadow); padding:9px 11px; font-size:12.5px; min-width:130px; z-index:5;
+  transition:opacity .1s;
+}
+.tip .t{font-weight:600; margin-bottom:5px; font-size:12.5px}
+.tip .r{display:flex; justify-content:space-between; gap:14px; font-family:var(--mono); font-size:12px; font-variant-numeric:tabular-nums; color:var(--ink-2)}
+.tip .r b{color:var(--ink); font-weight:500}
+.tip .r .k{display:flex; align-items:center; gap:6px}
+
+/* ─── prose blocks ──────────────────────────────────────────────────────── */
+.formula{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:24px 26px; box-shadow:var(--shadow);
+}
+.formula .eq{
+  font-family:var(--mono); font-size:clamp(15px,2.1vw,20px); font-weight:500;
+  padding:18px 20px; background:var(--surface-2); border-radius:10px; overflow-x:auto;
+  border:1px solid var(--line); letter-spacing:-.01em; white-space:nowrap;
+}
+.formula .eq em{font-style:normal; color:var(--accent); font-weight:600}
+.eqstack{display:grid; gap:8px}
+.eqstack .eq{font-size:clamp(14px,1.8vw,18px); white-space:normal; line-height:1.7}
+
+.deflist{display:grid; grid-template-columns:auto 1fr; gap:8px 16px; margin-top:18px; font-size:13.5px; align-items:baseline}
+.deflist dt{font-family:var(--mono); color:var(--accent); font-weight:600}
+.deflist dd{margin:0; color:var(--ink-2)}
+
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden}
+.cols .col{background:var(--surface); padding:20px 22px}
+.cols h3{font-family:var(--sans); font-size:14.5px; font-weight:600; margin-bottom:7px}
+.cols p{font-size:13.5px; color:var(--ink-2)}
+.cols .num{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase; display:block; margin-bottom:9px}
+
+.thumb{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:20px}
+.thumb .t{background:var(--surface); padding:17px 20px; display:flex; flex-direction:column; gap:4px}
+.thumb .t .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.thumb .t .n{font-size:27px; font-weight:600; line-height:1.1; letter-spacing:-.02em}
+.thumb .t .s{font-size:12.5px; color:var(--ink-2)}
+
+.bidbar{display:flex; align-items:center; gap:14px; padding:14px 20px; border-top:1px solid var(--line);
+  background:var(--surface-2); flex-wrap:wrap}
+.bidbar label{font-size:13px; color:var(--ink-2); font-weight:500; white-space:nowrap}
+.bidbar input[type=range]{flex:1 1 180px; min-width:150px}
+.bidbar .val{font-family:var(--mono); font-size:13px; font-weight:500; font-variant-numeric:tabular-nums; white-space:nowrap}
+.bidbar .hint{font-size:11.5px; color:var(--ink-3); flex:1 1 100%}
+
+table.bid td, table.bid th{padding:9px 11px}
+table.bid th{white-space:normal; line-height:1.3}
+table.bid input{width:62px; padding:5px 6px; font-size:12.5px; text-align:right; border-radius:6px}
+table.bid td.out{color:var(--ink); font-weight:500}
+table.bid tbody tr:hover{background:var(--surface-2)}
+table.bid .sov{font-family:var(--sans); font-weight:600; color:var(--ink)}
+table.bid .dash{color:var(--ink-3)}
+
+.caveats{list-style:none; padding:0; margin:0; display:grid; gap:11px}
+.caveats li{display:grid; grid-template-columns:auto 1fr; gap:12px; font-size:14px; color:var(--ink-2); align-items:start}
+.caveats li b{color:var(--ink); font-weight:600}
+.caveats .m{font-family:var(--mono); font-size:11px; color:var(--ink-3); padding-top:3px}
+
+/* skuff, bakteppe og flytende knapp finnes bare på smale skjermer */
+.railhead{display:none}
+.scrim{display:none}
+.fab{display:none}
+
+@media (max-width:1080px){
+  .layout{gap:0}
+  .rail{
+    position:fixed; top:0; left:0; bottom:0; z-index:60;
+    width:min(348px, 86vw); max-height:100dvh; overflow-y:auto;
+    background:var(--ground); border-right:1px solid var(--line);
+    padding:0 14px 32px; gap:12px;
+    transform:translateX(-103%); transition:transform .26s cubic-bezier(.4,0,.2,1);
+    box-shadow:none;
+  }
+  .rail.open{transform:none; box-shadow:0 0 60px rgba(0,0,0,.35)}
+  .railhead{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:2; padding:16px 2px 12px;
+    background:var(--ground); border-bottom:1px solid var(--line); margin-bottom:2px;
+  }
+  .railhead span{font-family:var(--display); font-weight:700; font-size:17px}
+  .railhead button{
+    width:32px; height:32px; border-radius:8px; border:1px solid var(--line-2);
+    background:var(--surface); color:var(--ink-2); font-size:15px; cursor:pointer; line-height:1;
+  }
+  .scrim{
+    display:block; position:fixed; inset:0; z-index:55; background:rgba(4,10,12,.55);
+    opacity:0; pointer-events:none; transition:opacity .26s;
+  }
+  .scrim.on{opacity:1; pointer-events:auto}
+  .fab{
+    display:inline-flex; align-items:center; gap:9px; position:fixed; z-index:50;
+    left:50%; transform:translateX(-50%); bottom:max(14px, env(safe-area-inset-bottom));
+    padding:11px 18px; border-radius:99px; border:1px solid var(--line-2);
+    background:var(--surface); color:var(--ink); cursor:pointer; white-space:nowrap;
+    max-width:calc(100vw - 28px); overflow:hidden;
+    box-shadow:0 4px 24px -6px rgba(0,0,0,.4); font-family:var(--sans); font-size:13.5px; font-weight:600;
+  }
+  .fab .fnum{font-family:var(--mono); font-size:12px; font-weight:500; color:var(--ink-2); font-variant-numeric:tabular-nums}
+  .fab .glyph{font-size:15px; line-height:1}
+  body.locked{overflow:hidden}
+}
+
+@media (max-width:760px){
+  .mast{padding:34px 0 26px}
+  .wrap{padding:0 16px 60px}
+  .plot{overflow-x:auto; overscroll-behavior-x:contain}
+  .plot svg{min-width:640px}
+  .tile.hero .v{font-size:42px}
+  .section{margin-top:40px}
+  main{padding-bottom:56px}
+}
+footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-3); max-width:70ch}
+</style>
+
+<div class="wrap">
+
+<div class="sitebar">
+  <a href="/">← mathiash98.github.io</a>
+  <a href="/blog/">Bloggen</a>
+</div>
+
+<header class="mast">
+  <div class="eyebrow">Bolig mot indeksfond · 62 boliger jeg har regnet på</div>
+  <h1>Hvilken yield må boligen ha?</h1>
+  <p class="lede">Spørsmålet har ett svar per rentenivå, én belåningsgrad og én forventning om
+  verdistigning — ikke ett svar totalt. Modellen under sammenligner den samme kronen investert to
+  steder: <strong>egenkapital i én utleiebolig</strong> mot <strong>samme beløp i et globalt
+  indeksfond</strong>, med identiske innskudd til samme tid, og regner ut hvilken netto yield boligen
+  må levere for å komme likt ut. Boligene i grafene er 62 leiligheter jeg selv har regnet på
+  gjennom årene, de fleste i Bergen.</p>
+</header>
+
+<div class="layout">
+
+  <!-- ── kontrollpanel ─────────────────────────────────────────────────── -->
+  <aside class="rail" id="rail" aria-label="Forutsetninger">
+    <div class="railhead"><span>Forutsetninger</span><button type="button" id="railClose" aria-label="Lukk">✕</button></div>
+
+    <details class="panel" open>
+      <summary>Boligen</summary>
+      <div class="body">
+        <div class="field">
+          <div class="top"><label for="pick">Velg en ekte bolig</label></div>
+          <select id="pick"></select>
+          <div class="hint" id="pickHint">Medianboligen av de 62.</div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="pris">Kjøpesum</label><span class="val" id="prisV"></span></div>
+          <input type="range" id="pris" min="500000" max="20000000" step="50000">
+        </div>
+        <div class="field">
+          <div class="top"><label for="opp">Oppussing</label><span class="val" id="oppV"></span></div>
+          <input type="range" id="opp" min="0" max="3000000" step="25000">
+        </div>
+        <div class="field">
+          <div class="top"><label for="leie">Leie per måned</label><span class="val" id="leieV"></span></div>
+          <input type="range" id="leie" min="0" max="150000" step="500">
+        </div>
+        <div class="field">
+          <div class="top"><label for="drift">Driftskostnad per måned</label><span class="val" id="driftV"></span></div>
+          <input type="range" id="drift" min="0" max="25000" step="100">
+          <div class="hint">Felleskostnader, kommunale avgifter, forsikring, strøm på fellesareal.</div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="ledig">Ledighet</label><span class="val" id="ledigV"></span></div>
+          <input type="range" id="ledig" min="0" max="25" step="1">
+          <div class="hint">8 % ≈ én tom måned i året.</div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="vedl">Vedlikehold per år</label><span class="val" id="vedlV"></span></div>
+          <input type="range" id="vedl" min="0" max="2" step="0.1">
+          <div class="hint">Av boligverdien. Den vanligste grunnen til at yield ser bedre ut på papiret enn på konto.</div>
+        </div>
+        <label class="switch" for="dokavg">
+          <span style="font-size:13px;color:var(--ink-2)">Dokumentavgift 2,5 % (selveier)</span>
+          <input type="checkbox" id="dokavg" checked><span class="track"></span>
+        </label>
+      </div>
+    </details>
+
+    <details class="panel" open>
+      <summary>Finansiering</summary>
+      <div class="body">
+        <div class="field">
+          <div class="top"><label for="ltv">Belåningsgrad</label><span class="val" id="ltvV"></span></div>
+          <input type="range" id="ltv" min="0" max="90" step="1">
+        </div>
+        <div class="field">
+          <div class="top"><label for="rente">Nominell rente</label><span class="val" id="renteV"></span></div>
+          <input type="range" id="rente" min="1" max="10" step="0.1">
+          <div class="chips" style="margin-top:6px">
+            <button class="chip" data-rente="2.5">2,5 % · 2021</button>
+            <button class="chip" data-rente="5">5,0 % · i dag</button>
+            <button class="chip" data-rente="7">7,0 % · 2023-topp</button>
+          </div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="lopetid">Nedbetalingstid</label><span class="val" id="lopetidV"></span></div>
+          <input type="range" id="lopetid" min="5" max="40" step="1">
+        </div>
+        <label class="switch" for="avdragsfri">
+          <span style="font-size:13px;color:var(--ink-2)">Avdragsfritt lån</span>
+          <input type="checkbox" id="avdragsfri"><span class="track"></span>
+        </label>
+      </div>
+    </details>
+
+    <details class="panel" open>
+      <summary>Marked</summary>
+      <div class="body">
+        <div class="field">
+          <div class="top"><label for="vekstbolig">Verdistigning bolig</label><span class="val" id="vekstboligV"></span></div>
+          <input type="range" id="vekstbolig" min="-2" max="8" step="0.1">
+          <div class="hint">Nominelt per år. Inflasjonen alene er ~2,5 %.</div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="indeks">Avkastning indeksfond</label><span class="val" id="indeksV"></span></div>
+          <input type="range" id="indeks" min="0" max="14" step="0.1">
+          <div class="hint">Nominelt per år, etter forvaltningshonorar.</div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="kpi">Leie- og kostnadsvekst</label><span class="val" id="kpiV"></span></div>
+          <input type="range" id="kpi" min="0" max="6" step="0.1">
+        </div>
+        <div class="field">
+          <div class="top"><label for="horisont">Eiertid</label><span class="val" id="horisontV"></span></div>
+          <input type="range" id="horisont" min="3" max="30" step="1">
+        </div>
+        <div class="field">
+          <div class="top"><label for="salgsomk">Salgsomkostninger</label><span class="val" id="salgsomkV"></span></div>
+          <input type="range" id="salgsomk" min="0" max="6" step="0.1">
+        </div>
+      </div>
+    </details>
+
+    <details class="panel">
+      <summary>Skatt</summary>
+      <div class="body">
+        <label class="switch" for="skatt">
+          <span style="font-size:13px;color:var(--ink-2)">Norsk skatt, privat eie</span>
+          <input type="checkbox" id="skatt" checked><span class="track"></span>
+        </label>
+        <div class="hint" style="font-size:11.5px;color:var(--ink-3)">
+          22 % på leieoverskudd og fradrag for renter · 22 % gevinstskatt på sekundærbolig ·
+          37,84 % på fondsgevinst med skjermingsfradrag.
+        </div>
+        <label class="switch" for="formue">
+          <span style="font-size:13px;color:var(--ink-2)">Marginal formuesskatt</span>
+          <input type="checkbox" id="formue"><span class="track"></span>
+        </label>
+        <div class="field">
+          <div class="top"><label for="formuesats">Formuesskattesats</label><span class="val" id="formuesatsV"></span></div>
+          <input type="range" id="formuesats" min="0" max="1.5" step="0.05">
+          <div class="hint">Sekundærbolig verdsettes til 100 % av markedsverdi, aksjefond til 80 %. Slår i boligens disfavør.</div>
+        </div>
+      </div>
+    </details>
+
+    <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center">
+      <button class="reset" id="reset">↺ Tilbakestill alt</button>
+      <button class="reset" id="share">⧉ Kopier lenke</button>
+    </div>
+  </aside>
+
+  <!-- ── innhold ───────────────────────────────────────────────────────── -->
+  <main>
+
+    <div class="verdict">
+      <div class="grid">
+        <div class="tile hero">
+          <div class="k">Nødvendig netto yield</div>
+          <div class="v" id="vReq">—</div>
+          <div class="sub" id="vReqSub">for å gå likt ut med indeksfondet</div>
+        </div>
+        <div class="tile">
+          <div class="k">Boligen leverer</div>
+          <div class="v" id="vAct">—</div>
+          <div class="sub" id="vActSub"></div>
+        </div>
+        <div class="tile">
+          <div class="k">Kontantstrøm</div>
+          <div class="v" id="vCf">—</div>
+          <div class="sub" id="vCfSub">per måned, år 1, etter avdrag og skatt</div>
+        </div>
+        <div class="tile">
+          <div class="k">Egenkapital ved slutt</div>
+          <div class="v" id="vEnd">—</div>
+          <div class="sub" id="vEndSub"></div>
+        </div>
+      </div>
+      <div class="verdictline">
+        <span class="badge" id="vBadge">—</span>
+        <span id="vText"></span>
+      </div>
+    </div>
+
+    <!-- 1. formelen -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Regnestykket</div>
+        <h2>Én linje forklarer det meste</h2>
+        <p>Se bort fra skatt, avdrag og transaksjonskostnader et øyeblikk. Da er avkastningen på
+        egenkapitalen i en belånt bolig ren aritmetikk: leieoverskuddet pluss verdistigningen, minus
+        renten på lånet, delt på egenkapitalen. Settes den lik indeksfondets avkastning, faller
+        terskelen ut av seg selv.</p>
+      </div>
+      <div class="formula">
+        <div class="eq"><em>y*</em> = R × (1 − B) + r × B − g</div>
+        <dl class="deflist">
+          <dt>y*</dt><dd>netto yield boligen må ha: (leie − ledighet − drift − vedlikehold) ÷ totalpris</dd>
+          <dt>R</dt><dd>forventet avkastning i indeksfondet</dd>
+          <dt>B</dt><dd>belåningsgrad</dd>
+          <dt>r</dt><dd>lånerente</dd>
+          <dt>g</dt><dd>årlig verdistigning på boligen</dd>
+        </dl>
+        <p style="margin-top:18px; color:var(--ink-2); font-size:14px; max-width:66ch">
+          Legg merke til fortegnet: terskelen beveger seg mot <b style="color:var(--ink)">renten</b> når
+          belåningen øker, og bort fra indeksfondets avkastning. Så lenge du låner billigere enn
+          indeksfondet gir, <b style="color:var(--ink)">senker</b> mer gjeld kravet til yield — og
+          øker samtidig alt du kan tape. Med tall: <span id="formulaEg" style="font-family:var(--mono)"></span>
+        </p>
+        <p style="margin-top:12px; color:var(--ink-3); font-size:13px; max-width:66ch">
+          Grafene under bruker ikke denne formelen, men en år-for-år-simulering med avdrag, skatt,
+          salgsomkostninger og reinvestering av overskudd. Formelen er snarveien; simuleringen er fasiten.
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. terskelkurven -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Belåningsgrad</div>
+        <h2>Tre terskler, ikke én</h2>
+        <p>«Gir det mening» er tre forskjellige spørsmål, og de har tre forskjellige svar. Å slå
+        indeksfondet er det <em>laveste</em> kravet når renten er lav — å få boligen til å betale
+        sine egne avdrag er det klart høyeste. Mellom kurvene ligger boliger som lønner seg på papiret,
+        men som krever at du sprøyter inn penger hver måned i mange år.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3>Nødvendig netto yield mot belåningsgrad</h3>
+          <span class="note" id="ltvNote"></span>
+        </div>
+        <div class="plot" id="plotLtv"><div class="tip" id="tipLtv"></div></div>
+        <div class="legend" id="legLtv"></div>
+        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblLtv"></div></details>
+      </div>
+    </section>
+
+    <!-- 3. porteføljen -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">62 virkelige boliger</div>
+        <h2>Hvor mange holder egentlig mål?</h2>
+        <p>Hver prikk er en leilighet jeg har regnet på, med kjøpesum, oppussing, leie og
+        driftskostnader slik de faktisk sto. Yielden er regnet om til netto — etter ledighet, drift
+        og vedlikehold — slik at den kan sammenlignes med tersklene over. Flytt på renten eller
+        belåningsgraden i panelet, og se hvor mange prikker som skifter farge.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3>Netto yield mot totalpris</h3>
+          <span class="note" id="scatNote"></span>
+        </div>
+        <div class="plot" id="plotScat"><div class="tip" id="tipScat"></div></div>
+        <div class="legend" id="legScat"></div>
+        <details class="tblwrap"><summary>Vis alle 62 som tabell</summary><div class="tblscroll" id="tblScat"></div></details>
+      </div>
+    </section>
+
+    <!-- 3b. maks kjøpesum -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Maksprisen</div>
+        <h2>Hva kan du by?</h2>
+        <p>Snu regnestykket: yielden er gitt av leien og prisen, så låser du yielden, faller maksprisen
+        ut. Fordi driftskostnadene stort sett følger leien, blir svaret <em>lineært</em> — én multiplikator
+        du kan gange månedsleien med på visningen. Trykk deg gjennom soveromsradene og juster arealene
+        til det du faktisk ser på.</p>
+      </div>
+
+      <div class="formula">
+        <div class="eqstack">
+          <div class="eq">maks kjøpesum = leie/mnd × <em>k</em></div>
+          <div class="eq"><em>k</em> = 12 (1 − ledighet − drift) ÷ (<em>y*</em> (1 + dok) + vedlikehold)</div>
+        </div>
+        <div class="thumb">
+          <div class="t"><span class="k">Tommelfingerregel</span><span class="n" id="kIndeks">—</span><span class="s">ganger månedsleien for å slå indeksfondet</span></div>
+          <div class="t"><span class="k">Uten å tape penger hver måned</span><span class="n" id="kCf">—</span><span class="s">ganger månedsleien for null kontantstrøm</span></div>
+          <div class="t"><span class="k">Arket ditt betalte</span><span class="n" id="kFaktisk">—</span><span class="s">ganger månedsleien i median</span></div>
+        </div>
+        <dl class="deflist" style="margin-top:16px">
+          <dt>y*</dt><dd>yielden du krever — hentet fra tersklene lenger opp, så den følger rente, belåning og verdistigning</dd>
+          <dt>drift</dt><dd>felleskostnader, kommunale avgifter, forsikring og strøm, som andel av leien</dd>
+          <dt>dok</dt><dd>dokumentavgift, 2,5 % for selveier og 0 for borettslag</dd>
+        </dl>
+        <p style="margin-top:18px; color:var(--ink-2); font-size:14px; max-width:66ch">
+          Multiplikatoren er hele svaret: alt annet — soverom, areal, bydel — påvirker bare hvilken leie
+          du kan ta. <span id="bidNote"></span>
+        </p>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="caption">
+          <h3>Maks kjøpesum og pris per kvadratmeter</h3>
+          <span class="note">Rediger leie og areal direkte i tabellen</span>
+        </div>
+        <div class="tblscroll" style="max-height:none; border-top:1px solid var(--line)" id="tblBid"></div>
+        <div class="bidbar">
+          <label for="driftandel">Driftskostnader som andel av leien</label>
+          <input type="range" id="driftandel" min="0" max="45" step="0.5">
+          <span class="val" id="driftandelV"></span>
+          <span class="hint">Felleskostnader, kommunale avgifter, forsikring og strøm. Medianen i utvalget er 17,4 %.</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="caption">
+          <h3>Maks kjøpesum mot månedsleie</h3>
+          <span class="note" id="bidChartNote"></span>
+        </div>
+        <div class="plot" id="plotBid"><div class="tip" id="tipBid"></div></div>
+        <div class="legend" id="legBid"></div>
+        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblBidChart"></div></details>
+      </div>
+    </section>
+
+    <!-- 4. rente x verdistigning -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Følsomhet</div>
+        <h2>De to tallene du ikke kjenner</h2>
+        <p>Yield og kjøpesum kan du regne ut på visning. Renten de neste femten årene og
+        verdistigningen i samme periode kan du ikke. Rutenettet viser hvor mye bedre eller dårligere
+        boligen kommer ut enn indeksfondet, målt i prosentpoeng årlig avkastning, for hver kombinasjon —
+        med boligen og belåningen du har satt opp nå.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3>Meravkastning bolig mot indeksfond</h3>
+          <span class="note">Prosentpoeng per år · blått = boligen vinner</span>
+        </div>
+        <div class="plot" id="plotHeat"><div class="tip" id="tipHeat"></div></div>
+        <div class="legend" id="legHeat"></div>
+        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblHeat"></div></details>
+      </div>
+    </section>
+
+    <!-- 5. formue over tid -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Over tid</div>
+        <h2>Samme krone, to steder</h2>
+        <p>Begge kurvene starter med den samme egenkapitalen og mottar nøyaktig de samme innskuddene
+        til samme tid: hver måned boligen går i minus, får indeksfondet det samme beløpet. Går boligen
+        i pluss, plasseres overskuddet i fond. Kurvene viser hva du sitter igjen med etter skatt hvis
+        du selger det året.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3>Netto formue etter skatt ved salg</h3>
+          <span class="note" id="wealthNote"></span>
+        </div>
+        <div class="plot" id="plotWealth"><div class="tip" id="tipWealth"></div></div>
+        <div class="legend" id="legWealth"></div>
+        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblWealth"></div></details>
+      </div>
+    </section>
+
+    <!-- 6. kontantstrøm -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Måned én</div>
+        <h2>Hvor blir leien av</h2>
+        <p>En bolig med 6 % brutto yield kan fint gå 4 000 kroner i minus hver måned. Nedbrytningen
+        under viser hvorfor: avdraget er ikke en kostnad, men det er en utbetaling — og
+        driftskostnadene som ikke står i annonsen spiser resten.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3>Fra brutto leie til kontantstrøm, per måned år 1</h3>
+          <span class="note">Avdrag er sparing, ikke kostnad — men må betales</span>
+        </div>
+        <div class="plot" id="plotFall"><div class="tip" id="tipFall"></div></div>
+        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblFall"></div></details>
+      </div>
+    </section>
+
+    <!-- 7. hva modellen ikke fanger -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow">Forbehold</div>
+        <h2>Det aritmetikken ikke ser</h2>
+        <p>Modellen sammenligner forventede kroner. Den sammenligner ikke risiko, tid eller
+        fleksibilitet — og der er de to alternativene ikke i nærheten av hverandre.</p>
+      </div>
+      <ul class="caveats" id="caveats"></ul>
+    </section>
+
+    <footer>
+      Boligdata: 62 leiligheter jeg har regnet på gjennom årene, de fleste i Bergen.
+      Netto yield er regnet på totalpris — kjøpesum pluss dokumentavgift pluss oppussing — etter ledighet,
+      driftskostnader og vedlikehold. Skattesatsene er 2025/2026-satser for privat eie: 22 % på
+      leieoverskudd og renter, 22 % gevinstskatt på sekundærbolig, 37,84 % på aksjefondsgevinst.
+      Modellen er et regneverktøy, ikke investeringsrådgivning.
+      <br><br>
+      Laget av Mathias Haugsbø · <a class="home" href="/">mathiash98.github.io</a>
+    </footer>
+
+  </main>
+</div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<button class="fab" id="fab" type="button" aria-controls="rail" aria-expanded="false">
+  <span class="glyph">⚙</span><span>Forutsetninger</span><span class="fnum" id="fabNum"></span>
+</button>
+
+<script>
+"use strict";
+
+/* ═══ 1. Boligdata — 62 leiligheter regnet på gjennom årene ═══════════════════════════════════════════
+   [adresse, totalpris (kjøpesum + dokumentavgift + oppussing), leie/mnd, drift/mnd] */
+const BOLIGER = [
+["Nordre Skogveien 20",2460000,12000,4883],["Lien 8F",2460000,12000,2439],
+["Søndre Skogveien 22L",5832500,35000,4500],["Solhaugveien 2",2712500,15000,2633],
+["Huldra Garborgs gate 10",3912500,20000,1733],["Rogagaten 59",3280000,12000,1616],
+["Møregaten 14",6550000,37500,3916],["Kristian Bings vei 17",3535000,19000,3966],
+["Kristian Bings vei 15",3382500,12000,3275],["Ibsens gate 50E",5380000,24000,2216],
+["Kristofer Jansons vei 10",3280000,15500,3116],["Hunstadsvingen 7",3587500,17000,2958],
+["Øvre Fredlundveien 41",3177500,13000,6200],["Kristin Bings vei 9",2800000,14000,7616],
+["Falsens vei 40",7162500,33500,2900],["Kringsjåveien 62",5125000,36667,3158],
+["Johan Berentsens vei 163",2665000,11000,2477],["Nye Sandviksveien 56C",3485000,13000,5533],
+["Øvre Sandviksveien 7",3474750,22000,2416],["Sandviksveien 20",4810000,24000,3000],
+["Hordagaten 14",5732500,35000,3416],["Håkonsgaten 33",2408750,12000,2616],
+["Lille Damsgårdsveien 28",4562500,24000,3416],["Rogagaten 17",2966250,12000,3033],
+["Michael Krohns gate 32",2347250,11000,3900],["Jørgen Moes gate 2",5100000,24000,2666],
+["Kringsjåveien 8",1650000,11000,4533],["Cappenes vei 5",1937500,11000,2300],
+["Søndre Skogveien 109",2357500,11000,2733],["Kringsjåveien 24",3941250,26000,2642],
+["Carl Konows gate 22",1627500,10000,1333],["Nattlandsveien 92C",2650000,12000,6833],
+["Gjeble Pederssøns gate 12B",6139750,25000,4196],["Blekenberg 50",3485000,20400,4183],
+["Kirkeveien 40",10045000,24000,5000],["Løbergsveien 46",3638750,24000,5679],
+["Løbergsveien 46 (høyere pris)",4510000,24000,5679],["Søndre Allmenningen 2",3485000,20000,3608],
+["Markesmauet 2A",4238750,20000,2325],["Løbergsveien 22",3320000,11000,7033],
+["Jonas Lies vei 22",3990000,21000,3633],["Frydenbølien 29",3790000,20000,7033],
+["Asylplassen 9",4920000,14000,3233],["Rogagaten 11F",3575000,25000,2550],
+["Løbergsveien 52",6535000,50000,3166],["Nansens vei 51",6450000,35000,1333],
+["Løbergsveien 100A",9532500,47000,5167],["Løbergsveien 100D",3823750,20000,2666],
+["Lien 8G",7447250,41292,5167],["Wessels gate 3B",6750000,50000,4233],
+["Jonas Reins gate 5",3987250,19000,6533],["Jonas Reins gate 5 (høyere leie)",3987250,29167,7233],
+["Kronshaugen 4",9430000,57333,4250],["Lien 18B",3485000,25000,2633],
+["Daniel Hansens gate 11",2870000,16000,4050],["Damsgårdsveien 55B",4048750,20000,3212],
+["Kirkegaten 19",17425000,126000,2512],["Dag Hammerskjølds vei 151",3884750,20000,7551],
+["Nedre Stølen 5",1625000,15000,2191],["Nordahls Rolfsens vei 23C",3890000,18000,9133],
+["Vangsgata 22C",2000000,14000,5275],["Marineholmen A301",6190000,20000,3250]
+];
+
+/* ═══ 2. Formatering ═════════════════════════════════════════════════════ */
+const nf0  = new Intl.NumberFormat("nb-NO",{maximumFractionDigits:0});
+const nf1  = new Intl.NumberFormat("nb-NO",{minimumFractionDigits:1,maximumFractionDigits:1});
+const nf2  = new Intl.NumberFormat("nb-NO",{minimumFractionDigits:2,maximumFractionDigits:2});
+const kr   = v => nf0.format(Math.round(v)) + " kr";
+const krS  = v => (v<0?"−":"") + nf0.format(Math.abs(Math.round(v))) + " kr";
+const pct1 = v => nf1.format(v).replace("-","−") + " %";
+const pct2 = v => nf2.format(v).replace("-","−") + " %";
+const ppS  = v => (v>0?"+":v<0?"−":"") + nf1.format(Math.abs(v)) + " pp";
+const mkr  = v => { const a=Math.abs(v);
+  if(a>=1e6) return (v<0?"−":"")+nf1.format(a/1e6)+" mill.";
+  if(a>=1e3) return (v<0?"−":"")+nf0.format(a/1e3)+" k";
+  return krS(v); };
+
+/* ═══ 3. Tilstand ════════════════════════════════════════════════════════ */
+const DEFAULTS = {
+  pris:3400000, opp:0, leie:19000, drift:3200, ledig:8, vedl:0.7, dokavg:true,
+  ltv:80, rente:5.0, lopetid:25, avdragsfri:false,
+  vekstbolig:3.5, indeks:7.0, kpi:2.5, horisont:15, salgsomk:2.5,
+  skatt:true, formue:false, formuesats:1.0, driftandel:17
+};
+/* soveromsbånd: [leie fra, leie til, areal m²] */
+const SOV_DEFAULT = [[17000,22000,45],[18000,22000,62],[26000,30000,85],[32000,38000,108]];
+let SOV = SOV_DEFAULT.map(r => r.slice());
+let S = Object.assign({}, DEFAULTS);
+
+const T_LEIE = 0.22, T_GEV_BOLIG = 0.22, T_GEV_FOND = 0.3784, SKJERMING = 0.030;
+
+/* ═══ 4. Motoren ═════════════════════════════════════════════════════════
+   Én simulering, år for år. Boligsporet og fondssporet får nøyaktig samme
+   kontantinnskudd til samme tid, så terminalformuen er direkte sammenlignbar. */
+
+function annuitet(r, n, pv){ return r === 0 ? pv/n : pv*r/(1-Math.pow(1+r,-n)); }
+
+function simuler(o){
+  const p = Object.assign({}, S, o||{});
+  const V0    = p.pris + p.opp;                                  // markedsverdi ved kjøp
+  const kost  = p.pris * (1 + (p.dokavg ? 0.025 : 0)) + p.opp;   // totalpris / kostpris
+  const laan0 = Math.min(p.ltv/100 * V0, kost);
+  const EK    = kost - laan0;
+  const r     = p.rente/100, g = p.vekstbolig/100, R = p.indeks/100;
+  const kpi   = p.kpi/100, v = p.ledig/100, N = Math.round(p.horisont);
+  const fs    = p.formue ? p.formuesats/100 : 0;
+  const sk    = p.skatt;
+  const ann   = p.avdragsfri ? 0 : annuitet(r, p.lopetid, laan0);
+
+  let gjeld = laan0, side = 0, sideBasis = 0, sideSkjerm = 0;
+  let fond = EK, fondBasis = EK, fondSkjerm = 0;
+
+  const aar = [];
+  for(let t=1; t<=N; t++){
+    const V     = V0 * Math.pow(1+g, t);
+    const Vfor  = V0 * Math.pow(1+g, t-1);
+    const infl  = Math.pow(1+kpi, t-1);
+    const leie  = p.leie*12 * infl * (1-v);
+    const drift = p.drift*12 * infl + p.vedl/100 * Vfor;
+    const rente = r * gjeld;
+    const avdr  = p.avdragsfri ? 0 : Math.max(0, Math.min(gjeld, ann - rente));
+    const skattLeie = sk ? T_LEIE * (leie - drift - rente) : 0;
+
+    // formuesskatt: sekundærbolig 100 % av verdi, aksjefond 80 %
+    const fBolig = fs * Math.max(0, V - gjeld + 0.8*side);
+    const fFond  = fs * Math.max(0, 0.8 * fond);
+
+    const cf = leie - drift - rente - avdr - skattLeie - fBolig;
+    gjeld -= avdr;
+
+    // sidefond: boligens overskudd plasseres i indeksfond
+    sideSkjerm += SKJERMING * sideBasis;
+    side = side * (1+R);
+    if(cf > 0){ side += cf; sideBasis += cf; }
+    const innskudd = cf < 0 ? -cf : 0;
+
+    // fondssporet: samme innskudd, samme tidspunkt
+    fondSkjerm += SKJERMING * fondBasis;
+    fond = fond * (1+R) - fFond + innskudd;
+    fondBasis += innskudd;
+
+    // hva sitter du igjen med hvis du selger i år t
+    const netto  = V * (1 - p.salgsomk/100);
+    const gevB   = sk ? T_GEV_BOLIG * Math.max(0, netto - kost) : 0;
+    const gevS   = sk ? T_GEV_FOND  * Math.max(0, side - sideBasis - sideSkjerm) : 0;
+    const gevF   = sk ? T_GEV_FOND  * Math.max(0, fond - fondBasis - fondSkjerm) : 0;
+
+    aar.push({
+      t, V, gjeld, leie, drift, rente, avdr, skattLeie, fBolig, cf, innskudd,
+      bolig: netto - gevB - gjeld + side - gevS,
+      fondNetto: fond - gevF,
+      innskuttSum: 0
+    });
+  }
+  // kumulativt innskutt
+  let sum = EK;
+  aar.forEach(a => { sum += a.innskudd; a.innskuttSum = sum; });
+
+  const sisteAar = aar[aar.length-1] || null;
+  const noi1 = p.leie*12*(1-v) - (p.drift*12 + p.vedl/100 * V0);
+  return {
+    p, V0, kost, laan0, EK, ann, aar, siste: sisteAar,
+    nettoYield: kost > 0 ? noi1/kost*100 : 0,
+    bruttoYield: kost > 0 ? p.leie*12/kost*100 : 0,
+    noi1
+  };
+}
+
+/* Nødvendig leie for at et mål skal treffes — monoton, så halvering funker. */
+function losLeie(fn, o){
+  let lo = 0, hi = 400000;
+  if(fn(hi, o) < 0) return null;
+  if(fn(lo, o) > 0) { // klarer målet uten leie i det hele tatt
+    lo = -400000;
+    if(fn(lo, o) > 0) return lo;
+  }
+  for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(fn(m,o) > 0) hi=m; else lo=m; }
+  return (lo+hi)/2;
+}
+const yieldAvLeie = (leie, o) => {
+  const p = Object.assign({}, S, o||{});
+  const V0 = p.pris + p.opp, kost = p.pris*(1+(p.dokavg?0.025:0)) + p.opp;
+  return kost>0 ? (leie*12*(1-p.ledig/100) - p.drift*12 - p.vedl/100*V0)/kost*100 : 0;
+};
+
+/* De tre tersklene, uttrykt som netto yield i prosent */
+function terskler(o){
+  const slaaIndeks = losLeie((leie,oo)=>{ const s=simuler(Object.assign({leie},oo));
+    return s.siste ? s.siste.bolig - s.siste.fondNetto : 0; }, o);
+  const nullCf = losLeie((leie,oo)=>{ const s=simuler(Object.assign({leie},oo));
+    return s.aar[0] ? s.aar[0].cf : 0; }, o);
+  const dekkRente = losLeie((leie,oo)=>{ const s=simuler(Object.assign({leie},oo));
+    const a=s.aar[0]; return a ? a.leie - a.drift - a.rente : 0; }, o);
+  return {
+    indeks: slaaIndeks===null?null:yieldAvLeie(slaaIndeks,o),
+    cf:     nullCf===null?null:yieldAvLeie(nullCf,o),
+    rente:  dekkRente===null?null:yieldAvLeie(dekkRente,o)
+  };
+}
+
+/* Netto yield for en bolig fra arket, med gjeldende ledighet og vedlikehold */
+function boligYield(b){
+  const [ , tot, leie, drift ] = b;
+  const V0 = tot / (S.dokavg ? 1.025 : 1);           // tilnærmet markedsverdi
+  return (leie*12*(1-S.ledig/100) - drift*12 - S.vedl/100*V0) / tot * 100;
+}
+</script>
+
+<script>
+"use strict";
+/* ═══ 5. Tegneverktøy ════════════════════════════════════════════════════ */
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const AX = 'fill="var(--ink-3)" font-family="var(--mono)" font-size="11"';
+const AXL= 'fill="var(--ink-2)" font-family="var(--sans)" font-size="11.5"';
+
+function setSvg(plotId, tipId, inner, w, h){
+  const el = document.getElementById(plotId), tip = document.getElementById(tipId);
+  el.innerHTML = '<svg viewBox="0 0 '+w+' '+h+'" role="img">'+inner+'</svg>';
+  if(tip) el.appendChild(tip);
+  return el.querySelector("svg");
+}
+function place(tip, plot, svg, vbW, x, y, text){
+  const r = svg.getBoundingClientRect(), pr = plot.getBoundingClientRect(), k = r.width/vbW;
+  tip.innerHTML = text;
+  tip.style.opacity = 1;
+  const tw = tip.offsetWidth;
+  let px = (r.left - pr.left) + x*k;
+  px = Math.max(tw/2+4, Math.min(pr.width - tw/2 - 4, px));
+  tip.style.left = (px + plot.scrollLeft) + "px";
+  tip.style.top  = ((r.top - pr.top) + y*k - 10) + "px";
+}
+const hide = tip => { tip.style.opacity = 0; };
+function tipRow(k, v, color){
+  return '<div class="r"><span class="k">'+(color?'<span style="width:9px;height:3px;border-radius:9px;background:'+color+';display:inline-block"></span>':'')+esc(k)+'</span><b>'+v+'</b></div>';
+}
+function niceTicks(min, max, n){
+  const span = max-min || 1, raw = span/n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1,2,2.5,5,10].map(m=>m*mag).find(v=>v>=raw) || 10*mag;
+  const out=[]; for(let v=Math.ceil(min/step)*step; v<=max+1e-9; v+=step) out.push(+v.toFixed(10));
+  return out;
+}
+function tableHtml(head, rows){
+  return '<table><thead><tr>'+head.map(h=>'<th>'+esc(h)+'</th>').join("")+'</tr></thead><tbody>'
+    + rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join("")+'</tr>').join("") + '</tbody></table>';
+}
+
+/* ═══ 6. Graf 1 — terskler mot belåningsgrad ═════════════════════════════ */
+let ltvData = [];
+function drawLtv(){
+  const W=900, H=372, ml=56, mr=136, mt=18, mb=42;
+  const xs=[]; for(let b=0; b<=90; b+=5) xs.push(b);
+  ltvData = xs.map(b => Object.assign({b}, terskler({ltv:b})));
+
+  const mine = simuler({}).nettoYield;
+  const all = ltvData.flatMap(d=>[d.indeks,d.cf,d.rente]).filter(v=>v!=null && isFinite(v));
+  let lo = Math.min(0, ...all, mine), hi = Math.max(...all, mine);
+  const pad=(hi-lo)*0.10; lo-=pad; hi+=pad;
+  const X = b => ml + (b/90)*(W-ml-mr);
+  const Y = y => mt + (1-(y-lo)/(hi-lo))*(H-mt-mb);
+
+  let g = "";
+  niceTicks(lo,hi,5).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)" stroke-width="1"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+pct1(v)+'</text>';
+  });
+  if(lo<0 && hi>0) g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--axis)" stroke-width="1"/>';
+  xs.filter(b=>b%15===0).forEach(b=>{
+    g += '<text x="'+X(b).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+b+' %</text>';
+  });
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>Belåningsgrad</text>';
+
+  // referanselinje: boligens egen yield
+  g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(mine).toFixed(1)+'" y2="'+Y(mine).toFixed(1)+'" stroke="var(--ink-3)" stroke-width="1.5" opacity=".55"/>';
+  const myY = Y(mine), myLab = myY < mt+18 ? myY+15 : myY-7;
+  g += '<text x="'+(ml+8)+'" y="'+myLab.toFixed(1)+'" '+AX+' fill="var(--ink-2)">Din bolig i dag · '+pct1(mine)+'</text>';
+
+  // markør for valgt belåningsgrad
+  g += '<line x1="'+X(S.ltv).toFixed(1)+'" x2="'+X(S.ltv).toFixed(1)+'" y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--accent)" stroke-width="1.5" opacity=".35"/>';
+
+  const series = [
+    {k:"indeks", c:"var(--s1)", n:"Slå indeksfondet"},
+    {k:"cf",     c:"var(--s2)", n:"Null kontantstrøm"},
+    {k:"rente",  c:"var(--s3)", n:"Dekke renten"}
+  ];
+  series.forEach(s=>{
+    const pts = ltvData.filter(d=>d[s.k]!=null && isFinite(d[s.k]));
+    if(!pts.length) return;
+    g += '<path d="'+pts.map((d,i)=>(i?"L":"M")+X(d.b).toFixed(1)+" "+Y(d[s.k]).toFixed(1)).join(" ")
+      + '" fill="none" stroke="'+s.c+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+    const last = pts[pts.length-1];
+    g += '<circle cx="'+X(last.b).toFixed(1)+'" cy="'+Y(last[s.k]).toFixed(1)+'" r="4" fill="'+s.c+'" stroke="var(--surface)" stroke-width="2"/>';
+  });
+  // etiketter til høyre, spredt så de ikke kolliderer
+  const ends = series.map(s=>{ const p=ltvData.filter(d=>d[s.k]!=null&&isFinite(d[s.k])).pop();
+    return p ? {y:Y(p[s.k]), n:s.n, c:s.c, v:p[s.k]} : null; }).filter(Boolean).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++) if(ends[i].y - ends[i-1].y < 15) ends[i].y = ends[i-1].y + 15;
+  ends.forEach(e=>{
+    g += '<text x="'+(W-mr+8)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(e.n)+'</text>';
+    g += '<text x="'+(W-mr+8)+'" y="'+(e.y+10).toFixed(1)+'" '+AX+'>'+pct1(e.v)+'</text>';
+  });
+  g += '<g id="ltvCross" opacity="0"><line y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1"/></g>';
+
+  const svg = setSvg("plotLtv","tipLtv",g,W,H);
+  const plot = document.getElementById("plotLtv"), tip = document.getElementById("tipLtv");
+  const cross = svg.querySelector("#ltvCross line");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), sx = (ev.clientX-r.left)/r.width*W;
+    if(sx<ml-6 || sx>W-mr+6){ hide(tip); svg.querySelector("#ltvCross").setAttribute("opacity",0); return; }
+    const b = Math.round(Math.max(0,Math.min(90,(sx-ml)/(W-ml-mr)*90))/5)*5;
+    const d = ltvData.find(x=>x.b===b); if(!d) return;
+    svg.querySelector("#ltvCross").setAttribute("opacity",1);
+    cross.setAttribute("x1",X(b)); cross.setAttribute("x2",X(b));
+    place(tip, plot, svg, W, X(b), mt+8,
+      '<div class="t">Belåningsgrad '+b+' %</div>'
+      + tipRow("Slå indeksfondet", d.indeks==null?"—":pct1(d.indeks), "var(--s1)")
+      + tipRow("Null kontantstrøm", d.cf==null?"—":pct1(d.cf), "var(--s2)")
+      + tipRow("Dekke renten", d.rente==null?"—":pct1(d.rente), "var(--s3)")
+      + tipRow("Din bolig", pct1(mine), "var(--ink-3)"));
+  };
+  plot.onpointerleave = () => { hide(tip); svg.querySelector("#ltvCross").setAttribute("opacity",0); };
+
+  document.getElementById("legLtv").innerHTML = series.map(s=>
+    '<span class="item"><span class="swatch" style="background:'+s.c+'"></span>'+esc(s.n)+'</span>').join("")
+    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.55"></span>Din bolig i dag</span>';
+  document.getElementById("ltvNote").textContent =
+    "Rente " + pct1(S.rente) + " · verdistigning " + pct1(S.vekstbolig) + " · indeksfond " + pct1(S.indeks);
+  document.getElementById("tblLtv").innerHTML = tableHtml(
+    ["Belåningsgrad","Slå indeksfondet","Null kontantstrøm","Dekke renten"],
+    ltvData.map(d=>[d.b+" %", d.indeks==null?"—":pct2(d.indeks), d.cf==null?"—":pct2(d.cf), d.rente==null?"—":pct2(d.rente)]));
+}
+
+/* ═══ 7. Graf 2 — dine 62 boliger ════════════════════════════════════════ */
+function drawScatter(th){
+  const W=900, H=408, ml=68, mr=150, mt=20, mb=44;
+  const pts = BOLIGER.map(b=>({n:b[0], tot:b[1], leie:b[2], drift:b[3], y:boligYield(b)}));
+  const xmin=1.4e6, xmax=1.9e7;
+  const X = v => ml + (Math.log(Math.max(xmin,Math.min(xmax,v)))-Math.log(xmin))/(Math.log(xmax)-Math.log(xmin))*(W-ml-mr);
+  const ys = pts.map(p=>p.y).concat([th.indeks, th.cf].filter(v=>v!=null));
+  let lo=Math.min(0,...ys), hi=Math.max(...ys); const pad=(hi-lo)*0.10; lo-=pad; hi+=pad;
+  const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
+
+  let g="";
+  niceTicks(lo,hi,5).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+pct1(v)+'</text>';
+  });
+  [2e6,3e6,5e6,8e6,1.2e7,1.8e7].forEach(v=>{
+    g += '<text x="'+X(v).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+(v/1e6).toString().replace(".",",")+' mill.</text>';
+  });
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>Totalpris (logaritmisk)</text>';
+  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>Netto yield</text>';
+
+  const rules = [];
+  if(th.indeks!=null) rules.push({v:th.indeks, c:"var(--s1)", n:"Slå indeksfondet"});
+  if(th.cf!=null)     rules.push({v:th.cf,     c:"var(--s2)", n:"Null kontantstrøm"});
+  rules.forEach(r=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(r.v).toFixed(1)+'" y2="'+Y(r.v).toFixed(1)+'" stroke="'+r.c+'" stroke-width="2"/>';
+  });
+  const sorted = rules.slice().sort((a,b)=>Y(a.v)-Y(b.v));
+  for(let i=1;i<sorted.length;i++) if(Y(sorted[i].v)-Y(sorted[i-1].v)<26) sorted[i]._off=26-(Y(sorted[i].v)-Y(sorted[i-1].v));
+  sorted.forEach(r=>{
+    const yy = Y(r.v)+(r._off||0);
+    g += '<text x="'+(W-mr+9)+'" y="'+(yy-3).toFixed(1)+'" fill="'+r.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(r.n)+'</text>';
+    g += '<text x="'+(W-mr+9)+'" y="'+(yy+10).toFixed(1)+'" '+AX+'>'+pct1(r.v)+'</text>';
+  });
+
+  const cut = th.indeks==null ? -1e9 : th.indeks;
+  pts.forEach(p=>{
+    p.px=X(p.tot); p.py=Y(p.y); p.ok = p.y>=cut;
+    g += '<circle cx="'+p.px.toFixed(1)+'" cy="'+p.py.toFixed(1)+'" r="5" fill="'+(p.ok?"var(--good)":"var(--crit)")
+       + '" fill-opacity=".85" stroke="var(--surface)" stroke-width="2"/>';
+  });
+  if(picked >= 0 && pts[picked]){
+    const sp = pts[picked];
+    g += '<circle cx="'+sp.px.toFixed(1)+'" cy="'+sp.py.toFixed(1)+'" r="10" fill="none" stroke="var(--ink)" stroke-width="1.5"/>';
+    g += '<text x="'+sp.px.toFixed(1)+'" y="'+(sp.py-16).toFixed(1)+'" text-anchor="middle" fill="var(--ink)" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(sp.n)+'</text>';
+  }
+  g += '<circle id="scatHi" r="9" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity="0"/>';
+
+  const svg = setSvg("plotScat","tipScat",g,W,H);
+  const plot = document.getElementById("plotScat"), tip = document.getElementById("tipScat");
+  const hi2 = svg.querySelector("#scatHi");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), k=r.width/W;
+    const sx=(ev.clientX-r.left)/k, sy=(ev.clientY-r.top)/k;
+    let best=null, bd=1e9;
+    pts.forEach(p=>{ const d=(p.px-sx)**2+(p.py-sy)**2; if(d<bd){bd=d;best=p;} });
+    if(!best || bd>26*26){ hide(tip); hi2.setAttribute("opacity",0); return; }
+    hi2.setAttribute("cx",best.px); hi2.setAttribute("cy",best.py); hi2.setAttribute("opacity",1);
+    place(tip, plot, svg, W, best.px, best.py,
+      '<div class="t">'+esc(best.n)+'</div>'
+      + tipRow("Netto yield", pct2(best.y), best.ok?"var(--good)":"var(--crit)")
+      + tipRow("Brutto yield", pct2(best.leie*12/best.tot*100))
+      + tipRow("Totalpris", kr(best.tot))
+      + tipRow("Leie", kr(best.leie)+"/mnd")
+      + tipRow("Drift", kr(best.drift)+"/mnd"));
+  };
+  plot.onpointerleave = () => { hide(tip); hi2.setAttribute("opacity",0); };
+
+  const over = pts.filter(p=>p.ok).length;
+  const overCf = th.cf==null?0:pts.filter(p=>p.y>=th.cf).length;
+  document.getElementById("legScat").innerHTML =
+      '<span class="item"><span class="dot" style="background:var(--good)"></span><span class="sym">✓</span> Slår indeksfondet ('+over+' av '+pts.length+')</span>'
+    + '<span class="item"><span class="dot" style="background:var(--crit)"></span><span class="sym">✕</span> Taper mot indeksfondet ('+(pts.length-over)+')</span>';
+  document.getElementById("scatNote").textContent =
+    overCf + " av " + pts.length + " betaler sine egne avdrag";
+  document.getElementById("tblScat").innerHTML = tableHtml(
+    ["Adresse","Totalpris","Leie/mnd","Drift/mnd","Brutto yield","Netto yield","Mot indeks"],
+    pts.slice().sort((a,b)=>b.y-a.y).map(p=>[esc(p.n), kr(p.tot), kr(p.leie), kr(p.drift),
+      pct2(p.leie*12/p.tot*100), pct2(p.y), p.ok?"✓ over":"✕ under"]));
+}
+</script>
+
+<script>
+"use strict";
+/* ═══ 8. Graf 3 — rente × verdistigning ══════════════════════════════════ */
+function divFill(v, D){
+  const w = Math.min(100, Math.abs(v)/D*100).toFixed(1);
+  const pole = v>=0 ? "var(--div-pos)" : "var(--div-neg)";
+  return "color-mix(in srgb, "+pole+" "+w+"%, var(--div-mid))";
+}
+function drawHeat(){
+  const W=900, H=430, ml=74, mr=132, mt=22, mb=48;
+  const renter=[], vekst=[];
+  for(let r=2; r<=8.001; r+=0.5) renter.push(+r.toFixed(1));
+  for(let g=0; g<=6.001; g+=0.5) vekst.push(+g.toFixed(1));
+  const N = Math.round(S.horisont);
+  const cells = [];
+  vekst.forEach(g => renter.forEach(r => {
+    const s = simuler({rente:r, vekstbolig:g});
+    const a = s.siste; let v;
+    if(!a || a.fondNetto<=0) v = 0;
+    else if(a.bolig<=0) v = -99;
+    else v = (Math.pow(a.bolig/a.fondNetto, 1/N)-1)*100;
+    cells.push({r, g, v});
+  }));
+  const finite = cells.map(c=>c.v).filter(v=>v>-90);
+  const D = Math.max(1, Math.min(12, Math.max(...finite.map(Math.abs))));
+  const cw = (W-ml-mr)/renter.length, ch = (H-mt-mb)/vekst.length;
+  const X = i => ml + i*cw, Y = j => mt + (vekst.length-1-j)*ch;
+
+  let out="";
+  cells.forEach(c=>{
+    const i = renter.indexOf(c.r), j = vekst.indexOf(c.g);
+    const fill = c.v<=-90 ? "var(--div-neg)" : divFill(c.v, D);
+    out += '<rect x="'+(X(i)+1).toFixed(1)+'" y="'+(Y(j)+1).toFixed(1)+'" width="'+(cw-2).toFixed(1)
+        +'" height="'+(ch-2).toFixed(1)+'" rx="2" fill="'+fill+'" data-i="'+i+'" data-j="'+j+'"/>';
+  });
+  renter.forEach((r,i)=>{ if(i%2===0) out += '<text x="'+(X(i)+cw/2).toFixed(1)+'" y="'+(H-mb+19)+'" text-anchor="middle" '+AX+'>'+nf1.format(r)+'</text>'; });
+  vekst.forEach((g,j)=>{ if(j%2===0) out += '<text x="'+(ml-10)+'" y="'+(Y(j)+ch/2+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+nf1.format(g)+' %</text>'; });
+  out += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-6)+'" text-anchor="middle" '+AXL+'>Lånerente, prosent</text>';
+  out += '<text transform="translate(16,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>Verdistigning bolig</text>';
+
+  // markør for gjeldende innstilling
+  const ci = renter.reduce((b,r,i)=>Math.abs(r-S.rente)<Math.abs(renter[b]-S.rente)?i:b,0);
+  const cj = vekst.reduce((b,g,j)=>Math.abs(g-S.vekstbolig)<Math.abs(vekst[b]-S.vekstbolig)?j:b,0);
+  out += '<rect x="'+(X(ci)+1).toFixed(1)+'" y="'+(Y(cj)+1).toFixed(1)+'" width="'+(cw-2).toFixed(1)
+      +'" height="'+(ch-2).toFixed(1)+'" rx="2" fill="none" stroke="var(--ink)" stroke-width="2"/>';
+  out += '<text x="'+(X(ci)+cw/2).toFixed(1)+'" y="'+(Y(cj)-5).toFixed(1)+'" text-anchor="middle" fill="var(--ink)" font-family="var(--sans)" font-size="11" font-weight="600">nå</text>';
+
+  // skalalegende
+  const lx=W-mr+22, ly=mt+8, lh=H-mt-mb-30, lw=13;
+  out += '<defs><linearGradient id="divgrad" x1="0" y1="0" x2="0" y2="1">'
+      + '<stop offset="0%" stop-color="'+divFill(D,D)+'"/><stop offset="50%" stop-color="var(--div-mid)"/>'
+      + '<stop offset="100%" stop-color="'+divFill(-D,D)+'"/></linearGradient></defs>';
+  out += '<rect x="'+lx+'" y="'+ly+'" width="'+lw+'" height="'+lh+'" rx="3" fill="url(#divgrad)" stroke="var(--ring)"/>';
+  [[0,"+"+nf1.format(D)+" pp"],[0.5,"0"],[1,"−"+nf1.format(D)+" pp"]].forEach(([f,t])=>{
+    out += '<text x="'+(lx+lw+7)+'" y="'+(ly+f*lh+4).toFixed(1)+'" '+AX+'>'+t+'</text>';
+  });
+  out += '<text x="'+lx+'" y="'+(ly+lh+22)+'" '+AX+' fill="var(--ink-2)">bolig − fond</text>';
+
+  const svg = setSvg("plotHeat","tipHeat",out,W,H);
+  const plot = document.getElementById("plotHeat"), tip = document.getElementById("tipHeat");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), k=r.width/W;
+    const sx=(ev.clientX-r.left)/k, sy=(ev.clientY-r.top)/k;
+    const i = Math.floor((sx-ml)/cw), j = vekst.length-1-Math.floor((sy-mt)/ch);
+    if(i<0||i>=renter.length||j<0||j>=vekst.length){ hide(tip); return; }
+    const c = cells.find(c=>c.r===renter[i] && c.g===vekst[j]); if(!c) return;
+    place(tip, plot, svg, W, X(i)+cw/2, Y(j),
+      '<div class="t">Rente '+pct1(renter[i])+' · vekst '+pct1(vekst[j])+'</div>'
+      + tipRow("Meravkastning", c.v<=-90 ? "egenkapitalen tapt" : ppS(c.v)+" per år")
+      + tipRow("Konklusjon", c.v>0?"boligen vinner":"fondet vinner"));
+  };
+  plot.onpointerleave = () => hide(tip);
+
+  document.getElementById("legHeat").innerHTML =
+      '<span class="item"><span class="dot" style="background:var(--div-pos)"></span>Boligen gir mer</span>'
+    + '<span class="item"><span class="dot" style="background:var(--div-mid);box-shadow:0 0 0 1px var(--line-2)"></span>Likt</span>'
+    + '<span class="item"><span class="dot" style="background:var(--div-neg)"></span>Indeksfondet gir mer</span>'
+    + '<span class="item" style="color:var(--ink-3)">Belåning '+S.ltv+' % · '+N+' års eiertid · netto yield '+pct1(simuler({}).nettoYield)+'</span>';
+  document.getElementById("tblHeat").innerHTML = tableHtml(
+    ["Verdistigning"].concat(renter.map(r=>nf1.format(r)+" %")),
+    vekst.slice().reverse().map(g=>[nf1.format(g)+" %"].concat(renter.map(r=>{
+      const c=cells.find(c=>c.r===r&&c.g===g); return c.v<=-90?"—":ppS(c.v); }))));
+}
+
+/* ═══ 9. Graf 4 — formue over tid ════════════════════════════════════════ */
+function drawWealth(sim){
+  const W=900, H=372, ml=66, mr=142, mt=20, mb=42;
+  const N = sim.aar.length;
+  const b = [{t:0,v:sim.EK}].concat(sim.aar.map(a=>({t:a.t, v:a.bolig})));
+  const f = [{t:0,v:sim.EK}].concat(sim.aar.map(a=>({t:a.t, v:a.fondNetto})));
+  const inn = [{t:0,v:sim.EK}].concat(sim.aar.map(a=>({t:a.t, v:a.innskuttSum})));
+  const all = b.concat(f, inn).map(d=>d.v);
+  let lo=Math.min(0,...all), hi=Math.max(...all); const pad=(hi-lo)*0.10; hi+=pad; lo-=pad*0.4;
+  const X = t => ml + (t/N)*(W-ml-mr);
+  const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
+
+  let g="";
+  niceTicks(lo,hi,5).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+mkr(v)+'</text>';
+  });
+  if(lo<0) g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--axis)"/>';
+  const step = N<=10?2:N<=20?4:5;
+  const ticks=[]; for(let t=0;t<=N;t+=step) ticks.push(t);
+  if(N-ticks[ticks.length-1] < step*0.5) ticks.pop();
+  ticks.push(N);
+  ticks.forEach(t => g += '<text x="'+X(t).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+t+'</text>');
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>År etter kjøp</text>';
+
+  const line = (arr,c,w,op) => '<path d="'+arr.map((d,i)=>(i?"L":"M")+X(d.t).toFixed(1)+" "+Y(d.v).toFixed(1)).join(" ")
+      + '" fill="none" stroke="'+c+'" stroke-width="'+w+'" stroke-linejoin="round" stroke-linecap="round"'+(op?' opacity="'+op+'"':'')+'/>';
+  g += line(inn,"var(--ink-3)",1.5,".6");
+  g += line(f,"var(--s2)",2);
+  g += line(b,"var(--s1)",2);
+  [[b,"var(--s1)","Bolig"],[f,"var(--s2)","Indeksfond"]].forEach(([arr,c])=>{
+    const l=arr[arr.length-1];
+    g += '<circle cx="'+X(l.t).toFixed(1)+'" cy="'+Y(l.v).toFixed(1)+'" r="4.5" fill="'+c+'" stroke="var(--surface)" stroke-width="2"/>';
+  });
+  const ends=[{y:Y(b[b.length-1].v),n:"Bolig",c:"var(--s1)",v:b[b.length-1].v},
+              {y:Y(f[f.length-1].v),n:"Indeksfond",c:"var(--s2)",v:f[f.length-1].v},
+              {y:Y(inn[inn.length-1].v),n:"Innskutt",c:"var(--ink-3)",v:inn[inn.length-1].v}].sort((a,c)=>a.y-c.y);
+  for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<17) ends[i].y=ends[i-1].y+17;
+  ends.forEach(e=>{
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+e.n+'</text>';
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y+10).toFixed(1)+'" '+AX+'>'+mkr(e.v)+'</text>';
+  });
+  g += '<g id="wCross" opacity="0"><line y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1"/></g>';
+
+  const svg = setSvg("plotWealth","tipWealth",g,W,H);
+  const plot = document.getElementById("plotWealth"), tip = document.getElementById("tipWealth");
+  const cg = svg.querySelector("#wCross"), cl = cg.querySelector("line");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), sx=(ev.clientX-r.left)/r.width*W;
+    if(sx<ml-6||sx>W-mr+6){ hide(tip); cg.setAttribute("opacity",0); return; }
+    const t = Math.max(0,Math.min(N,Math.round((sx-ml)/(W-ml-mr)*N)));
+    cg.setAttribute("opacity",1); cl.setAttribute("x1",X(t)); cl.setAttribute("x2",X(t));
+    const d = b[t].v - f[t].v;
+    place(tip, plot, svg, W, X(t), mt+8,
+      '<div class="t">'+(t===0?"Ved kjøp":"Etter "+t+" år")+'</div>'
+      + tipRow("Bolig", krS(b[t].v), "var(--s1)")
+      + tipRow("Indeksfond", krS(f[t].v), "var(--s2)")
+      + tipRow("Innskutt kapital", krS(inn[t].v), "var(--ink-3)")
+      + tipRow("Differanse", (d>=0?"+":"−")+kr(Math.abs(d))));
+  };
+  plot.onpointerleave = () => { hide(tip); cg.setAttribute("opacity",0); };
+
+  document.getElementById("legWealth").innerHTML =
+      '<span class="item"><span class="swatch" style="background:var(--s1)"></span>Bolig, etter skatt ved salg</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>Indeksfond, etter skatt</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.6"></span>Innskutt kapital</span>';
+  document.getElementById("wealthNote").textContent =
+    "Egenkapital ved kjøp " + kr(sim.EK) + " · lån " + kr(sim.laan0);
+  document.getElementById("tblWealth").innerHTML = tableHtml(
+    ["År","Bolig","Indeksfond","Differanse","Innskutt","Boligverdi","Restgjeld"],
+    b.map((d,i)=>[d.t, krS(d.v), krS(f[i].v), krS(d.v-f[i].v), krS(inn[i].v),
+      i===0?kr(sim.V0):kr(sim.aar[i-1].V), i===0?kr(sim.laan0):kr(sim.aar[i-1].gjeld)]));
+}
+
+/* ═══ 10. Graf 5 — kontantstrømmen måned én ══════════════════════════════ */
+function drawFall(sim){
+  const a = sim.aar[0]; if(!a) return;
+  const p = sim.p;
+  const steps = [
+    {n:"Brutto leie",        v: p.leie,                          start:true},
+    {n:"Ledighet",           v: -p.leie*(p.ledig/100)},
+    {n:"Drift og vedlikehold", v: -(p.drift + p.vedl/100*sim.V0/12)},
+    {n:"Renter",             v: -a.rente/12},
+    {n:"Avdrag",             v: -a.avdr/12},
+    {n:"Skatt",              v: -a.skattLeie/12}
+  ];
+  if(p.formue) steps.push({n:"Formuesskatt", v:-a.fBolig/12});
+
+  const W=900, H=308, ml=54, mr=24, mt=26, mb=64;
+  const n = steps.length+1, bw = (W-ml-mr)/n*0.62, gapw=(W-ml-mr)/n;
+  let run=0; const bars=[];
+  steps.forEach((s,i)=>{ const from=run; run+=s.v; bars.push({n:s.n, from, to:run, v:s.v, i}); });
+  const total = run;
+  bars.push({n:"Kontantstrøm", from:0, to:total, v:total, i:steps.length, total:true});
+  const vals = bars.flatMap(b=>[b.from,b.to]).concat([0]);
+  let lo=Math.min(...vals), hi=Math.max(...vals); const pad=(hi-lo)*0.16; lo-=pad; hi+=pad;
+  const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
+  const Xc = i => ml + gapw*i + gapw/2;
+
+  let g="";
+  niceTicks(lo,hi,4).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+mkr(v)+'</text>';
+  });
+  g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--axis)"/>';
+
+  bars.forEach((b,i)=>{
+    const y0=Y(b.from), y1=Y(b.to), top=Math.min(y0,y1), h=Math.max(2,Math.abs(y1-y0));
+    const fill = b.total ? (b.v>=0?"var(--good)":"var(--crit)") : (i===0?"var(--s1)":"var(--ink-3)");
+    g += '<rect x="'+(Xc(i)-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)
+      + '" rx="3" fill="'+fill+'" data-b="'+i+'"/>';
+    if(i<bars.length-1 && !bars[i+1].total)
+      g += '<line x1="'+(Xc(i)+bw/2).toFixed(1)+'" x2="'+(Xc(i+1)-bw/2).toFixed(1)+'" y1="'+y1.toFixed(1)+'" y2="'+y1.toFixed(1)+'" stroke="var(--line-2)" stroke-width="1"/>';
+    const lab = Math.min(y0,y1)-8;
+    g += '<text x="'+Xc(i).toFixed(1)+'" y="'+lab.toFixed(1)+'" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="500" fill="'
+      + (b.total ? (b.v>=0?"var(--good)":"var(--crit)") : "var(--ink-2)") + '">'+(b.total?krS(b.v):(b.v>=0?"+":"−")+nf0.format(Math.abs(Math.round(b.v))))+'</text>';
+    const words = b.n.split(" ");
+    if(words.length>2){
+      g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(H-mb+18)+'" text-anchor="middle" '+AXL+'>'+esc(words.slice(0,2).join(" "))+'</text>';
+      g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(H-mb+32)+'" text-anchor="middle" '+AXL+'>'+esc(words.slice(2).join(" "))+'</text>';
+    } else {
+      g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(H-mb+18)+'" text-anchor="middle" '+AXL+'>'+esc(b.n)+'</text>';
+    }
+  });
+
+  const svg = setSvg("plotFall","tipFall",g,W,H);
+  const plot = document.getElementById("plotFall"), tip = document.getElementById("tipFall");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), sx=(ev.clientX-r.left)/r.width*W;
+    const i = Math.floor((sx-ml)/gapw);
+    if(i<0||i>=bars.length){ hide(tip); return; }
+    const b = bars[i];
+    place(tip, plot, svg, W, Xc(i), Math.min(Y(b.from),Y(b.to)),
+      '<div class="t">'+esc(b.n)+'</div>'
+      + tipRow(b.total?"Netto per måned":"Endring", krS(b.v))
+      + (b.total?"":tipRow("Igjen etter dette", krS(b.to))));
+  };
+  plot.onpointerleave = () => hide(tip);
+
+  document.getElementById("tblFall").innerHTML = tableHtml(
+    ["Post","Per måned","Per år","Løpende"],
+    bars.map(b=>[esc(b.n), krS(b.v), krS(b.v*12), krS(b.to)]));
+}
+</script>
+
+<script>
+"use strict";
+/* ═══ 11. Kontroller og oppdatering ══════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const FMT = {
+  pris:kr, opp:kr, leie:v=>kr(v)+"/mnd", drift:v=>kr(v)+"/mnd",
+  ledig:pct1, vedl:pct1, ltv:v=>nf0.format(v)+" %", rente:pct1,
+  lopetid:v=>v+" år", vekstbolig:pct1, indeks:pct1, kpi:pct1,
+  horisont:v=>v+" år", salgsomk:pct1, formuesats:pct2, driftandel:pct1
+};
+const RANGES = ["pris","opp","leie","drift","ledig","vedl","ltv","rente","lopetid",
+                "vekstbolig","indeks","kpi","horisont","salgsomk","formuesats","driftandel"];
+const TOGGLES = ["dokavg","avdragsfri","skatt","formue"];
+let picked = -1;
+
+function syncInputs(){
+  RANGES.forEach(k=>{ const el=$(k); if(el){ el.value = S[k]; const v=$(k+"V"); if(v) v.textContent = FMT[k](S[k]); } });
+  TOGGLES.forEach(k=>{ const el=$(k); if(el) el.checked = !!S[k]; });
+  document.querySelectorAll(".chip[data-rente]").forEach(c=>
+    c.setAttribute("aria-pressed", Math.abs(parseFloat(c.dataset.rente)-S.rente)<0.05));
+  const fn = $("fabNum");
+  if(fn) fn.textContent = S.ltv + " % lån · " + pct1(S.rente);
+}
+
+/* ═══ Tilstand i adressefeltet — hver innstilling kan deles som lenke ═════ */
+const BOOLS = ["dokavg","avdragsfri","skatt","formue"];
+const AVLEDET = ["pris","opp","leie","drift"];   // følger av valgt bolig
+
+function writeUrl(){
+  const q = new URLSearchParams();
+  if(picked >= 0) q.set("bolig", String(picked));
+  RANGES.forEach(k=>{
+    if(picked >= 0 && AVLEDET.includes(k)) return;
+    if(S[k] !== DEFAULTS[k]) q.set(k, String(S[k]));
+  });
+  BOOLS.forEach(k=>{ if(!!S[k] !== !!DEFAULTS[k]) q.set(k, S[k] ? "1" : "0"); });
+  if(SOV.some((r,i) => r.some((v,j) => v !== SOV_DEFAULT[i][j])))
+    q.set("sov", SOV.map(r => r.join("-")).join("_"));
+  const qs = q.toString();
+  try{ history.replaceState(null, "", location.pathname + (qs ? "?"+qs : "") + location.hash); }catch(e){}
+}
+
+function readUrl(){
+  let q; try{ q = new URLSearchParams(location.search); }catch(e){ return; }
+  BOOLS.forEach(k=>{ if(q.has(k)) S[k] = q.get(k) === "1"; });
+  const b = q.get("bolig");
+  if(b !== null){
+    const i = parseInt(b,10);
+    if(i >= 0 && i < BOLIGER.length){
+      picked = i;
+      const bo = BOLIGER[i];
+      S.pris  = Math.round(bo[1] / (S.dokavg ? 1.025 : 1) / 10000) * 10000;
+      S.opp   = 0; S.leie = bo[2]; S.drift = bo[3];
+    }
+  }
+  RANGES.forEach(k=>{
+    if(!q.has(k)) return;
+    const el = $(k), v = parseFloat(q.get(k));
+    if(!isFinite(v) || !el) return;
+    S[k] = Math.min(parseFloat(el.max), Math.max(parseFloat(el.min), v));
+  });
+  const sv = q.get("sov");
+  if(sv){
+    sv.split("_").slice(0,4).forEach((row,i) => {
+      const t = row.split("-").map(Number);
+      if(t.length === 3 && t.every(x => isFinite(x) && x >= 0)) SOV[i] = t;
+    });
+  }
+}
+
+let queued = false;
+function schedule(){ if(queued) return; queued = true; requestAnimationFrame(()=>{ queued=false; render(); }); }
+
+function render(){
+  syncInputs();
+  const sim = simuler({});
+  const th  = terskler({});
+  LAST.th = th;
+  const a1  = sim.aar[0];
+  const cfM = a1 ? a1.cf/12 : 0;
+
+  // ── tiles
+  $("vReq").textContent = th.indeks==null ? "—" : pct1(th.indeks);
+  $("vReqSub").textContent = "for å gå likt ut med indeksfondet på " + Math.round(S.horisont)
+    + " år, med " + S.ltv + " % belåning";
+
+  const over = th.indeks!=null && sim.nettoYield >= th.indeks;
+  const vAct = $("vAct");
+  vAct.textContent = pct1(sim.nettoYield);
+  vAct.className = "v " + (over ? "pos" : "neg");
+  $("vActSub").textContent = "netto · brutto " + pct1(sim.bruttoYield) + " av " + kr(sim.kost);
+
+  const vCf = $("vCf");
+  vCf.textContent = krS(cfM);
+  vCf.className = "v " + (cfM>=0 ? "pos" : "neg");
+  $("vCfSub").textContent = "per måned år 1, etter avdrag" + (S.skatt?" og skatt":"");
+
+  const s2 = sim.siste;
+  $("vEnd").textContent = s2 ? mkr(s2.bolig) : "—";
+  $("vEndSub").textContent = s2
+    ? "mot " + mkr(s2.fondNetto) + " i fond · differanse " + (s2.bolig>=s2.fondNetto?"+":"−") + mkr(Math.abs(s2.bolig-s2.fondNetto))
+    : "";
+
+  const badge = $("vBadge"), text = $("vText");
+  const selvgaaende = th.cf!=null && sim.nettoYield >= th.cf;
+  const wipe = sim.V0>0 ? sim.EK/sim.V0*100 : 0;
+  badge.className = "badge " + (over ? "ok" : "no");
+  badge.textContent = over ? (selvgaaende ? "Holder mål" : "Holder — så vidt") : "Under terskelen";
+  if(over && selvgaaende){
+    text.innerHTML = "Boligen slår indeksfondet <b>og</b> betaler sine egne avdrag. Prisen for det er "
+      + "konsentrasjonsrisiko: et prisfall på <b>" + pct1(wipe) + "</b> sletter hele egenkapitalen din.";
+  } else if(over){
+    text.innerHTML = "Boligen slår indeksfondet på papiret, men koster deg <b>" + kr(Math.abs(cfM))
+      + " i måneden</b> i egne penger — " + kr(Math.abs(cfM)*12) + " i året du må ha på konto uansett hva som skjer. "
+      + "Et prisfall på <b>" + pct1(wipe) + "</b> sletter hele egenkapitalen.";
+  } else {
+    const mangler = th.indeks!=null ? th.indeks - sim.nettoYield : 0;
+    const merLeie = mangler/100 * sim.kost / 12 / Math.max(0.01, 1 - S.ledig/100);
+    const lavereKost = th.indeks > 0 ? sim.kost - sim.noi1/(th.indeks/100) : 0;
+    text.innerHTML = "Boligen mangler <b>" + nf1.format(mangler) + " prosentpoeng</b> netto yield på å forsvare seg mot "
+      + "indeksfondet. Det er <b>" + kr(merLeie) + " mer i leie per måned</b> — eller "
+      + (lavereKost > 0 && lavereKost < sim.kost
+           ? "<b>" + kr(lavereKost) + " lavere totalpris</b> — altså " + pct1(lavereKost/sim.kost*100) + " under det du betaler nå."
+           : "en pris så mye lavere at kjøpet ikke lar seg forsvare.");
+  }
+
+  // formeleksempel
+  const R=S.indeks, B=S.ltv/100, r=S.rente, g=S.vekstbolig;
+  $("formulaEg").innerHTML = pct1(R)+" × "+nf2.format(1-B).replace(".",",")+" + "+pct1(r)+" × "
+    + nf2.format(B).replace(".",",")+" − "+pct1(g)+" = <b>"+pct1(R*(1-B)+r*B-g)+"</b>";
+
+  writeUrl();
+
+  drawLtv();
+  drawScatter(th);
+  drawHeat();
+  drawWealth(sim);
+  drawFall(sim);
+  LAST.th = th;
+  drawBidTable();
+  drawBidChart();
+  drawCaveats(sim, th, cfM);
+}
+
+function drawCaveats(sim, th, cfM){
+  const wipe = sim.V0>0 ? sim.EK/sim.V0*100 : 0;
+  const items = [
+    ["Risiko", "Belåning forstørrer begge veier.",
+     "Med " + S.ltv + " % lån gir " + pct1(S.vekstbolig) + " verdistigning deg "
+     + pct1(S.vekstbolig/Math.max(0.01,(1-S.ltv/100))) + " på egenkapitalen — men et fall på "
+     + pct1(wipe) + " nuller den. Indeksfondet på " + pct1(S.indeks) + " er ubelånt. Modellen sammenligner forventning mot forventning, ikke risiko mot risiko."],
+    ["Konsentrasjon", "Én bolig er ikke en portefølje.",
+     "Ett bygg, én by, én leietaker om gangen. Et globalt indeksfond er tusenvis av selskaper i titalls land. Samme forventede avkastning betyr ikke samme spredning."],
+    ["Tid", "Boligen er en jobb.",
+     "Visninger, kontrakter, vannlekkasjer, inkasso, oppussing mellom leietakere. Sett en timepris på det og trekk den fra yielden — 20 timer i året på " + kr(600) + " timen er " + pct2(12000/sim.kost*100) + " av totalprisen."],
+    ["Likviditet", "Fondet selges på en dag, boligen på et kvartal.",
+     "Salgsomkostningene på " + pct1(S.salgsomk) + " ligger inne i modellen. Tiden det tar, og at du ikke kan selge et halvt bad, gjør det ikke."],
+    ["Finansiering", "Banken setter en grense modellen ikke ser.",
+     "Utlånsforskriften stresstester deg på dagens rente pluss 3 prosentpoeng og på samlet gjeld mot inntekt. Den femte boligen får du sjelden kjøpt selv om regnestykket holder."],
+    ["Egen bolig", "Primærboligen spiller etter andre regler.",
+     "Gevinst er skattefri etter ett års botid, og formuesverdien settes til 25 % av markedsverdi mot 100 % for sekundærbolig. Denne modellen gjelder utleie, ikke der du selv bor."]
+  ];
+  $("caveats").innerHTML = items.map(([m,t,d])=>
+    '<li><span class="m">'+esc(m)+'</span><span><b>'+esc(t)+'</b> '+esc(d)+'</span></li>').join("");
+}
+
+/* ═══ 11b. Maksprisen — modellen snudd på hodet ══════════════════════════
+   NOI = 12·leie·(1 − ledighet − driftsandel) − vedlikehold·kjøpesum
+   y*  = NOI ÷ totalpris,  totalpris = kjøpesum·(1 + dok.avg.)
+   ⇒   kjøpesum = leie · 12(1 − ledighet − driftsandel) ÷ (y*(1 + dok) + vedlikehold) */
+let LAST = {th:null};
+
+function kFaktor(yPct){
+  if(yPct == null || !isFinite(yPct)) return null;
+  const teller = 12 * (1 - S.ledig/100 - S.driftandel/100);
+  const nevner = yPct/100 * (1 + (S.dokavg ? 0.025 : 0)) + S.vedl/100;
+  if(teller <= 0 || nevner <= 0) return null;
+  return teller / nevner;
+}
+const medianKjop = (() => {
+  const m = BOLIGER.map(b => (b[1]/1.025)/b[2]).sort((a,b)=>a-b);
+  return m[Math.floor(m.length/2)];
+})();
+const kFmt = k => k == null ? "—" : nf0.format(Math.round(k)) + " ×";
+const spenn = (a, b) => {
+  if(a == null || b == null) return '<span class="dash">—</span>';
+  if(a >= 1e6 && b >= 1e6) return nf1.format(a/1e6) + "–" + nf1.format(b/1e6) + " mill.";
+  return mkr(a) + "–" + mkr(b);
+};
+const spennKvm = (a, b, m) => (a == null || b == null || !m) ? '<span class="dash">—</span>'
+  : nf0.format(Math.round(a/m/1000)) + "–" + nf0.format(Math.round(b/m/1000)) + " k";
+
+function bidOutputs(){
+  const th = LAST.th; if(!th) return;
+  const kI = kFaktor(th.indeks), kC = kFaktor(th.cf);
+  $("kIndeks").textContent  = kFmt(kI);
+  $("kCf").textContent      = kFmt(kC);
+  $("kFaktisk").textContent = kFmt(medianKjop);
+  $("bidNote").innerHTML = kI == null
+    ? "Med disse forutsetningene spiser ledighet og drift hele leien — ingen pris forsvarer seg."
+    : "Med " + pct1(S.ledig) + " ledighet, " + pct1(S.driftandel) + " drift og " + pct1(S.vedl)
+      + " vedlikehold blir <b>k = " + nf0.format(Math.round(kI)) + "</b> ved terskelen på "
+      + pct1(th.indeks) + " — altså <b>" + nf1.format(kI/12) + " ganger årlig bruttoleie</b>.";
+
+  SOV.forEach((r,i) => {
+    const [lav, hoy, m2] = r;
+    const el = id => $("bid-"+i+"-"+id);
+    if(!el("mi")) return;
+    el("mi").innerHTML  = spenn(kI && lav*kI, kI && hoy*kI);
+    el("ki").innerHTML  = spennKvm(kI && lav*kI, kI && hoy*kI, m2);
+    el("mc").innerHTML  = spenn(kC && lav*kC, kC && hoy*kC);
+    el("kc").innerHTML  = spennKvm(kC && lav*kC, kC && hoy*kC, m2);
+  });
+}
+
+function drawBidTable(){
+  const navn = ["1 soverom","2 soverom","3 soverom","4 soverom"];
+  const inp = (i,c,v,st) => '<input type="number" data-r="'+i+'" data-c="'+c+'" value="'+v+'" step="'+st+'" min="0">';
+  let h = '<table class="bid"><thead><tr>'
+    + ['Soverom','Leie fra','Leie til','m²','Maks · slå indeks','kr/m²','Maks · null kontantstrøm','kr/m²']
+        .map(t=>'<th>'+t+'</th>').join("") + '</tr></thead><tbody>';
+  SOV.forEach((r,i) => {
+    h += '<tr><td class="sov">'+navn[i]+'</td>'
+      + '<td>'+inp(i,0,r[0],500)+'</td><td>'+inp(i,1,r[1],500)+'</td><td>'+inp(i,2,r[2],1)+'</td>'
+      + '<td class="out" id="bid-'+i+'-mi"></td><td class="out" id="bid-'+i+'-ki"></td>'
+      + '<td class="out" id="bid-'+i+'-mc"></td><td class="out" id="bid-'+i+'-kc"></td></tr>';
+  });
+  $("tblBid").innerHTML = h + '</tbody></table>';
+  bidOutputs();
+}
+
+function drawBidChart(){
+  const th = LAST.th; if(!th) return;
+  const W=900, H=430, ml=74, mr=150, mt=76, mb=44;
+  const xmin=8000, xmax=45000;
+  const X = v => ml + (v-xmin)/(xmax-xmin)*(W-ml-mr);
+
+  const dok = S.dokavg ? 1.025 : 1;
+  const alle = BOLIGER.map(b => ({n:b[0], leie:b[2], pris:b[1]/dok, y:boligYield(b)}));
+  const dots = alle.filter(d => d.leie >= xmin && d.leie <= xmax);
+  const utelatt = alle.length - dots.length;
+
+  const linjer = [
+    {k:kFaktor(th.indeks), c:"var(--s1)", n:"Slå indeksfondet"},
+    {k:kFaktor(th.cf),     c:"var(--s2)", n:"Null kontantstrøm"},
+    {k:kFaktor(th.rente),  c:"var(--s3)", n:"Dekke renten"}
+  ];
+  const dotMax = dots.length ? Math.max(...dots.map(d=>d.pris)) : 5e6;
+  const kC = linjer[1].k || 100;
+  let hi = Math.max(dotMax*1.12, kC*xmax*1.35);
+  const kAlle = linjer.map(l=>l.k).filter(Boolean);
+  if(kAlle.length) hi = Math.min(hi, Math.max(...kAlle)*xmax*1.05);
+  const Y = v => mt + (1-v/hi)*(H-mt-mb);
+
+  let g = '<defs><clipPath id="bidClip"><rect x="'+ml+'" y="'+mt+'" width="'+(W-ml-mr)+'" height="'+(H-mt-mb)+'"/></clipPath></defs>';
+  niceTicks(0,hi,5).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+mkr(v)+'</text>';
+  });
+  [10000,20000,30000,40000].forEach(v=>{
+    g += '<text x="'+X(v).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+nf0.format(v/1000)+' k</text>';
+  });
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>Månedsleie</text>';
+  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>Maks kjøpesum</text>';
+
+  // soveromsbånd som egne rader over grafen, så overlappende leienivåer ikke kolliderer
+  const navn = ["1 sov","2 sov","3 sov","4 sov"];
+  SOV.forEach((r,i)=>{
+    const y = 14 + i*14, x0 = X(Math.max(xmin,r[0])), x1 = X(Math.min(xmax,r[1]));
+    if(x1 <= x0) return;
+    g += '<rect x="'+x0.toFixed(1)+'" y="'+y+'" width="'+(x1-x0).toFixed(1)+'" height="6" rx="3" fill="var(--ink-3)" opacity=".38"/>';
+    g += '<text x="'+(x1+8).toFixed(1)+'" y="'+(y+6)+'" '+AX+'>'+navn[i]+'</text>';
+  });
+
+  g += '<g clip-path="url(#bidClip)">';
+  linjer.forEach(l=>{
+    if(!l.k) return;
+    g += '<line x1="'+X(xmin).toFixed(1)+'" y1="'+Y(xmin*l.k).toFixed(1)+'" x2="'+X(xmax).toFixed(1)+'" y2="'+Y(xmax*l.k).toFixed(1)
+      + '" stroke="'+l.c+'" stroke-width="2" stroke-linecap="round"/>';
+  });
+  const cut = th.indeks == null ? -1e9 : th.indeks;
+  dots.forEach(d=>{
+    d.px = X(d.leie); d.py = Y(d.pris); d.ok = d.y >= cut;
+    g += '<circle cx="'+d.px.toFixed(1)+'" cy="'+d.py.toFixed(1)+'" r="5" fill="'+(d.ok?"var(--good)":"var(--crit)")
+      + '" fill-opacity=".85" stroke="var(--surface)" stroke-width="2"/>';
+  });
+  g += '</g>';
+
+  const ends = linjer.filter(l=>l.k).map(l=>({y:Math.max(mt+6, Math.min(H-mb, Y(xmax*l.k))), n:l.n, c:l.c, k:l.k}))
+    .sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<26) ends[i].y = ends[i-1].y+26;
+  ends.forEach(e=>{
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(e.n)+'</text>';
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y+10).toFixed(1)+'" '+AX+'>'+nf0.format(Math.round(e.k))+' × leien</text>';
+  });
+  g += '<g id="bidCross" opacity="0"><line y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1"/></g>';
+
+  const svg = setSvg("plotBid","tipBid",g,W,H);
+  const plot = $("plotBid"), tip = $("tipBid"), cg = svg.querySelector("#bidCross"), cl = cg.querySelector("line");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), k = r.width/W;
+    const sx = (ev.clientX-r.left)/k, sy = (ev.clientY-r.top)/k;
+    let best=null, bd=1e9;
+    dots.forEach(d=>{ const q=(d.px-sx)**2+(d.py-sy)**2; if(q<bd){bd=q;best=d;} });
+    if(best && bd <= 22*22){
+      cg.setAttribute("opacity",0);
+      const kI = linjer[0].k, maks = kI ? best.leie*kI : null;
+      place(tip, plot, svg, W, best.px, best.py,
+        '<div class="t">'+esc(best.n)+'</div>'
+        + tipRow("Betalt", kr(best.pris), best.ok?"var(--good)":"var(--crit)")
+        + tipRow("Leie", kr(best.leie)+"/mnd")
+        + tipRow("Maks · slå indeks", maks==null?"—":kr(maks), "var(--s1)")
+        + tipRow("Netto yield", pct2(best.y)));
+      return;
+    }
+    if(sx<ml-6 || sx>W-mr+6){ hide(tip); cg.setAttribute("opacity",0); return; }
+    const leie = Math.round((xmin + (sx-ml)/(W-ml-mr)*(xmax-xmin))/500)*500;
+    cg.setAttribute("opacity",1); cl.setAttribute("x1",X(leie)); cl.setAttribute("x2",X(leie));
+    place(tip, plot, svg, W, X(leie), mt+8,
+      '<div class="t">Leie '+kr(leie)+'/mnd</div>'
+      + linjer.map(l=>tipRow(l.n, l.k?kr(leie*l.k):"—", l.c)).join(""));
+  };
+  plot.onpointerleave = () => { hide(tip); cg.setAttribute("opacity",0); };
+
+  $("legBid").innerHTML =
+      linjer.map(l=>'<span class="item"><span class="swatch" style="background:'+l.c+'"></span>'+esc(l.n)+'</span>').join("")
+    + '<span class="item"><span class="dot" style="background:var(--good)"></span><span class="sym">✓</span> Bolig over terskelen</span>'
+    + '<span class="item"><span class="dot" style="background:var(--crit)"></span><span class="sym">✕</span> Bolig under</span>';
+  $("bidChartNote").textContent = "Linjene bruker " + pct1(S.driftandel) + " drift av leien"
+    + (utelatt ? " · " + utelatt + " boliger med leie utenfor skalaen er utelatt" : "");
+  $("tblBidChart").innerHTML = tableHtml(
+    ["Månedsleie","Slå indeksfondet","Null kontantstrøm","Dekke renten"],
+    [10000,15000,20000,25000,30000,35000,40000,45000].map(v =>
+      [kr(v)].concat(linjer.map(l => l.k ? kr(v*l.k) : "—"))));
+}
+
+/* ═══ 12. Oppstart ═══════════════════════════════════════════════════════ */
+(function init(){
+  $("pris").step = 10000;
+
+  // boligvelger
+  const sel = $("pick");
+  sel.innerHTML = '<option value="-1">Medianboligen i utvalget</option>'
+    + BOLIGER.map((b,i)=>'<option value="'+i+'">'+esc(b[0])+'</option>').join("");
+  sel.onchange = () => {
+    picked = parseInt(sel.value,10);
+    if(picked < 0){
+      Object.assign(S, {pris:DEFAULTS.pris, opp:DEFAULTS.opp, leie:DEFAULTS.leie, drift:DEFAULTS.drift});
+      $("pickHint").textContent = "Medianboligen av de 62.";
+    } else {
+      const b = BOLIGER[picked];
+      S.pris  = Math.round(b[1] / (S.dokavg ? 1.025 : 1) / 10000) * 10000;
+      S.opp   = 0;
+      S.leie  = b[2];
+      S.drift = b[3];
+      $("pickHint").textContent = "Totalpris " + kr(b[1]) + " · oppussing er lagt inn i kjøpesummen.";
+    }
+    schedule();
+  };
+
+  RANGES.forEach(k => $(k).addEventListener("input", e => {
+    S[k] = parseFloat(e.target.value);
+    if(picked >= 0 && ["pris","opp","leie","drift"].includes(k)){ picked=-1; sel.value="-1"; }
+    schedule();
+  }));
+  TOGGLES.forEach(k => $(k).addEventListener("change", e => { S[k] = e.target.checked; schedule(); }));
+  document.querySelectorAll(".chip[data-rente]").forEach(c =>
+    c.addEventListener("click", () => { S.rente = parseFloat(c.dataset.rente); schedule(); }));
+  $("reset").addEventListener("click", () => {
+    S = Object.assign({}, DEFAULTS);
+    SOV = SOV_DEFAULT.map(r => r.slice());
+    picked = -1; sel.value = "-1";
+    $("pickHint").textContent = "Medianboligen av de 62."; schedule();
+  });
+
+  // skuff på smale skjermer
+  const rail = $("rail"), scrim = $("scrim"), fab = $("fab");
+  function setDrawer(open){
+    rail.classList.toggle("open", open);
+    scrim.classList.toggle("on", open);
+    document.body.classList.toggle("locked", open);
+    fab.setAttribute("aria-expanded", open ? "true" : "false");
+    if(open){ const f = rail.querySelector("select, summary"); if(f) f.focus({preventScroll:true}); }
+    else fab.focus({preventScroll:true});
+  }
+  fab.addEventListener("click", () => setDrawer(!rail.classList.contains("open")));
+  scrim.addEventListener("click", () => setDrawer(false));
+  $("railClose").addEventListener("click", () => setDrawer(false));
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && rail.classList.contains("open")) setDrawer(false); });
+  window.addEventListener("resize", () => { if(window.innerWidth > 1080 && rail.classList.contains("open")) setDrawer(false); });
+
+  // redigerbar soveromstabell — oppdaterer utdata og graf uten å bygge tabellen på nytt
+  $("tblBid").addEventListener("input", e => {
+    const el = e.target;
+    if(el.tagName !== "INPUT") return;
+    const r = +el.dataset.r, c = +el.dataset.c, v = parseFloat(el.value);
+    if(!isFinite(v) || v < 0) return;
+    SOV[r][c] = v;
+    bidOutputs(); drawBidChart(); writeUrl();
+  });
+
+  // del gjeldende oppsett
+  $("share").addEventListener("click", async () => {
+    writeUrl();
+    const btn = $("share"), before = btn.textContent;
+    try{ await navigator.clipboard.writeText(location.href); btn.textContent = "✓ Lenke kopiert"; }
+    catch(e){ btn.textContent = "Kopier fra adressefeltet"; }
+    setTimeout(() => { btn.textContent = before; }, 2200);
+  });
+
+  readUrl();
+  if(picked >= 0){
+    sel.value = String(picked);
+    $("pickHint").textContent = "Totalpris " + kr(BOLIGER[picked][1]) + " · oppussing er lagt inn i kjøpesummen.";
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
