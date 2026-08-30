@@ -139,6 +139,18 @@ a{color:var(--accent)}
 
 .wrap{max-width:1360px; margin:0 auto; padding:0 24px 80px}
 
+
+/* ─── språkvelger ───────────────────────────────────────────────────────── */
+.langbar{display:flex; justify-content:flex-end; padding-top:16px}
+.langsw{display:flex; gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:8px; overflow:hidden}
+.langsw button{
+  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.08em;
+  padding:6px 12px; border:0; background:var(--surface); color:var(--ink-3); cursor:pointer;
+}
+.langsw button:hover{color:var(--ink)}
+.langsw button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink)}
+
 /* ─── masthead ──────────────────────────────────────────────────────────── */
 .mast{padding:56px 0 34px; border-bottom:1px solid var(--line)}
 .eyebrow{
@@ -444,10 +456,17 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
 
 <div class="wrap">
 
+<div class="langbar">
+  <div class="langsw" role="group" aria-label="Språk / Language">
+    <button type="button" data-lang="no" aria-pressed="true">NO</button>
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+</div>
+
 <header class="mast">
-  <div class="eyebrow">Bolig mot indeksfond · 62 boliger jeg har regnet på</div>
-  <h1>Hvilken yield må boligen ha?</h1>
-  <p class="lede">Spørsmålet har ett svar per rentenivå, én belåningsgrad og én forventning om
+  <div class="eyebrow" data-en="Property vs index fund · 62 flats I have run the numbers on">Bolig mot indeksfond · 62 boliger jeg har regnet på</div>
+  <h1 data-en="What yield does the flat need?">Hvilken yield må boligen ha?</h1>
+  <p class="lede" data-en="The question has one answer per interest rate, one loan-to-value and one expectation about appreciation — not one answer overall. The model below compares the same krone invested in two places: &lt;strong&gt;equity in one rental flat&lt;/strong&gt; against &lt;strong&gt;the same amount in a global index fund&lt;/strong&gt;, with identical deposits at identical times, and works out what net yield the flat has to deliver to come out even. The flats in the charts are 62 apartments I have run the numbers on over the years, most of them in Bergen.">Spørsmålet har ett svar per rentenivå, én belåningsgrad og én forventning om
   verdistigning — ikke ett svar totalt. Modellen under sammenligner den samme kronen investert to
   steder: <strong>egenkapital i én utleiebolig</strong> mot <strong>samme beløp i et globalt
   indeksfond</strong>, med identiske innskudd til samme tid, og regner ut hvilken netto yield boligen
@@ -462,146 +481,146 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
     <div class="railhead"><span>Forutsetninger</span><button type="button" id="railClose" aria-label="Lukk">✕</button></div>
 
     <details class="panel" open>
-      <summary>Fra Finn.no</summary>
+      <summary data-en="From Finn.no">Fra Finn.no</summary>
       <div class="body">
         <div class="field">
-          <div class="top"><label for="finnInn">Lenke eller kopiert annonse</label></div>
+          <div class="top"><label for="finnInn" data-en="Link or pasted listing">Lenke eller kopiert annonse</label></div>
           <textarea id="finnInn" rows="3" spellcheck="false" placeholder="Lim inn finn.no-lenken — eller marker hele annonsen med ⌘A ⌘C og lim inn teksten her"></textarea>
         </div>
         <div class="chips">
-          <button class="chip" id="finnGo" type="button">Fyll ut fra annonsen</button>
-          <button class="chip" id="finnClear" type="button">Tøm</button>
+          <button class="chip" id="finnGo" type="button" data-en="Fill in from listing">Fyll ut fra annonsen</button>
+          <button class="chip" id="finnClear" type="button" data-en="Clear">Tøm</button>
         </div>
         <div class="finnres" id="finnRes" hidden></div>
-        <div class="hint">Leser prisantydning, felleskostnader, kommunale avgifter, eieform,
+        <div class="hint" data-en="Reads asking price, shared costs, municipal fees, ownership form, area and number of bedrooms. Rent is not in a sales listing — it is estimated from the bedroom table, so check it yourself.">Leser prisantydning, felleskostnader, kommunale avgifter, eieform,
           areal og antall soverom. Leien finnes ikke i en salgsannonse — den gjettes fra
           soveromstabellen, så den må du sjekke selv.</div>
       </div>
     </details>
 
     <details class="panel" open>
-      <summary>Boligen</summary>
+      <summary data-en="The flat">Boligen</summary>
       <div class="body">
         <div class="field">
-          <div class="top"><label for="pick">Velg en ekte bolig</label></div>
+          <div class="top"><label for="pick" data-en="Pick a real flat">Velg en ekte bolig</label></div>
           <select id="pick"></select>
           <div class="hint" id="pickHint">Medianboligen av de 62.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="pris">Kjøpesum</label><span class="val" id="prisV"></span></div>
+          <div class="top"><label for="pris" data-en="Purchase price">Kjøpesum</label><span class="val" id="prisV"></span></div>
           <input type="range" id="pris" min="500000" max="20000000" step="50000">
         </div>
         <div class="field">
-          <div class="top"><label for="opp">Oppussing</label><span class="val" id="oppV"></span></div>
+          <div class="top"><label for="opp" data-en="Renovation">Oppussing</label><span class="val" id="oppV"></span></div>
           <input type="range" id="opp" min="0" max="3000000" step="25000">
         </div>
         <div class="field">
-          <div class="top"><label for="leie">Leie per måned</label><span class="val" id="leieV"></span></div>
+          <div class="top"><label for="leie" data-en="Rent per month">Leie per måned</label><span class="val" id="leieV"></span></div>
           <input type="range" id="leie" min="0" max="150000" step="500">
         </div>
         <div class="field">
-          <div class="top"><label for="drift">Driftskostnad per måned</label><span class="val" id="driftV"></span></div>
+          <div class="top"><label for="drift" data-en="Running costs per month">Driftskostnad per måned</label><span class="val" id="driftV"></span></div>
           <input type="range" id="drift" min="0" max="25000" step="100">
-          <div class="hint">Felleskostnader, kommunale avgifter, forsikring, strøm på fellesareal.</div>
+          <div class="hint" data-en="Shared costs, municipal fees, insurance, electricity for common areas.">Felleskostnader, kommunale avgifter, forsikring, strøm på fellesareal.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="ledig">Ledighet</label><span class="val" id="ledigV"></span></div>
+          <div class="top"><label for="ledig" data-en="Vacancy">Ledighet</label><span class="val" id="ledigV"></span></div>
           <input type="range" id="ledig" min="0" max="25" step="1">
-          <div class="hint">8 % ≈ én tom måned i året.</div>
+          <div class="hint" data-en="8 % ≈ one empty month per year.">8 % ≈ én tom måned i året.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="vedl">Vedlikehold per år</label><span class="val" id="vedlV"></span></div>
+          <div class="top"><label for="vedl" data-en="Maintenance per year">Vedlikehold per år</label><span class="val" id="vedlV"></span></div>
           <input type="range" id="vedl" min="0" max="2" step="0.1">
-          <div class="hint">Av boligverdien. Den vanligste grunnen til at yield ser bedre ut på papiret enn på konto.</div>
+          <div class="hint" data-en="Of the property value. The most common reason a yield looks better on paper than in your account.">Av boligverdien. Den vanligste grunnen til at yield ser bedre ut på papiret enn på konto.</div>
         </div>
         <label class="switch" for="dokavg">
-          <span style="font-size:13px;color:var(--ink-2)">Dokumentavgift 2,5 % (selveier)</span>
+          <span style="font-size:13px;color:var(--ink-2)" data-en="Stamp duty 2.5 % (freehold)">Dokumentavgift 2,5 % (selveier)</span>
           <input type="checkbox" id="dokavg" checked><span class="track"></span>
         </label>
       </div>
     </details>
 
     <details class="panel" open>
-      <summary>Finansiering</summary>
+      <summary data-en="Financing">Finansiering</summary>
       <div class="body">
         <div class="field">
-          <div class="top"><label for="ltv">Belåningsgrad</label><span class="val" id="ltvV"></span></div>
+          <div class="top"><label for="ltv" data-en="Loan-to-value">Belåningsgrad</label><span class="val" id="ltvV"></span></div>
           <input type="range" id="ltv" min="0" max="90" step="1">
         </div>
         <div class="field">
-          <div class="top"><label for="rente">Nominell rente</label><span class="val" id="renteV"></span></div>
+          <div class="top"><label for="rente" data-en="Nominal interest rate">Nominell rente</label><span class="val" id="renteV"></span></div>
           <input type="range" id="rente" min="1" max="10" step="0.1">
           <div class="chips" style="margin-top:6px">
-            <button class="chip" data-rente="2.5">2,5 % · 2021</button>
-            <button class="chip" data-rente="5">5,0 % · i dag</button>
-            <button class="chip" data-rente="7">7,0 % · 2023-topp</button>
+            <button class="chip" data-rente="2.5" data-en="2.5 % · 2021">2,5 % · 2021</button>
+            <button class="chip" data-rente="5" data-en="5.0 % · today">5,0 % · i dag</button>
+            <button class="chip" data-rente="7" data-en="7.0 % · 2023 peak">7,0 % · 2023-topp</button>
           </div>
         </div>
         <div class="field">
-          <div class="top"><label for="lopetid">Nedbetalingstid</label><span class="val" id="lopetidV"></span></div>
+          <div class="top"><label for="lopetid" data-en="Loan term">Nedbetalingstid</label><span class="val" id="lopetidV"></span></div>
           <input type="range" id="lopetid" min="5" max="40" step="1">
         </div>
         <label class="switch" for="avdragsfri">
-          <span style="font-size:13px;color:var(--ink-2)">Avdragsfritt lån</span>
+          <span style="font-size:13px;color:var(--ink-2)" data-en="Interest-only loan">Avdragsfritt lån</span>
           <input type="checkbox" id="avdragsfri"><span class="track"></span>
         </label>
       </div>
     </details>
 
     <details class="panel" open>
-      <summary>Marked</summary>
+      <summary data-en="Market">Marked</summary>
       <div class="body">
         <div class="field">
-          <div class="top"><label for="vekstbolig">Verdistigning bolig</label><span class="val" id="vekstboligV"></span></div>
+          <div class="top"><label for="vekstbolig" data-en="Property appreciation">Verdistigning bolig</label><span class="val" id="vekstboligV"></span></div>
           <input type="range" id="vekstbolig" min="-2" max="8" step="0.1">
-          <div class="hint">Nominelt per år. Inflasjonen alene er ~2,5 %.</div>
+          <div class="hint" data-en="Nominal per year. Inflation alone is about 2.5 %.">Nominelt per år. Inflasjonen alene er ~2,5 %.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="indeks">Avkastning indeksfond</label><span class="val" id="indeksV"></span></div>
+          <div class="top"><label for="indeks" data-en="Index fund return">Avkastning indeksfond</label><span class="val" id="indeksV"></span></div>
           <input type="range" id="indeks" min="0" max="14" step="0.1">
-          <div class="hint">Nominelt per år, etter forvaltningshonorar.</div>
+          <div class="hint" data-en="Nominal per year, after management fees.">Nominelt per år, etter forvaltningshonorar.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="kpi">Leie- og kostnadsvekst</label><span class="val" id="kpiV"></span></div>
+          <div class="top"><label for="kpi" data-en="Rent and cost inflation">Leie- og kostnadsvekst</label><span class="val" id="kpiV"></span></div>
           <input type="range" id="kpi" min="0" max="6" step="0.1">
         </div>
         <div class="field">
-          <div class="top"><label for="horisont">Eiertid</label><span class="val" id="horisontV"></span></div>
+          <div class="top"><label for="horisont" data-en="Holding period">Eiertid</label><span class="val" id="horisontV"></span></div>
           <input type="range" id="horisont" min="3" max="30" step="1">
         </div>
         <div class="field">
-          <div class="top"><label for="salgsomk">Salgsomkostninger</label><span class="val" id="salgsomkV"></span></div>
+          <div class="top"><label for="salgsomk" data-en="Selling costs">Salgsomkostninger</label><span class="val" id="salgsomkV"></span></div>
           <input type="range" id="salgsomk" min="0" max="6" step="0.1">
         </div>
       </div>
     </details>
 
     <details class="panel">
-      <summary>Skatt</summary>
+      <summary data-en="Tax">Skatt</summary>
       <div class="body">
         <label class="switch" for="skatt">
-          <span style="font-size:13px;color:var(--ink-2)">Norsk skatt, privat eie</span>
+          <span style="font-size:13px;color:var(--ink-2)" data-en="Norwegian tax, personal ownership">Norsk skatt, privat eie</span>
           <input type="checkbox" id="skatt" checked><span class="track"></span>
         </label>
-        <div class="hint" style="font-size:11.5px;color:var(--ink-3)">
+        <div class="hint" style="font-size:11.5px;color:var(--ink-3)" data-en="22 % on rental profit with interest deductible · 22 % capital gains tax on a secondary home · 37.84 % on fund gains with a shielding deduction.">
           22 % på leieoverskudd og fradrag for renter · 22 % gevinstskatt på sekundærbolig ·
           37,84 % på fondsgevinst med skjermingsfradrag.
         </div>
         <label class="switch" for="formue">
-          <span style="font-size:13px;color:var(--ink-2)">Marginal formuesskatt</span>
+          <span style="font-size:13px;color:var(--ink-2)" data-en="Marginal wealth tax">Marginal formuesskatt</span>
           <input type="checkbox" id="formue"><span class="track"></span>
         </label>
         <div class="field">
-          <div class="top"><label for="formuesats">Formuesskattesats</label><span class="val" id="formuesatsV"></span></div>
+          <div class="top"><label for="formuesats" data-en="Wealth tax rate">Formuesskattesats</label><span class="val" id="formuesatsV"></span></div>
           <input type="range" id="formuesats" min="0" max="1.5" step="0.05">
-          <div class="hint">Sekundærbolig verdsettes til 100 % av markedsverdi, aksjefond til 80 %. Slår i boligens disfavør.</div>
+          <div class="hint" data-en="A secondary home is valued at 100 % of market value, equity funds at 80 %. Works against the flat.">Sekundærbolig verdsettes til 100 % av markedsverdi, aksjefond til 80 %. Slår i boligens disfavør.</div>
         </div>
       </div>
     </details>
 
     <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center">
-      <button class="reset" id="reset">↺ Tilbakestill alt</button>
-      <button class="reset" id="share">⧉ Kopier lenke</button>
+      <button class="reset" id="reset" data-en="↺ Reset everything">↺ Tilbakestill alt</button>
+      <button class="reset" id="share" data-en="⧉ Copy link">⧉ Kopier lenke</button>
     </div>
   </aside>
 
@@ -611,22 +630,22 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
     <div class="verdict">
       <div class="grid">
         <div class="tile hero">
-          <div class="k">Nødvendig netto yield</div>
+          <div class="k" data-en="Required net yield">Nødvendig netto yield</div>
           <div class="v" id="vReq">—</div>
           <div class="sub" id="vReqSub">for å gå likt ut med indeksfondet</div>
         </div>
         <div class="tile">
-          <div class="k">Boligen leverer</div>
+          <div class="k" data-en="The flat delivers">Boligen leverer</div>
           <div class="v" id="vAct">—</div>
           <div class="sub" id="vActSub"></div>
         </div>
         <div class="tile">
-          <div class="k">Kontantstrøm</div>
+          <div class="k" data-en="Cash flow">Kontantstrøm</div>
           <div class="v" id="vCf">—</div>
           <div class="sub" id="vCfSub">per måned, år 1, etter avdrag og skatt</div>
         </div>
         <div class="tile">
-          <div class="k">Egenkapital ved slutt</div>
+          <div class="k" data-en="Equity at the end">Egenkapital ved slutt</div>
           <div class="v" id="vEnd">—</div>
           <div class="sub" id="vEndSub"></div>
         </div>
@@ -640,9 +659,9 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
     <!-- 1. formelen -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Regnestykket</div>
-        <h2>Én linje forklarer det meste</h2>
-        <p>Se bort fra skatt, avdrag og transaksjonskostnader et øyeblikk. Da er avkastningen på
+        <div class="eyebrow" data-en="The arithmetic">Regnestykket</div>
+        <h2 data-en="One line explains most of it">Én linje forklarer det meste</h2>
+        <p data-en="Ignore tax, principal payments and transaction costs for a moment. Then the return on equity in a leveraged flat is pure arithmetic: the rental surplus plus the appreciation, minus the interest on the loan, divided by the equity. Set that equal to the index fund return and the threshold falls out on its own.">Se bort fra skatt, avdrag og transaksjonskostnader et øyeblikk. Da er avkastningen på
         egenkapitalen i en belånt bolig ren aritmetikk: leieoverskuddet pluss verdistigningen, minus
         renten på lånet, delt på egenkapitalen. Settes den lik indeksfondets avkastning, faller
         terskelen ut av seg selv.</p>
@@ -650,19 +669,19 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
       <div class="formula">
         <div class="eq"><em>y*</em> = R × (1 − B) + r × B − g</div>
         <dl class="deflist">
-          <dt>y*</dt><dd>netto yield boligen må ha: (leie − ledighet − drift − vedlikehold) ÷ totalpris</dd>
-          <dt>R</dt><dd>forventet avkastning i indeksfondet</dd>
+          <dt>y*</dt><dd data-en="net yield the flat must have: (rent − vacancy − running costs − maintenance) ÷ total price">netto yield boligen må ha: (leie − ledighet − drift − vedlikehold) ÷ totalpris</dd>
+          <dt>R</dt><dd data-en="expected return in the index fund">forventet avkastning i indeksfondet</dd>
           <dt>B</dt><dd>belåningsgrad</dd>
-          <dt>r</dt><dd>lånerente</dd>
-          <dt>g</dt><dd>årlig verdistigning på boligen</dd>
+          <dt>r</dt><dd data-en="loan interest rate">lånerente</dd>
+          <dt>g</dt><dd data-en="annual appreciation of the property">årlig verdistigning på boligen</dd>
         </dl>
-        <p style="margin-top:18px; color:var(--ink-2); font-size:14px; max-width:66ch">
+        <p style="margin-top:18px; color:var(--ink-2); font-size:14px; max-width:66ch" data-en="Note the sign: the threshold moves toward the &lt;b style=&quot;color:var(--ink)&quot;&gt;interest rate&lt;/b&gt; as leverage rises, and away from the index fund return. As long as you borrow more cheaply than the index fund returns, more debt &lt;b style=&quot;color:var(--ink)&quot;&gt;lowers&lt;/b&gt; the yield requirement — while raising everything you can lose. With numbers: &lt;span id=&quot;formulaEg&quot; style=&quot;font-family:var(--mono)&quot;&gt;&lt;/span&gt;">
           Legg merke til fortegnet: terskelen beveger seg mot <b style="color:var(--ink)">renten</b> når
           belåningen øker, og bort fra indeksfondets avkastning. Så lenge du låner billigere enn
           indeksfondet gir, <b style="color:var(--ink)">senker</b> mer gjeld kravet til yield — og
           øker samtidig alt du kan tape. Med tall: <span id="formulaEg" style="font-family:var(--mono)"></span>
         </p>
-        <p style="margin-top:12px; color:var(--ink-3); font-size:13px; max-width:66ch">
+        <p style="margin-top:12px; color:var(--ink-3); font-size:13px; max-width:66ch" data-en="The charts below do not use this formula, but a year-by-year simulation with principal payments, tax, selling costs and reinvested surplus. The formula is the shortcut; the simulation is the answer.">
           Grafene under bruker ikke denne formelen, men en år-for-år-simulering med avdrag, skatt,
           salgsomkostninger og reinvestering av overskudd. Formelen er snarveien; simuleringen er fasiten.
         </p>
@@ -672,51 +691,51 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
     <!-- 2. terskelkurven -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Belåningsgrad</div>
-        <h2>Tre terskler, ikke én</h2>
-        <p>«Gir det mening» er tre forskjellige spørsmål, og de har tre forskjellige svar. Å slå
+        <div class="eyebrow" data-en="Loan-to-value">Belåningsgrad</div>
+        <h2 data-en="Three thresholds, not one">Tre terskler, ikke én</h2>
+        <p data-en="“Does it make sense” is three different questions, and they have three different answers. Beating the index fund is the &lt;em&gt;lowest&lt;/em&gt; bar when rates are low — getting the flat to pay its own principal is by far the highest. Between the curves sit flats that pay off on paper, but require you to inject cash every month for years.">«Gir det mening» er tre forskjellige spørsmål, og de har tre forskjellige svar. Å slå
         indeksfondet er det <em>laveste</em> kravet når renten er lav — å få boligen til å betale
         sine egne avdrag er det klart høyeste. Mellom kurvene ligger boliger som lønner seg på papiret,
         men som krever at du sprøyter inn penger hver måned i mange år.</p>
       </div>
       <div class="card">
         <div class="caption">
-          <h3>Nødvendig netto yield mot belåningsgrad</h3>
+          <h3 data-en="Required net yield vs loan-to-value">Nødvendig netto yield mot belåningsgrad</h3>
           <span class="note" id="ltvNote"></span>
         </div>
         <div class="plot" id="plotLtv"><div class="tip" id="tipLtv"></div></div>
         <div class="legend" id="legLtv"></div>
-        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblLtv"></div></details>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblLtv"></div></details>
       </div>
     </section>
 
     <!-- 3. porteføljen -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">62 virkelige boliger</div>
-        <h2>Hvor mange holder egentlig mål?</h2>
-        <p>Hver prikk er en leilighet jeg har regnet på, med kjøpesum, oppussing, leie og
+        <div class="eyebrow" data-en="62 real flats">62 virkelige boliger</div>
+        <h2 data-en="How many actually clear the bar?">Hvor mange holder egentlig mål?</h2>
+        <p data-en="Each dot is an apartment I have run the numbers on, with purchase price, renovation, rent and running costs as they actually stood. The yield is converted to net — after vacancy, running costs and maintenance — so it can be compared with the thresholds above. Move the interest rate or the loan-to-value in the panel and watch how many dots change colour.">Hver prikk er en leilighet jeg har regnet på, med kjøpesum, oppussing, leie og
         driftskostnader slik de faktisk sto. Yielden er regnet om til netto — etter ledighet, drift
         og vedlikehold — slik at den kan sammenlignes med tersklene over. Flytt på renten eller
         belåningsgraden i panelet, og se hvor mange prikker som skifter farge.</p>
       </div>
       <div class="card">
         <div class="caption">
-          <h3>Netto yield mot totalpris</h3>
+          <h3 data-en="Net yield vs total price">Netto yield mot totalpris</h3>
           <span class="note" id="scatNote"></span>
         </div>
         <div class="plot" id="plotScat"><div class="tip" id="tipScat"></div></div>
         <div class="legend" id="legScat"></div>
-        <details class="tblwrap"><summary>Vis alle 62 som tabell</summary><div class="tblscroll" id="tblScat"></div></details>
+        <details class="tblwrap"><summary data-en="Show all 62 as a table">Vis alle 62 som tabell</summary><div class="tblscroll" id="tblScat"></div></details>
       </div>
     </section>
 
     <!-- 3b. maks kjøpesum -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Maksprisen</div>
-        <h2>Hva kan du by?</h2>
-        <p>Snu regnestykket: yielden er gitt av leien og prisen, så låser du yielden, faller maksprisen
+        <div class="eyebrow" data-en="The maximum price">Maksprisen</div>
+        <h2 data-en="What can you bid?">Hva kan du by?</h2>
+        <p data-en="Turn the arithmetic around: the yield follows from the rent and the price, so if you fix the yield, the maximum price falls out. Because running costs largely track the rent, the answer is &lt;em&gt;linear&lt;/em&gt; — a single multiplier you can apply to the monthly rent at a viewing. Click through the bedroom rows and adjust the areas to match what you are actually looking at.">Snu regnestykket: yielden er gitt av leien og prisen, så låser du yielden, faller maksprisen
         ut. Fordi driftskostnadene stort sett følger leien, blir svaret <em>lineært</em> — én multiplikator
         du kan gange månedsleien med på visningen. Trykk deg gjennom soveromsradene og juster arealene
         til det du faktisk ser på.</p>
@@ -728,16 +747,16 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
           <div class="eq"><em>k</em> = 12 (1 − ledighet − drift) ÷ (<em>y*</em> (1 + dok) + vedlikehold)</div>
         </div>
         <div class="thumb">
-          <div class="t"><span class="k">Tommelfingerregel</span><span class="n" id="kIndeks">—</span><span class="s">ganger månedsleien for å slå indeksfondet</span></div>
-          <div class="t"><span class="k">Uten å tape penger hver måned</span><span class="n" id="kCf">—</span><span class="s">ganger månedsleien for null kontantstrøm</span></div>
-          <div class="t"><span class="k">Arket ditt betalte</span><span class="n" id="kFaktisk">—</span><span class="s">ganger månedsleien i median</span></div>
+          <div class="t"><span class="k" data-en="Rule of thumb">Tommelfingerregel</span><span class="n" id="kIndeks">—</span><span class="s" data-en="times the monthly rent to beat the index fund">ganger månedsleien for å slå indeksfondet</span></div>
+          <div class="t"><span class="k" data-en="Without losing money every month">Uten å tape penger hver måned</span><span class="n" id="kCf">—</span><span class="s" data-en="times the monthly rent for break-even cash flow">ganger månedsleien for null kontantstrøm</span></div>
+          <div class="t"><span class="k" data-en="What I actually paid">Arket ditt betalte</span><span class="n" id="kFaktisk">—</span><span class="s" data-en="times the monthly rent, median">ganger månedsleien i median</span></div>
         </div>
         <dl class="deflist" style="margin-top:16px">
-          <dt>y*</dt><dd>yielden du krever — hentet fra tersklene lenger opp, så den følger rente, belåning og verdistigning</dd>
-          <dt>drift</dt><dd>felleskostnader, kommunale avgifter, forsikring og strøm, som andel av leien</dd>
-          <dt>dok</dt><dd>dokumentavgift, 2,5 % for selveier og 0 for borettslag</dd>
+          <dt>y*</dt><dd data-en="the yield you require — taken from the thresholds above, so it follows the interest rate, leverage and appreciation">yielden du krever — hentet fra tersklene lenger opp, så den følger rente, belåning og verdistigning</dd>
+          <dt>drift</dt><dd data-en="shared costs, municipal fees, insurance and electricity, as a share of the rent">felleskostnader, kommunale avgifter, forsikring og strøm, som andel av leien</dd>
+          <dt>dok</dt><dd data-en="stamp duty, 2.5 % for freehold and 0 for housing co-operatives">dokumentavgift, 2,5 % for selveier og 0 for borettslag</dd>
         </dl>
-        <p style="margin-top:18px; color:var(--ink-2); font-size:14px; max-width:66ch">
+        <p style="margin-top:18px; color:var(--ink-2); font-size:14px; max-width:66ch" data-en="The multiplier is the whole answer: everything else — bedrooms, area, neighbourhood — only affects what rent you can charge. &lt;span id=&quot;bidNote&quot;&gt;&lt;/span&gt;">
           Multiplikatoren er hele svaret: alt annet — soverom, areal, bydel — påvirker bare hvilken leie
           du kan ta. <span id="bidNote"></span>
         </p>
@@ -745,102 +764,102 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
 
       <div class="card" style="margin-top:20px">
         <div class="caption">
-          <h3>Maks kjøpesum og pris per kvadratmeter</h3>
-          <span class="note">Rediger leie og areal direkte i tabellen</span>
+          <h3 data-en="Maximum price and price per square metre">Maks kjøpesum og pris per kvadratmeter</h3>
+          <span class="note" data-en="Edit rent and area directly in the table">Rediger leie og areal direkte i tabellen</span>
         </div>
         <div class="tblscroll" style="max-height:none; border-top:1px solid var(--line)" id="tblBid"></div>
         <div class="bidbar">
-          <label for="driftandel">Driftskostnader som andel av leien</label>
+          <label for="driftandel" data-en="Running costs as a share of rent">Driftskostnader som andel av leien</label>
           <input type="range" id="driftandel" min="0" max="45" step="0.5">
           <span class="val" id="driftandelV"></span>
-          <span class="hint">Felleskostnader, kommunale avgifter, forsikring og strøm. Medianen i utvalget er 17,4 %.</span>
+          <span class="hint" data-en="Shared costs, municipal fees, insurance and electricity. The median in the sample is 17.4 %.">Felleskostnader, kommunale avgifter, forsikring og strøm. Medianen i utvalget er 17,4 %.</span>
         </div>
       </div>
 
       <div class="card" style="margin-top:20px">
         <div class="caption">
-          <h3>Maks kjøpesum mot månedsleie</h3>
+          <h3 data-en="Maximum price vs monthly rent">Maks kjøpesum mot månedsleie</h3>
           <span class="note" id="bidChartNote"></span>
         </div>
         <div class="plot" id="plotBid"><div class="tip" id="tipBid"></div></div>
         <div class="legend" id="legBid"></div>
-        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblBidChart"></div></details>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblBidChart"></div></details>
       </div>
     </section>
 
     <!-- 4. rente x verdistigning -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Følsomhet</div>
-        <h2>De to tallene du ikke kjenner</h2>
-        <p>Yield og kjøpesum kan du regne ut på visning. Renten de neste femten årene og
+        <div class="eyebrow" data-en="Sensitivity">Følsomhet</div>
+        <h2 data-en="The two numbers you do not know">De to tallene du ikke kjenner</h2>
+        <p data-en="Yield and purchase price you can work out at the viewing. The interest rate over the next fifteen years, and the appreciation over the same period, you cannot. The grid shows how much better or worse the flat comes out than the index fund, in percentage points of annual return, for every combination — with the flat and the leverage you have set up now.">Yield og kjøpesum kan du regne ut på visning. Renten de neste femten årene og
         verdistigningen i samme periode kan du ikke. Rutenettet viser hvor mye bedre eller dårligere
         boligen kommer ut enn indeksfondet, målt i prosentpoeng årlig avkastning, for hver kombinasjon —
         med boligen og belåningen du har satt opp nå.</p>
       </div>
       <div class="card">
         <div class="caption">
-          <h3>Meravkastning bolig mot indeksfond</h3>
+          <h3 data-en="Excess return, property vs index fund">Meravkastning bolig mot indeksfond</h3>
           <span class="note">Prosentpoeng per år · blått = boligen vinner</span>
         </div>
         <div class="plot" id="plotHeat"><div class="tip" id="tipHeat"></div></div>
         <div class="legend" id="legHeat"></div>
-        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblHeat"></div></details>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblHeat"></div></details>
       </div>
     </section>
 
     <!-- 5. formue over tid -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Over tid</div>
-        <h2>Samme krone, to steder</h2>
-        <p>Begge kurvene starter med den samme egenkapitalen og mottar nøyaktig de samme innskuddene
+        <div class="eyebrow" data-en="Over time">Over tid</div>
+        <h2 data-en="The same krone, in two places">Samme krone, to steder</h2>
+        <p data-en="Both curves start with the same equity and receive exactly the same deposits at the same times: every month the flat runs a deficit, the index fund receives the same amount. If the flat runs a surplus, that surplus is invested in the fund. The curves show what you are left with after tax if you sell that year.">Begge kurvene starter med den samme egenkapitalen og mottar nøyaktig de samme innskuddene
         til samme tid: hver måned boligen går i minus, får indeksfondet det samme beløpet. Går boligen
         i pluss, plasseres overskuddet i fond. Kurvene viser hva du sitter igjen med etter skatt hvis
         du selger det året.</p>
       </div>
       <div class="card">
         <div class="caption">
-          <h3>Netto formue etter skatt ved salg</h3>
+          <h3 data-en="Net wealth after tax on sale">Netto formue etter skatt ved salg</h3>
           <span class="note" id="wealthNote"></span>
         </div>
         <div class="plot" id="plotWealth"><div class="tip" id="tipWealth"></div></div>
         <div class="legend" id="legWealth"></div>
-        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblWealth"></div></details>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblWealth"></div></details>
       </div>
     </section>
 
     <!-- 6. kontantstrøm -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Måned én</div>
-        <h2>Hvor blir leien av</h2>
-        <p>En bolig med 6 % brutto yield kan fint gå 4 000 kroner i minus hver måned. Nedbrytningen
+        <div class="eyebrow" data-en="Month one">Måned én</div>
+        <h2 data-en="Where the rent goes">Hvor blir leien av</h2>
+        <p data-en="A flat with a 6 % gross yield can easily run 4,000 kroner a month in the red. The breakdown below shows why: the principal payment is not a cost, but it is money out — and the running costs that never make it into the listing eat the rest.">En bolig med 6 % brutto yield kan fint gå 4 000 kroner i minus hver måned. Nedbrytningen
         under viser hvorfor: avdraget er ikke en kostnad, men det er en utbetaling — og
         driftskostnadene som ikke står i annonsen spiser resten.</p>
       </div>
       <div class="card">
         <div class="caption">
-          <h3>Fra brutto leie til kontantstrøm, per måned år 1</h3>
+          <h3 data-en="From gross rent to cash flow, per month in year 1">Fra brutto leie til kontantstrøm, per måned år 1</h3>
           <span class="note">Avdrag er sparing, ikke kostnad — men må betales</span>
         </div>
         <div class="plot" id="plotFall"><div class="tip" id="tipFall"></div></div>
-        <details class="tblwrap"><summary>Vis som tabell</summary><div class="tblscroll" id="tblFall"></div></details>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblFall"></div></details>
       </div>
     </section>
 
     <!-- 7. hva modellen ikke fanger -->
     <section class="section">
       <div class="head">
-        <div class="eyebrow">Forbehold</div>
-        <h2>Det aritmetikken ikke ser</h2>
-        <p>Modellen sammenligner forventede kroner. Den sammenligner ikke risiko, tid eller
+        <div class="eyebrow" data-en="Caveats">Forbehold</div>
+        <h2 data-en="What the arithmetic cannot see">Det aritmetikken ikke ser</h2>
+        <p data-en="The model compares expected kroner. It does not compare risk, time or flexibility — and on those, the two options are nowhere near each other.">Modellen sammenligner forventede kroner. Den sammenligner ikke risiko, tid eller
         fleksibilitet — og der er de to alternativene ikke i nærheten av hverandre.</p>
       </div>
       <ul class="caveats" id="caveats"></ul>
     </section>
 
-    <footer>
+    <footer data-en="Property data: 62 apartments I have run the numbers on over the years, most of them in Bergen. Net yield is calculated on the total price — purchase price plus stamp duty plus renovation — after vacancy, running costs and maintenance. Tax rates are Norwegian 2025/2026 rates for personal ownership: 22 % on rental profit and interest, 22 % capital gains tax on a secondary home, 37.84 % on equity fund gains. The model is a calculator, not investment advice.">
       Boligdata: 62 leiligheter jeg har regnet på gjennom årene, de fleste i Bergen.
       Netto yield er regnet på totalpris — kjøpesum pluss dokumentavgift pluss oppussing — etter ledighet,
       driftskostnader og vedlikehold. Skattesatsene er 2025/2026-satser for privat eie: 22 % på
@@ -896,17 +915,52 @@ const BOLIGER = [
 ["Vangsgata 22C",2000000,14000,5275],["Marineholmen A301",6190000,20000,3250]
 ];
 
+
+/* ═══ 0. Språk ═══════════════════════════════════════════════════════════
+   Oversettelsen ligger ved siden av originalen: data-en på statisk markup,
+   L(no, en) i JS. Da kan de ikke komme ut av synk med en nøkkelliste. */
+let LANG = "no";
+const L = (no, en) => (LANG === "en" ? en : no);
+
+(function initLang(){
+  let v = null;
+  try{ v = new URLSearchParams(location.search).get("lang"); }catch(e){}
+  if(!v){ try{ v = localStorage.getItem("lang"); }catch(e){} }
+  if(v === "en" || v === "no") LANG = v;
+})();
+
+function applyLang(){
+  document.documentElement.lang = LANG === "en" ? "en" : "no";
+  document.querySelectorAll("[data-en]").forEach(el => {
+    if(el.__no === undefined) el.__no = el.innerHTML;
+    el.innerHTML = LANG === "en" ? el.dataset.en : el.__no;
+  });
+  document.querySelectorAll("[data-lang]").forEach(b =>
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG));
+  const fi = document.getElementById("finnInn");
+  if(fi) fi.placeholder = L(
+    "Lim inn finn.no-lenken — eller marker hele annonsen med \u2318A \u2318C og lim inn teksten her",
+    "Paste the finn.no link — or select the whole listing with \u2318A \u2318C and paste the text here");
+  document.title = L("Hvilken yield må boligen ha?", "What yield does the flat need?");
+  try{ localStorage.setItem("lang", LANG); }catch(e){}
+}
+
 /* ═══ 2. Formatering ═════════════════════════════════════════════════════ */
-const nf0  = new Intl.NumberFormat("nb-NO",{maximumFractionDigits:0});
-const nf1  = new Intl.NumberFormat("nb-NO",{minimumFractionDigits:1,maximumFractionDigits:1});
-const nf2  = new Intl.NumberFormat("nb-NO",{minimumFractionDigits:2,maximumFractionDigits:2});
+let nf0, nf1, nf2;
+function setLocale(){
+  const loc = LANG === "en" ? "en-GB" : "nb-NO";
+  nf0 = new Intl.NumberFormat(loc,{maximumFractionDigits:0});
+  nf1 = new Intl.NumberFormat(loc,{minimumFractionDigits:1,maximumFractionDigits:1});
+  nf2 = new Intl.NumberFormat(loc,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+setLocale();
 const kr   = v => nf0.format(Math.round(v)) + " kr";
 const krS  = v => (v<0?"−":"") + nf0.format(Math.abs(Math.round(v))) + " kr";
 const pct1 = v => nf1.format(v).replace("-","−") + " %";
 const pct2 = v => nf2.format(v).replace("-","−") + " %";
 const ppS  = v => (v>0?"+":v<0?"−":"") + nf1.format(Math.abs(v)) + " pp";
 const mkr  = v => { const a=Math.abs(v);
-  if(a>=1e6) return (v<0?"−":"")+nf1.format(a/1e6)+" mill.";
+  if(a>=1e6) return (v<0?"−":"")+nf1.format(a/1e6)+L(" mill."," m");
   if(a>=1e3) return (v<0?"−":"")+nf0.format(a/1e3)+" k";
   return krS(v); };
 
@@ -1102,20 +1156,20 @@ function drawLtv(){
   xs.filter(b=>b%15===0).forEach(b=>{
     g += '<text x="'+X(b).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+b+' %</text>';
   });
-  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>Belåningsgrad</text>';
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>'+L('Belåningsgrad','Loan-to-value')+'</text>';
 
   // referanselinje: boligens egen yield
   g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(mine).toFixed(1)+'" y2="'+Y(mine).toFixed(1)+'" stroke="var(--ink-3)" stroke-width="1.5" opacity=".55"/>';
   const myY = Y(mine), myLab = myY < mt+18 ? myY+15 : myY-7;
-  g += '<text x="'+(ml+8)+'" y="'+myLab.toFixed(1)+'" '+AX+' fill="var(--ink-2)">Din bolig i dag · '+pct1(mine)+'</text>';
+  g += '<text x="'+(ml+8)+'" y="'+myLab.toFixed(1)+'" '+AX+' fill="var(--ink-2)">'+L('Din bolig i dag · ','This flat today · ')+pct1(mine)+'</text>';
 
   // markør for valgt belåningsgrad
   g += '<line x1="'+X(S.ltv).toFixed(1)+'" x2="'+X(S.ltv).toFixed(1)+'" y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--accent)" stroke-width="1.5" opacity=".35"/>';
 
   const series = [
-    {k:"indeks", c:"var(--s1)", n:"Slå indeksfondet"},
-    {k:"cf",     c:"var(--s2)", n:"Null kontantstrøm"},
-    {k:"rente",  c:"var(--s3)", n:"Dekke renten"}
+    {k:"indeks", c:"var(--s1)", n:L("Slå indeksfondet","Beat the index fund")},
+    {k:"cf",     c:"var(--s2)", n:L("Null kontantstrøm","Break-even cash flow")},
+    {k:"rente",  c:"var(--s3)", n:L("Dekke renten","Cover the interest")}
   ];
   series.forEach(s=>{
     const pts = ltvData.filter(d=>d[s.k]!=null && isFinite(d[s.k]));
@@ -1146,21 +1200,21 @@ function drawLtv(){
     svg.querySelector("#ltvCross").setAttribute("opacity",1);
     cross.setAttribute("x1",X(b)); cross.setAttribute("x2",X(b));
     place(tip, plot, svg, W, X(b), mt+8,
-      '<div class="t">Belåningsgrad '+b+' %</div>'
-      + tipRow("Slå indeksfondet", d.indeks==null?"—":pct1(d.indeks), "var(--s1)")
-      + tipRow("Null kontantstrøm", d.cf==null?"—":pct1(d.cf), "var(--s2)")
-      + tipRow("Dekke renten", d.rente==null?"—":pct1(d.rente), "var(--s3)")
-      + tipRow("Din bolig", pct1(mine), "var(--ink-3)"));
+      '<div class="t">'+L('Belåningsgrad ','Loan-to-value ')+b+' %</div>'
+      + tipRow(L("Slå indeksfondet","Beat the index fund"), d.indeks==null?"—":pct1(d.indeks), "var(--s1)")
+      + tipRow(L("Null kontantstrøm","Break-even cash flow"), d.cf==null?"—":pct1(d.cf), "var(--s2)")
+      + tipRow(L("Dekke renten","Cover the interest"), d.rente==null?"—":pct1(d.rente), "var(--s3)")
+      + tipRow(L("Din bolig","This flat"), pct1(mine), "var(--ink-3)"));
   };
   plot.onpointerleave = () => { hide(tip); svg.querySelector("#ltvCross").setAttribute("opacity",0); };
 
   document.getElementById("legLtv").innerHTML = series.map(s=>
     '<span class="item"><span class="swatch" style="background:'+s.c+'"></span>'+esc(s.n)+'</span>').join("")
-    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.55"></span>Din bolig i dag</span>';
+    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.55"></span>'+L('Din bolig i dag','This flat today')+'</span>';
   document.getElementById("ltvNote").textContent =
-    "Rente " + pct1(S.rente) + " · verdistigning " + pct1(S.vekstbolig) + " · indeksfond " + pct1(S.indeks);
+    L("Rente ","Rate ") + pct1(S.rente) + L(" · verdistigning "," · appreciation ") + pct1(S.vekstbolig) + L(" · indeksfond "," · index fund ") + pct1(S.indeks);
   document.getElementById("tblLtv").innerHTML = tableHtml(
-    ["Belåningsgrad","Slå indeksfondet","Null kontantstrøm","Dekke renten"],
+    [L("Belåningsgrad","Loan-to-value"),L("Slå indeksfondet","Beat the index fund"),L("Null kontantstrøm","Break-even cash flow"),L("Dekke renten","Cover the interest")],
     ltvData.map(d=>[d.b+" %", d.indeks==null?"—":pct2(d.indeks), d.cf==null?"—":pct2(d.cf), d.rente==null?"—":pct2(d.rente)]));
 }
 
@@ -1182,12 +1236,12 @@ function drawScatter(th){
   [2e6,3e6,5e6,8e6,1.2e7,1.8e7].forEach(v=>{
     g += '<text x="'+X(v).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+(v/1e6).toString().replace(".",",")+' mill.</text>';
   });
-  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>Totalpris (logaritmisk)</text>';
-  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>Netto yield</text>';
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>'+L('Totalpris (logaritmisk)','Total price (log scale)')+'</text>';
+  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>'+L('Netto yield','Net yield')+'</text>';
 
   const rules = [];
-  if(th.indeks!=null) rules.push({v:th.indeks, c:"var(--s1)", n:"Slå indeksfondet"});
-  if(th.cf!=null)     rules.push({v:th.cf,     c:"var(--s2)", n:"Null kontantstrøm"});
+  if(th.indeks!=null) rules.push({v:th.indeks, c:"var(--s1)", n:L("Slå indeksfondet","Beat the index fund")});
+  if(th.cf!=null)     rules.push({v:th.cf,     c:"var(--s2)", n:L("Null kontantstrøm","Break-even cash flow")});
   rules.forEach(r=>{
     g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(r.v).toFixed(1)+'" y2="'+Y(r.v).toFixed(1)+'" stroke="'+r.c+'" stroke-width="2"/>';
   });
@@ -1224,25 +1278,25 @@ function drawScatter(th){
     hi2.setAttribute("cx",best.px); hi2.setAttribute("cy",best.py); hi2.setAttribute("opacity",1);
     place(tip, plot, svg, W, best.px, best.py,
       '<div class="t">'+esc(best.n)+'</div>'
-      + tipRow("Netto yield", pct2(best.y), best.ok?"var(--good)":"var(--crit)")
-      + tipRow("Brutto yield", pct2(best.leie*12/best.tot*100))
-      + tipRow("Totalpris", kr(best.tot))
-      + tipRow("Leie", kr(best.leie)+"/mnd")
-      + tipRow("Drift", kr(best.drift)+"/mnd"));
+      + tipRow(L("Netto yield","Net yield"), pct2(best.y), best.ok?"var(--good)":"var(--crit)")
+      + tipRow(L("Brutto yield","Gross yield"), pct2(best.leie*12/best.tot*100))
+      + tipRow(L("Totalpris","Total price"), kr(best.tot))
+      + tipRow(L("Leie","Rent"), kr(best.leie)+L("/mnd","/mo"))
+      + tipRow(L("Drift","Running costs"), kr(best.drift)+L("/mnd","/mo")));
   };
   plot.onpointerleave = () => { hide(tip); hi2.setAttribute("opacity",0); };
 
   const over = pts.filter(p=>p.ok).length;
   const overCf = th.cf==null?0:pts.filter(p=>p.y>=th.cf).length;
   document.getElementById("legScat").innerHTML =
-      '<span class="item"><span class="dot" style="background:var(--good)"></span><span class="sym">✓</span> Slår indeksfondet ('+over+' av '+pts.length+')</span>'
-    + '<span class="item"><span class="dot" style="background:var(--crit)"></span><span class="sym">✕</span> Taper mot indeksfondet ('+(pts.length-over)+')</span>';
+      '<span class="item"><span class="dot" style="background:var(--good)"></span><span class="sym">✓</span> '+L('Slår indeksfondet','Beats the index fund')+' ('+over+L(' av ',' of ')+pts.length+')</span>'
+    + '<span class="item"><span class="dot" style="background:var(--crit)"></span><span class="sym">✕</span> '+L('Taper mot indeksfondet','Loses to the index fund')+' ('+(pts.length-over)+')</span>';
   document.getElementById("scatNote").textContent =
-    overCf + " av " + pts.length + " betaler sine egne avdrag";
+    overCf + L(" av "," of ") + pts.length + L(" betaler sine egne avdrag"," pay their own principal");
   document.getElementById("tblScat").innerHTML = tableHtml(
-    ["Adresse","Totalpris","Leie/mnd","Drift/mnd","Brutto yield","Netto yield","Mot indeks"],
+    [L("Adresse","Address"),L("Totalpris","Total price"),L("Leie/mnd","Rent/mo"),L("Drift/mnd","Costs/mo"),L("Brutto yield","Gross yield"),L("Netto yield","Net yield"),L("Mot indeks","vs index")],
     pts.slice().sort((a,b)=>b.y-a.y).map(p=>[esc(p.n), kr(p.tot), kr(p.leie), kr(p.drift),
-      pct2(p.leie*12/p.tot*100), pct2(p.y), p.ok?"✓ over":"✕ under"]));
+      pct2(p.leie*12/p.tot*100), pct2(p.y), p.ok?L("✓ over","✓ above"):L("✕ under","✕ below")]));
 }
 </script>
 
@@ -1283,15 +1337,15 @@ function drawHeat(){
   });
   renter.forEach((r,i)=>{ if(i%2===0) out += '<text x="'+(X(i)+cw/2).toFixed(1)+'" y="'+(H-mb+19)+'" text-anchor="middle" '+AX+'>'+nf1.format(r)+'</text>'; });
   vekst.forEach((g,j)=>{ if(j%2===0) out += '<text x="'+(ml-10)+'" y="'+(Y(j)+ch/2+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+nf1.format(g)+' %</text>'; });
-  out += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-6)+'" text-anchor="middle" '+AXL+'>Lånerente, prosent</text>';
-  out += '<text transform="translate(16,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>Verdistigning bolig</text>';
+  out += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-6)+'" text-anchor="middle" '+AXL+'>'+L('Lånerente, prosent','Loan interest rate, per cent')+'</text>';
+  out += '<text transform="translate(16,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>'+L('Verdistigning bolig','Property appreciation')+'</text>';
 
   // markør for gjeldende innstilling
   const ci = renter.reduce((b,r,i)=>Math.abs(r-S.rente)<Math.abs(renter[b]-S.rente)?i:b,0);
   const cj = vekst.reduce((b,g,j)=>Math.abs(g-S.vekstbolig)<Math.abs(vekst[b]-S.vekstbolig)?j:b,0);
   out += '<rect x="'+(X(ci)+1).toFixed(1)+'" y="'+(Y(cj)+1).toFixed(1)+'" width="'+(cw-2).toFixed(1)
       +'" height="'+(ch-2).toFixed(1)+'" rx="2" fill="none" stroke="var(--ink)" stroke-width="2"/>';
-  out += '<text x="'+(X(ci)+cw/2).toFixed(1)+'" y="'+(Y(cj)-5).toFixed(1)+'" text-anchor="middle" fill="var(--ink)" font-family="var(--sans)" font-size="11" font-weight="600">nå</text>';
+  out += '<text x="'+(X(ci)+cw/2).toFixed(1)+'" y="'+(Y(cj)-5).toFixed(1)+'" text-anchor="middle" fill="var(--ink)" font-family="var(--sans)" font-size="11" font-weight="600">'+L('nå','now')+'</text>';
 
   // skalalegende
   const lx=W-mr+22, ly=mt+8, lh=H-mt-mb-30, lw=13;
@@ -1302,7 +1356,7 @@ function drawHeat(){
   [[0,"+"+nf1.format(D)+" pp"],[0.5,"0"],[1,"−"+nf1.format(D)+" pp"]].forEach(([f,t])=>{
     out += '<text x="'+(lx+lw+7)+'" y="'+(ly+f*lh+4).toFixed(1)+'" '+AX+'>'+t+'</text>';
   });
-  out += '<text x="'+lx+'" y="'+(ly+lh+22)+'" '+AX+' fill="var(--ink-2)">bolig − fond</text>';
+  out += '<text x="'+lx+'" y="'+(ly+lh+22)+'" '+AX+' fill="var(--ink-2)">'+L('bolig − fond','flat − fund')+'</text>';
 
   const svg = setSvg("plotHeat","tipHeat",out,W,H);
   const plot = document.getElementById("plotHeat"), tip = document.getElementById("tipHeat");
@@ -1313,19 +1367,19 @@ function drawHeat(){
     if(i<0||i>=renter.length||j<0||j>=vekst.length){ hide(tip); return; }
     const c = cells.find(c=>c.r===renter[i] && c.g===vekst[j]); if(!c) return;
     place(tip, plot, svg, W, X(i)+cw/2, Y(j),
-      '<div class="t">Rente '+pct1(renter[i])+' · vekst '+pct1(vekst[j])+'</div>'
-      + tipRow("Meravkastning", c.v<=-90 ? "egenkapitalen tapt" : ppS(c.v)+" per år")
-      + tipRow("Konklusjon", c.v>0?"boligen vinner":"fondet vinner"));
+      '<div class="t">'+L('Rente ','Rate ')+pct1(renter[i])+L(' · vekst ',' · growth ')+pct1(vekst[j])+'</div>'
+      + tipRow(L("Meravkastning","Excess return"), c.v<=-90 ? L("egenkapitalen tapt","equity wiped out") : ppS(c.v)+L(" per år"," per year"))
+      + tipRow(L("Konklusjon","Verdict"), c.v>0?L("boligen vinner","the flat wins"):L("fondet vinner","the fund wins")));
   };
   plot.onpointerleave = () => hide(tip);
 
   document.getElementById("legHeat").innerHTML =
-      '<span class="item"><span class="dot" style="background:var(--div-pos)"></span>Boligen gir mer</span>'
-    + '<span class="item"><span class="dot" style="background:var(--div-mid);box-shadow:0 0 0 1px var(--line-2)"></span>Likt</span>'
-    + '<span class="item"><span class="dot" style="background:var(--div-neg)"></span>Indeksfondet gir mer</span>'
-    + '<span class="item" style="color:var(--ink-3)">Belåning '+S.ltv+' % · '+N+' års eiertid · netto yield '+pct1(simuler({}).nettoYield)+'</span>';
+      '<span class="item"><span class="dot" style="background:var(--div-pos)"></span>'+L('Boligen gir mer','The flat gives more')+'</span>'
+    + '<span class="item"><span class="dot" style="background:var(--div-mid);box-shadow:0 0 0 1px var(--line-2)"></span>'+L('Likt','Equal')+'</span>'
+    + '<span class="item"><span class="dot" style="background:var(--div-neg)"></span>'+L('Indeksfondet gir mer','The index fund gives more')+'</span>'
+    + '<span class="item" style="color:var(--ink-3)">'+L('Belåning ','Leverage ')+S.ltv+' % · '+N+L(' års eiertid · netto yield ',' year hold · net yield ')+pct1(simuler({}).nettoYield)+'</span>';
   document.getElementById("tblHeat").innerHTML = tableHtml(
-    ["Verdistigning"].concat(renter.map(r=>nf1.format(r)+" %")),
+    [L("Verdistigning","Appreciation")].concat(renter.map(r=>nf1.format(r)+" %")),
     vekst.slice().reverse().map(g=>[nf1.format(g)+" %"].concat(renter.map(r=>{
       const c=cells.find(c=>c.r===r&&c.g===g); return c.v<=-90?"—":ppS(c.v); }))));
 }
@@ -1353,7 +1407,7 @@ function drawWealth(sim){
   if(N-ticks[ticks.length-1] < step*0.5) ticks.pop();
   ticks.push(N);
   ticks.forEach(t => g += '<text x="'+X(t).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+t+'</text>');
-  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>År etter kjøp</text>';
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>'+L('År etter kjøp','Years after purchase')+'</text>';
 
   const line = (arr,c,w,op) => '<path d="'+arr.map((d,i)=>(i?"L":"M")+X(d.t).toFixed(1)+" "+Y(d.v).toFixed(1)).join(" ")
       + '" fill="none" stroke="'+c+'" stroke-width="'+w+'" stroke-linejoin="round" stroke-linecap="round"'+(op?' opacity="'+op+'"':'')+'/>';
@@ -1364,9 +1418,9 @@ function drawWealth(sim){
     const l=arr[arr.length-1];
     g += '<circle cx="'+X(l.t).toFixed(1)+'" cy="'+Y(l.v).toFixed(1)+'" r="4.5" fill="'+c+'" stroke="var(--surface)" stroke-width="2"/>';
   });
-  const ends=[{y:Y(b[b.length-1].v),n:"Bolig",c:"var(--s1)",v:b[b.length-1].v},
-              {y:Y(f[f.length-1].v),n:"Indeksfond",c:"var(--s2)",v:f[f.length-1].v},
-              {y:Y(inn[inn.length-1].v),n:"Innskutt",c:"var(--ink-3)",v:inn[inn.length-1].v}].sort((a,c)=>a.y-c.y);
+  const ends=[{y:Y(b[b.length-1].v),n:L("Bolig","Flat"),c:"var(--s1)",v:b[b.length-1].v},
+              {y:Y(f[f.length-1].v),n:L("Indeksfond","Index fund"),c:"var(--s2)",v:f[f.length-1].v},
+              {y:Y(inn[inn.length-1].v),n:L("Innskutt","Invested"),c:"var(--ink-3)",v:inn[inn.length-1].v}].sort((a,c)=>a.y-c.y);
   for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<17) ends[i].y=ends[i-1].y+17;
   ends.forEach(e=>{
     g += '<text x="'+(W-mr+9)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+e.n+'</text>';
@@ -1384,22 +1438,22 @@ function drawWealth(sim){
     cg.setAttribute("opacity",1); cl.setAttribute("x1",X(t)); cl.setAttribute("x2",X(t));
     const d = b[t].v - f[t].v;
     place(tip, plot, svg, W, X(t), mt+8,
-      '<div class="t">'+(t===0?"Ved kjøp":"Etter "+t+" år")+'</div>'
-      + tipRow("Bolig", krS(b[t].v), "var(--s1)")
-      + tipRow("Indeksfond", krS(f[t].v), "var(--s2)")
-      + tipRow("Innskutt kapital", krS(inn[t].v), "var(--ink-3)")
-      + tipRow("Differanse", (d>=0?"+":"−")+kr(Math.abs(d))));
+      '<div class="t">'+(t===0?L("Ved kjøp","At purchase"):L("Etter "+t+" år","After "+t+" years"))+'</div>'
+      + tipRow(L("Bolig","Flat"), krS(b[t].v), "var(--s1)")
+      + tipRow(L("Indeksfond","Index fund"), krS(f[t].v), "var(--s2)")
+      + tipRow(L("Innskutt kapital","Capital invested"), krS(inn[t].v), "var(--ink-3)")
+      + tipRow(L("Differanse","Difference"), (d>=0?"+":"−")+kr(Math.abs(d))));
   };
   plot.onpointerleave = () => { hide(tip); cg.setAttribute("opacity",0); };
 
   document.getElementById("legWealth").innerHTML =
-      '<span class="item"><span class="swatch" style="background:var(--s1)"></span>Bolig, etter skatt ved salg</span>'
-    + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>Indeksfond, etter skatt</span>'
-    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.6"></span>Innskutt kapital</span>';
+      '<span class="item"><span class="swatch" style="background:var(--s1)"></span>'+L('Bolig, etter skatt ved salg','Flat, after tax on sale')+'</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>'+L('Indeksfond, etter skatt','Index fund, after tax')+'</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.6"></span>'+L('Innskutt kapital','Capital invested')+'</span>';
   document.getElementById("wealthNote").textContent =
-    "Egenkapital ved kjøp " + kr(sim.EK) + " · lån " + kr(sim.laan0);
+    L("Egenkapital ved kjøp ","Equity at purchase ") + kr(sim.EK) + L(" · lån "," · loan ") + kr(sim.laan0);
   document.getElementById("tblWealth").innerHTML = tableHtml(
-    ["År","Bolig","Indeksfond","Differanse","Innskutt","Boligverdi","Restgjeld"],
+    [L("År","Year"),L("Bolig","Flat"),L("Indeksfond","Index fund"),L("Differanse","Difference"),L("Innskutt","Invested"),L("Boligverdi","Property value"),L("Restgjeld","Debt left")],
     b.map((d,i)=>[d.t, krS(d.v), krS(f[i].v), krS(d.v-f[i].v), krS(inn[i].v),
       i===0?kr(sim.V0):kr(sim.aar[i-1].V), i===0?kr(sim.laan0):kr(sim.aar[i-1].gjeld)]));
 }
@@ -1409,21 +1463,21 @@ function drawFall(sim){
   const a = sim.aar[0]; if(!a) return;
   const p = sim.p;
   const steps = [
-    {n:"Brutto leie",        v: p.leie,                          start:true},
-    {n:"Ledighet",           v: -p.leie*(p.ledig/100)},
-    {n:"Drift og vedlikehold", v: -(p.drift + p.vedl/100*sim.V0/12)},
-    {n:"Renter",             v: -a.rente/12},
-    {n:"Avdrag",             v: -a.avdr/12},
-    {n:"Skatt",              v: -a.skattLeie/12}
+    {n:L("Brutto leie","Gross rent"),        v: p.leie,                          start:true},
+    {n:L("Ledighet","Vacancy"),           v: -p.leie*(p.ledig/100)},
+    {n:L("Drift og vedlikehold","Costs and maintenance"), v: -(p.drift + p.vedl/100*sim.V0/12)},
+    {n:L("Renter","Interest"),             v: -a.rente/12},
+    {n:L("Avdrag","Principal"),             v: -a.avdr/12},
+    {n:L("Skatt","Tax"),              v: -a.skattLeie/12}
   ];
-  if(p.formue) steps.push({n:"Formuesskatt", v:-a.fBolig/12});
+  if(p.formue) steps.push({n:L("Formuesskatt","Wealth tax"), v:-a.fBolig/12});
 
   const W=900, H=308, ml=54, mr=24, mt=26, mb=64;
   const n = steps.length+1, bw = (W-ml-mr)/n*0.62, gapw=(W-ml-mr)/n;
   let run=0; const bars=[];
   steps.forEach((s,i)=>{ const from=run; run+=s.v; bars.push({n:s.n, from, to:run, v:s.v, i}); });
   const total = run;
-  bars.push({n:"Kontantstrøm", from:0, to:total, v:total, i:steps.length, total:true});
+  bars.push({n:L("Kontantstrøm","Cash flow"), from:0, to:total, v:total, i:steps.length, total:true});
   const vals = bars.flatMap(b=>[b.from,b.to]).concat([0]);
   let lo=Math.min(...vals), hi=Math.max(...vals); const pad=(hi-lo)*0.16; lo-=pad; hi+=pad;
   const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
@@ -1464,13 +1518,13 @@ function drawFall(sim){
     const b = bars[i];
     place(tip, plot, svg, W, Xc(i), Math.min(Y(b.from),Y(b.to)),
       '<div class="t">'+esc(b.n)+'</div>'
-      + tipRow(b.total?"Netto per måned":"Endring", krS(b.v))
-      + (b.total?"":tipRow("Igjen etter dette", krS(b.to))));
+      + tipRow(b.total?L("Netto per måned","Net per month"):L("Endring","Change"), krS(b.v))
+      + (b.total?"":tipRow(L("Igjen etter dette","Left after this"), krS(b.to))));
   };
   plot.onpointerleave = () => hide(tip);
 
   document.getElementById("tblFall").innerHTML = tableHtml(
-    ["Post","Per måned","Per år","Løpende"],
+    [L("Post","Item"),L("Per måned","Per month"),L("Per år","Per year"),L("Løpende","Running")],
     bars.map(b=>[esc(b.n), krS(b.v), krS(b.v*12), krS(b.to)]));
 }
 </script>
@@ -1511,6 +1565,7 @@ function writeUrl(){
     if(S[k] !== DEFAULTS[k]) q.set(k, String(S[k]));
   });
   BOOLS.forEach(k=>{ if(!!S[k] !== !!DEFAULTS[k]) q.set(k, S[k] ? "1" : "0"); });
+  if(LANG !== "no") q.set("lang", LANG);
   if(SOV.some((r,i) => r.some((v,j) => v !== SOV_DEFAULT[i][j])))
     q.set("sov", SOV.map(r => r.join("-")).join("_"));
   const qs = q.toString();
@@ -1558,47 +1613,58 @@ function render(){
 
   // ── tiles
   $("vReq").textContent = th.indeks==null ? "—" : pct1(th.indeks);
-  $("vReqSub").textContent = "for å gå likt ut med indeksfondet på " + Math.round(S.horisont)
-    + " år, med " + S.ltv + " % belåning";
+  $("vReqSub").textContent = L("for å gå likt ut med indeksfondet på " + Math.round(S.horisont) + " år, med " + S.ltv + " % belåning",
+       "to break even with the index fund over " + Math.round(S.horisont) + " years, at " + S.ltv + " % leverage");
 
   const over = th.indeks!=null && sim.nettoYield >= th.indeks;
   const vAct = $("vAct");
   vAct.textContent = pct1(sim.nettoYield);
   vAct.className = "v " + (over ? "pos" : "neg");
-  $("vActSub").textContent = "netto · brutto " + pct1(sim.bruttoYield) + " av " + kr(sim.kost);
+  $("vActSub").textContent = L("netto · brutto ", "net · gross ") + pct1(sim.bruttoYield) + L(" av ", " of ") + kr(sim.kost);
 
   const vCf = $("vCf");
   vCf.textContent = krS(cfM);
   vCf.className = "v " + (cfM>=0 ? "pos" : "neg");
-  $("vCfSub").textContent = "per måned år 1, etter avdrag" + (S.skatt?" og skatt":"");
+  $("vCfSub").textContent = L("per måned år 1, etter avdrag" + (S.skatt?" og skatt":""),
+       "per month in year 1, after principal" + (S.skatt?" and tax":""));
 
   const s2 = sim.siste;
   $("vEnd").textContent = s2 ? mkr(s2.bolig) : "—";
   $("vEndSub").textContent = s2
-    ? "mot " + mkr(s2.fondNetto) + " i fond · differanse " + (s2.bolig>=s2.fondNetto?"+":"−") + mkr(Math.abs(s2.bolig-s2.fondNetto))
+    ? L("mot ", "vs ") + mkr(s2.fondNetto) + L(" i fond · differanse ", " in the fund · difference ") + (s2.bolig>=s2.fondNetto?"+":"−") + mkr(Math.abs(s2.bolig-s2.fondNetto))
     : "";
 
   const badge = $("vBadge"), text = $("vText");
   const selvgaaende = th.cf!=null && sim.nettoYield >= th.cf;
   const wipe = sim.V0>0 ? sim.EK/sim.V0*100 : 0;
   badge.className = "badge " + (over ? "ok" : "no");
-  badge.textContent = over ? (selvgaaende ? "Holder mål" : "Holder — så vidt") : "Under terskelen";
+  badge.textContent = over ? (selvgaaende ? L("Holder mål","Clears the bar") : L("Holder — så vidt","Clears it, barely")) : L("Under terskelen","Below the threshold");
   if(over && selvgaaende){
-    text.innerHTML = "Boligen slår indeksfondet <b>og</b> betaler sine egne avdrag. Prisen for det er "
-      + "konsentrasjonsrisiko: et prisfall på <b>" + pct1(wipe) + "</b> sletter hele egenkapitalen din.";
+    text.innerHTML = L("Boligen slår indeksfondet <b>og</b> betaler sine egne avdrag. Prisen for det er "
+      + "konsentrasjonsrisiko: et prisfall på <b>" + pct1(wipe) + "</b> sletter hele egenkapitalen din.",
+      "The flat beats the index fund <b>and</b> pays its own principal. The price is concentration "
+      + "risk: a price drop of <b>" + pct1(wipe) + "</b> wipes out your entire equity.");
   } else if(over){
-    text.innerHTML = "Boligen slår indeksfondet på papiret, men koster deg <b>" + kr(Math.abs(cfM))
+    text.innerHTML = L("Boligen slår indeksfondet på papiret, men koster deg <b>" + kr(Math.abs(cfM))
       + " i måneden</b> i egne penger — " + kr(Math.abs(cfM)*12) + " i året du må ha på konto uansett hva som skjer. "
-      + "Et prisfall på <b>" + pct1(wipe) + "</b> sletter hele egenkapitalen.";
+      + "Et prisfall på <b>" + pct1(wipe) + "</b> sletter hele egenkapitalen.",
+      "The flat beats the index fund on paper, but costs you <b>" + kr(Math.abs(cfM))
+      + " a month</b> out of pocket — " + kr(Math.abs(cfM)*12) + " a year you need in the bank whatever happens. "
+      + "A price drop of <b>" + pct1(wipe) + "</b> wipes out the entire equity.");
   } else {
     const mangler = th.indeks!=null ? th.indeks - sim.nettoYield : 0;
     const merLeie = mangler/100 * sim.kost / 12 / Math.max(0.01, 1 - S.ledig/100);
     const lavereKost = th.indeks > 0 ? sim.kost - sim.noi1/(th.indeks/100) : 0;
-    text.innerHTML = "Boligen mangler <b>" + nf1.format(mangler) + " prosentpoeng</b> netto yield på å forsvare seg mot "
+    text.innerHTML = L("Boligen mangler <b>" + nf1.format(mangler) + " prosentpoeng</b> netto yield på å forsvare seg mot "
       + "indeksfondet. Det er <b>" + kr(merLeie) + " mer i leie per måned</b> — eller "
       + (lavereKost > 0 && lavereKost < sim.kost
            ? "<b>" + kr(lavereKost) + " lavere totalpris</b> — altså " + pct1(lavereKost/sim.kost*100) + " under det du betaler nå."
-           : "en pris så mye lavere at kjøpet ikke lar seg forsvare.");
+           : "en pris så mye lavere at kjøpet ikke lar seg forsvare."),
+      "The flat is <b>" + nf1.format(mangler) + " percentage points</b> of net yield short of defending "
+      + "itself against the index fund. That is <b>" + kr(merLeie) + " more rent per month</b> — or "
+      + (lavereKost > 0 && lavereKost < sim.kost
+           ? "<b>" + kr(lavereKost) + " off the total price</b>, i.e. " + pct1(lavereKost/sim.kost*100) + " below what you are paying now."
+           : "a price so much lower that the purchase cannot be defended."));
   }
 
   // formeleksempel
@@ -1621,7 +1687,22 @@ function render(){
 
 function drawCaveats(sim){
   const wipe = sim.V0>0 ? sim.EK/sim.V0*100 : 0;
-  const items = [
+  const items = LANG === "en" ? [
+    ["Risk", "Leverage magnifies both ways.",
+     "At " + S.ltv + " % debt, " + pct1(S.vekstbolig) + " appreciation gives you "
+     + pct1(S.vekstbolig/Math.max(0.01,(1-S.ltv/100))) + " on your equity — but a fall of "
+     + pct1(wipe) + " zeroes it. The index fund at " + pct1(S.indeks) + " is unleveraged. The model compares expectation with expectation, not risk with risk."],
+    ["Concentration", "One flat is not a portfolio.",
+     "One building, one city, one tenant at a time. A global index fund is thousands of companies across dozens of countries. The same expected return does not mean the same spread."],
+    ["Time", "The flat is a job.",
+     "Viewings, contracts, water leaks, debt collection, refurbishing between tenants. Put an hourly rate on that and subtract it from the yield — 20 hours a year at " + kr(600) + " an hour is " + pct2(12000/sim.kost*100) + " of the total price."],
+    ["Liquidity", "The fund sells in a day, the flat in a quarter.",
+     "The " + pct1(S.salgsomk) + " selling cost is in the model. The time it takes, and the fact that you cannot sell half a bathroom, is not."],
+    ["Financing", "The bank sets a limit the model cannot see.",
+     "Norwegian lending rules stress-test you at today's rate plus 3 percentage points, and on total debt against income. You rarely get to buy the fifth flat even when the arithmetic holds."],
+    ["Own home", "Your primary residence plays by different rules.",
+     "Gains are tax free after one year of residence, and the taxable value is set at 25 % of market value against 100 % for a secondary home. This model is about letting, not about where you live."]
+  ] : [
     ["Risiko", "Belåning forstørrer begge veier.",
      "Med " + S.ltv + " % lån gir " + pct1(S.vekstbolig) + " verdistigning deg "
      + pct1(S.vekstbolig/Math.max(0.01,(1-S.ltv/100))) + " på egenkapitalen — men et fall på "
@@ -1674,10 +1755,14 @@ function bidOutputs(){
   $("kCf").textContent      = kFmt(kC);
   $("kFaktisk").textContent = kFmt(medianKjop);
   $("bidNote").innerHTML = kI == null
-    ? "Med disse forutsetningene spiser ledighet og drift hele leien — ingen pris forsvarer seg."
-    : "Med " + pct1(S.ledig) + " ledighet, " + pct1(S.driftandel) + " drift og " + pct1(S.vedl)
-      + " vedlikehold blir <b>k = " + nf0.format(Math.round(kI)) + "</b> ved terskelen på "
-      + pct1(th.indeks) + " — altså <b>" + nf1.format(kI/12) + " ganger årlig bruttoleie</b>.";
+    ? L("Med disse forutsetningene spiser ledighet og drift hele leien — ingen pris forsvarer seg.",
+        "With these assumptions, vacancy and running costs eat the whole rent — no price can be defended.")
+    : L("Med " + pct1(S.ledig) + " ledighet, " + pct1(S.driftandel) + " drift og " + pct1(S.vedl)
+        + " vedlikehold blir <b>k = " + nf0.format(Math.round(kI)) + "</b> ved terskelen på "
+        + pct1(th.indeks) + " — altså <b>" + nf1.format(kI/12) + " ganger årlig bruttoleie</b>.",
+        "At " + pct1(S.ledig) + " vacancy, " + pct1(S.driftandel) + " running costs and " + pct1(S.vedl)
+        + " maintenance, <b>k = " + nf0.format(Math.round(kI)) + "</b> at the " + pct1(th.indeks)
+        + " threshold — that is <b>" + nf1.format(kI/12) + " times the annual gross rent</b>.");
 
   SOV.forEach((r,i) => {
     const [lav, hoy, m2] = r;
@@ -1691,10 +1776,12 @@ function bidOutputs(){
 }
 
 function drawBidTable(){
-  const navn = ["1 soverom","2 soverom","3 soverom","4 soverom"];
+  const navn = LANG === "en" ? ["1 bedroom","2 bedrooms","3 bedrooms","4 bedrooms"]
+                             : ["1 soverom","2 soverom","3 soverom","4 soverom"];
   const inp = (i,c,v,st) => '<input type="number" data-r="'+i+'" data-c="'+c+'" value="'+v+'" step="'+st+'" min="0">';
   let h = '<table class="bid"><thead><tr>'
-    + ['Soverom','Leie fra','Leie til','m²','Maks · slå indeks','kr/m²','Maks · null kontantstrøm','kr/m²']
+    + (LANG === 'en' ? ['Bedrooms','Rent from','Rent to','m²','Max · beat index','kr/m²','Max · break-even','kr/m²']
+                     : ['Soverom','Leie fra','Leie til','m²','Maks · slå indeks','kr/m²','Maks · null kontantstrøm','kr/m²'])
         .map(t=>'<th>'+t+'</th>').join("") + '</tr></thead><tbody>';
   SOV.forEach((r,i) => {
     h += '<tr><td class="sov">'+navn[i]+'</td>'
@@ -1718,9 +1805,9 @@ function drawBidChart(){
   const utelatt = alle.length - dots.length;
 
   const linjer = [
-    {k:kFaktor(th.indeks), c:"var(--s1)", n:"Slå indeksfondet"},
-    {k:kFaktor(th.cf),     c:"var(--s2)", n:"Null kontantstrøm"},
-    {k:kFaktor(th.rente),  c:"var(--s3)", n:"Dekke renten"}
+    {k:kFaktor(th.indeks), c:"var(--s1)", n:L("Slå indeksfondet","Beat the index fund")},
+    {k:kFaktor(th.cf),     c:"var(--s2)", n:L("Null kontantstrøm","Break-even cash flow")},
+    {k:kFaktor(th.rente),  c:"var(--s3)", n:L("Dekke renten","Cover the interest")}
   ];
   const dotMax = dots.length ? Math.max(...dots.map(d=>d.pris)) : 5e6;
   const kC = linjer[1].k || 100;
@@ -1737,11 +1824,11 @@ function drawBidChart(){
   [10000,20000,30000,40000].forEach(v=>{
     g += '<text x="'+X(v).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+nf0.format(v/1000)+' k</text>';
   });
-  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>Månedsleie</text>';
-  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>Maks kjøpesum</text>';
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>'+L('Månedsleie','Monthly rent')+'</text>';
+  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>'+L('Maks kjøpesum','Maximum price')+'</text>';
 
   // soveromsbånd som egne rader over grafen, så overlappende leienivåer ikke kolliderer
-  const navn = ["1 sov","2 sov","3 sov","4 sov"];
+  const navn = LANG === "en" ? ["1 bed","2 bed","3 bed","4 bed"] : ["1 sov","2 sov","3 sov","4 sov"];
   SOV.forEach((r,i)=>{
     const y = 14 + i*14, x0 = X(Math.max(xmin,r[0])), x1 = X(Math.min(xmax,r[1]));
     if(x1 <= x0) return;
@@ -1768,7 +1855,7 @@ function drawBidChart(){
   for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<26) ends[i].y = ends[i-1].y+26;
   ends.forEach(e=>{
     g += '<text x="'+(W-mr+9)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(e.n)+'</text>';
-    g += '<text x="'+(W-mr+9)+'" y="'+(e.y+10).toFixed(1)+'" '+AX+'>'+nf0.format(Math.round(e.k))+' × leien</text>';
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y+10).toFixed(1)+'" '+AX+'>'+nf0.format(Math.round(e.k))+L(' × leien',' × rent')+'</text>';
   });
   g += '<g id="bidCross" opacity="0"><line y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1"/></g>';
 
@@ -1784,29 +1871,30 @@ function drawBidChart(){
       const kI = linjer[0].k, maks = kI ? best.leie*kI : null;
       place(tip, plot, svg, W, best.px, best.py,
         '<div class="t">'+esc(best.n)+'</div>'
-        + tipRow("Betalt", kr(best.pris), best.ok?"var(--good)":"var(--crit)")
-        + tipRow("Leie", kr(best.leie)+"/mnd")
-        + tipRow("Maks · slå indeks", maks==null?"—":kr(maks), "var(--s1)")
-        + tipRow("Netto yield", pct2(best.y)));
+        + tipRow(L("Betalt","Paid"), kr(best.pris), best.ok?"var(--good)":"var(--crit)")
+        + tipRow(L("Leie","Rent"), kr(best.leie)+L("/mnd","/mo"))
+        + tipRow(L("Maks · slå indeks","Max · beat index"), maks==null?"—":kr(maks), "var(--s1)")
+        + tipRow(L("Netto yield","Net yield"), pct2(best.y)));
       return;
     }
     if(sx<ml-6 || sx>W-mr+6){ hide(tip); cg.setAttribute("opacity",0); return; }
     const leie = Math.round((xmin + (sx-ml)/(W-ml-mr)*(xmax-xmin))/500)*500;
     cg.setAttribute("opacity",1); cl.setAttribute("x1",X(leie)); cl.setAttribute("x2",X(leie));
     place(tip, plot, svg, W, X(leie), mt+8,
-      '<div class="t">Leie '+kr(leie)+'/mnd</div>'
+      '<div class="t">'+L('Leie ','Rent ')+kr(leie)+L('/mnd','/mo')+'</div>'
       + linjer.map(l=>tipRow(l.n, l.k?kr(leie*l.k):"—", l.c)).join(""));
   };
   plot.onpointerleave = () => { hide(tip); cg.setAttribute("opacity",0); };
 
   $("legBid").innerHTML =
       linjer.map(l=>'<span class="item"><span class="swatch" style="background:'+l.c+'"></span>'+esc(l.n)+'</span>').join("")
-    + '<span class="item"><span class="dot" style="background:var(--good)"></span><span class="sym">✓</span> Bolig over terskelen</span>'
-    + '<span class="item"><span class="dot" style="background:var(--crit)"></span><span class="sym">✕</span> Bolig under</span>';
-  $("bidChartNote").textContent = "Linjene bruker " + pct1(S.driftandel) + " drift av leien"
-    + (utelatt ? " · " + utelatt + " boliger med leie utenfor skalaen er utelatt" : "");
+    + '<span class="item"><span class="dot" style="background:var(--good)"></span><span class="sym">✓</span> '+L('Bolig over terskelen','Flat above the threshold')+'</span>'
+    + '<span class="item"><span class="dot" style="background:var(--crit)"></span><span class="sym">✕</span> '+L('Bolig under','Flat below')+'</span>';
+  $("bidChartNote").textContent = L("Linjene bruker ","The lines use ") + pct1(S.driftandel)
+    + L(" drift av leien"," running costs of rent")
+    + (utelatt ? " · " + utelatt + L(" boliger med leie utenfor skalaen er utelatt"," flats with rent outside the scale are omitted") : "");
   $("tblBidChart").innerHTML = tableHtml(
-    ["Månedsleie","Slå indeksfondet","Null kontantstrøm","Dekke renten"],
+    [L("Månedsleie","Monthly rent"),L("Slå indeksfondet","Beat the index fund"),L("Null kontantstrøm","Break-even cash flow"),L("Dekke renten","Cover the interest")],
     [10000,15000,20000,25000,30000,35000,40000,45000].map(v =>
       [kr(v)].concat(linjer.map(l => l.k ? kr(v*l.k) : "—"))));
 }
@@ -1852,23 +1940,23 @@ function anvendFinn(d){
   let endret = 0;
 
   if(d.pris){ S.pris = Math.round(d.pris/10000)*10000; S.opp = 0; endret++;
-    rows.push(["Prisantydning", kr(d.pris)]); }
+    rows.push([L("Prisantydning","Asking price"), kr(d.pris)]); }
   else if(d.totalpris && d.omkostning){
     S.pris = Math.round((d.totalpris-d.omkostning)/10000)*10000; endret++;
-    rows.push(["Pris (totalpris − omk.)", kr(S.pris)]); }
+    rows.push([L("Pris (totalpris − omk.)","Price (total − costs)"), kr(S.pris)]); }
 
   if(d.eieform){
     const selveier = /selveier|^eier$/i.test(d.eieform);
     S.dokavg = selveier; endret++;
-    rows.push(["Eieform", d.eieform + (selveier ? " · 2,5 % dok." : " · ingen dok.")]);
+    rows.push([L("Eieform","Ownership"), d.eieform + (selveier ? L(" · 2,5 % dok."," · 2.5 % duty") : L(" · ingen dok."," · no duty"))]);
   }
 
   const felles = d.felles || 0, komm = d.kommunale || 0;
   if(felles || komm){
     S.drift = Math.round(felles + komm/12); endret++;
-    rows.push(["Driftskostnad", kr(S.drift) + "/mnd"]);
-    if(felles) rows.push(["  felleskost", kr(felles) + "/mnd"]);
-    if(komm)   rows.push(["  kommunale", kr(komm) + "/år"]);
+    rows.push([L("Driftskostnad","Running costs"), kr(S.drift) + L("/mnd","/mo")]);
+    if(felles) rows.push([L("  felleskost","  shared costs"), kr(felles) + L("/mnd","/mo")]);
+    if(komm)   rows.push([L("  kommunale","  municipal"), kr(komm) + L("/år","/yr")]);
   }
 
   let leieGjett = null;
@@ -1876,24 +1964,26 @@ function anvendFinn(d){
     const i = Math.min(Math.max(d.soverom, 1), SOV.length) - 1;
     leieGjett = Math.round((SOV[i][0] + SOV[i][1]) / 2 / 500) * 500;
     S.leie = leieGjett; endret++;
-    rows.push([d.soverom + " soverom", "leie gjettet til " + kr(leieGjett) + "/mnd"]);
+    rows.push([d.soverom + L(" soverom"," bedrooms"), L("leie gjettet til ","rent estimated at ") + kr(leieGjett) + L("/mnd","/mo")]);
   }
-  if(d.areal && S.pris) rows.push(["Areal", d.areal + " m² · " + kr(S.pris/d.areal) + "/m²"]);
-  if(d.fellesgjeld) rows.push(["Fellesgjeld", kr(d.fellesgjeld) + " — ikke med i modellen"]);
+  if(d.areal && S.pris) rows.push([L("Areal","Area"), d.areal + " m² · " + kr(S.pris/d.areal) + "/m²"]);
+  if(d.fellesgjeld) rows.push([L("Fellesgjeld","Shared debt"), kr(d.fellesgjeld) + L(" — ikke med i modellen"," — not in the model")]);
 
   if(!endret){
     res.hidden = false;
-    res.innerHTML = '<div class="msg warn">Fant ingen tall å bruke. Er hele annonsen kopiert med?</div>';
+    res.innerHTML = '<div class="msg warn">'+L("Fant ingen tall å bruke. Er hele annonsen kopiert med?","Found no usable numbers. Was the whole listing copied?")+'</div>';
     return;
   }
   picked = -1; $("pick").value = "-1";
-  $("pickHint").textContent = "Hentet fra Finn-annonsen.";
+  $("pickHint").textContent = L("Hentet fra Finn-annonsen.","Taken from the Finn listing.");
   res.hidden = false;
   res.innerHTML = rows.map(([k, v]) =>
       '<div class="r"><span>' + esc(k) + '</span><b>' + esc(v) + '</b></div>').join("")
     + '<div class="msg' + (leieGjett ? ' warn' : ' ok') + '">'
-    + (leieGjett ? "Leien er et anslag fra soveromstabellen — sjekk mot faktiske leiepriser i området."
-                 : "Fant ikke antall soverom, så leien står urørt.")
+    + (leieGjett ? L("Leien er et anslag fra soveromstabellen — sjekk mot faktiske leiepriser i området.",
+                     "The rent is an estimate from the bedroom table — check it against real local rents.")
+                 : L("Fant ikke antall soverom, så leien står urørt.",
+                     "No bedroom count found, so the rent was left alone."))
     + '</div>';
   schedule();
 }
@@ -1902,7 +1992,7 @@ async function importerFinn(){
   const inn = $("finnInn").value.trim(), res = $("finnRes"), btn = $("finnGo");
   if(!inn){
     res.hidden = false;
-    res.innerHTML = '<div class="msg warn">Lim inn en finn.no-lenke eller teksten fra annonsen først.</div>';
+    res.innerHTML = '<div class="msg warn">'+L("Lim inn en finn.no-lenke eller teksten fra annonsen først.","Paste a finn.no link or the listing text first.")+'</div>';
     return;
   }
   const erLenke = /^https?:\/\/\S+$/i.test(inn);
@@ -1910,13 +2000,13 @@ async function importerFinn(){
 
   if(!/finn\.no/i.test(inn)){
     res.hidden = false;
-    res.innerHTML = '<div class="msg warn">Det ser ut som en lenke, men ikke til finn.no.</div>';
+    res.innerHTML = '<div class="msg warn">'+L("Det ser ut som en lenke, men ikke til finn.no.","That looks like a link, but not to finn.no.")+'</div>';
     return;
   }
   btn.setAttribute("aria-busy", "true");
-  btn.textContent = "Henter …";
+  btn.textContent = L("Henter …","Fetching …");
   res.hidden = false;
-  res.innerHTML = '<div class="msg">Henter annonsen …</div>';
+  res.innerHTML = '<div class="msg">'+L("Henter annonsen …","Fetching the listing …")+'</div>';
   try{
     const r = await fetch(FINN_PROXY + inn, { headers: { Accept: "text/plain" } });
     if(!r.ok) throw new Error("status " + r.status);
@@ -1925,12 +2015,13 @@ async function importerFinn(){
     anvendFinn(parseFinn(txt));
   }catch(e){
     res.hidden = false;
-    res.innerHTML = '<div class="msg warn">Fikk ikke hentet annonsen automatisk — '
-      + 'Finn blokkerer direkte oppslag fra nettleseren.</div>'
-      + '<div class="msg">Åpne annonsen, merk alt med ⌘A, kopier med ⌘C og lim inn teksten her i stedet. Det virker alltid.</div>';
+    res.innerHTML = '<div class="msg warn">' + L("Fikk ikke hentet annonsen automatisk — Finn blokkerer direkte oppslag fra nettleseren.",
+        "Could not fetch the listing automatically — Finn blocks direct lookups from the browser.") + '</div>'
+      + '<div class="msg">' + L("Åpne annonsen, merk alt med ⌘A, kopier med ⌘C og lim inn teksten her i stedet. Det virker alltid.",
+        "Open the listing, select all with ⌘A, copy with ⌘C and paste the text here instead. That always works.") + '</div>';
   }finally{
     btn.removeAttribute("aria-busy");
-    btn.textContent = "Fyll ut fra annonsen";
+    btn.textContent = L("Fyll ut fra annonsen","Fill in from listing");
   }
 }
 
@@ -1940,20 +2031,20 @@ async function importerFinn(){
 
   // boligvelger
   const sel = $("pick");
-  sel.innerHTML = '<option value="-1">Medianboligen i utvalget</option>'
+  sel.innerHTML = '<option value="-1">' + L('Medianboligen i utvalget','The median flat of the sample') + '</option>'
     + BOLIGER.map((b,i)=>'<option value="'+i+'">'+esc(b[0])+'</option>').join("");
   sel.onchange = () => {
     picked = parseInt(sel.value,10);
     if(picked < 0){
       Object.assign(S, {pris:DEFAULTS.pris, opp:DEFAULTS.opp, leie:DEFAULTS.leie, drift:DEFAULTS.drift});
-      $("pickHint").textContent = "Medianboligen av de 62.";
+      $("pickHint").textContent = L("Medianboligen av de 62.","The median flat of the 62.");
     } else {
       const b = BOLIGER[picked];
       S.pris  = Math.round(b[1] / (S.dokavg ? 1.025 : 1) / 10000) * 10000;
       S.opp   = 0;
       S.leie  = b[2];
       S.drift = b[3];
-      $("pickHint").textContent = "Totalpris " + kr(b[1]) + " · oppussing er lagt inn i kjøpesummen.";
+      $("pickHint").textContent = L("Totalpris ","Total price ") + kr(b[1]) + L(" · oppussing er lagt inn i kjøpesummen."," · renovation is folded into the price.");
     }
     schedule();
   };
@@ -1970,7 +2061,7 @@ async function importerFinn(){
     S = Object.assign({}, DEFAULTS);
     SOV = SOV_DEFAULT.map(r => r.slice());
     picked = -1; sel.value = "-1";
-    $("pickHint").textContent = "Medianboligen av de 62."; schedule();
+    $("pickHint").textContent = L("Medianboligen av de 62.","The median flat of the 62."); schedule();
   });
 
   $("finnGo").addEventListener("click", importerFinn);
@@ -2011,15 +2102,25 @@ async function importerFinn(){
   $("share").addEventListener("click", async () => {
     writeUrl();
     const btn = $("share"), before = btn.textContent;
-    try{ await navigator.clipboard.writeText(location.href); btn.textContent = "✓ Lenke kopiert"; }
-    catch(e){ btn.textContent = "Kopier fra adressefeltet"; }
+    try{ await navigator.clipboard.writeText(location.href); btn.textContent = L("✓ Lenke kopiert","✓ Link copied"); }
+    catch(e){ btn.textContent = L("Kopier fra adressefeltet","Copy from the address bar"); }
     setTimeout(() => { btn.textContent = before; }, 2200);
   });
 
+  document.querySelectorAll("[data-lang]").forEach(b =>
+    b.addEventListener("click", () => {
+      if(b.dataset.lang === LANG) return;
+      LANG = b.dataset.lang;
+      setLocale();
+      applyLang();
+      render();
+    }));
+
   readUrl();
+  applyLang();
   if(picked >= 0){
     sel.value = String(picked);
-    $("pickHint").textContent = "Totalpris " + kr(BOLIGER[picked][1]) + " · oppussing er lagt inn i kjøpesummen.";
+    $("pickHint").textContent = L("Totalpris ","Total price ") + kr(BOLIGER[picked][1]) + L(" · oppussing er lagt inn i kjøpesummen."," · renovation is folded into the price.");
   }
 
   render();
