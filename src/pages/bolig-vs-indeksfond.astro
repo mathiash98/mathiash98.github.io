@@ -1380,8 +1380,10 @@ function drawKapital(){
   const dNaa = naa.bolig - uten, dBest = best.bolig - uten;
 
   const alle = ok.map(d => d.bolig).concat([uten]);
-  let lo = Math.min(0, ...alle), hi = Math.max(...alle);
-  const pad = (hi-lo)*0.10; hi += pad; lo -= pad*0.4;
+  // aksen starter ved kapitalen du la inn, ikke på null — ellers ligger kurvene
+  // klemt sammen i overkant med tomrom under seg
+  let lo = Math.min(K, ...alle), hi = Math.max(...alle);
+  const spenn = (hi - lo) || 1; hi += spenn*0.10; lo -= spenn*0.13;
   const X = b => ml + (b/90)*(W-ml-mr);
   const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
 
@@ -1406,6 +1408,15 @@ function drawKapital(){
     if(xc - ml > 130)
       g += '<text x="'+(xc-9).toFixed(1)+'" y="'+((mt+H-mb)/2).toFixed(1)+'" text-anchor="end" '+AX+'>'
          + esc(L('for lite egenkapital','not enough equity'))+'</text>';
+  }
+
+  // aksen begynner ikke på null, så det må stå hvor gulvet er: alt over denne
+  // streken er avkastning på kapitalen
+  if(K > lo && K < hi){
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(K).toFixed(1)+'" y2="'+Y(K).toFixed(1)
+       + '" stroke="var(--ink-3)" stroke-width="1.5" opacity=".55" stroke-dasharray="4 3"/>';
+    g += '<text x="'+(ml+8)+'" y="'+(Y(K)-7).toFixed(1)+'" '+AX+' fill="var(--ink-2)">'
+       + esc(L('Innskutt kapital · ','Capital invested · ')+kr(K))+'</text>';
   }
 
   // markør for valgt belåningsgrad
@@ -1461,6 +1472,7 @@ function drawKapital(){
   document.getElementById("legKap").innerHTML =
       '<span class="item"><span class="swatch" style="background:var(--s1)"></span>'+L('Bolig + resten i indeksfond','Flat + the rest in the index fund')+'</span>'
     + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>'+L('Kjøper ikke bolig — hele beløpet i indeksfond','No flat bought — the whole amount in the index fund')+'</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.55"></span>'+L('Innskutt kapital — aksen starter her','Capital invested — the axis starts here')+'</span>'
     + '<span class="item" style="color:var(--ink-3)">'+L('Begge etter skatt ved salg · ','Both after tax on sale · ')+kr(K)+L(' i kapital',' of capital')+'</span>';
 
   // ── oppsummering: hva valget faktisk koster ──────────────────────────
