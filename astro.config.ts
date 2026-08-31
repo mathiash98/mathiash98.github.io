@@ -14,10 +14,6 @@ export default defineConfig({
     icon(),
   ],
   redirects: {
-    "/boligkalkulator": {
-      status: 301,
-      destination: "/bolig-vs-indeksfond",
-    },
     "/posts/[...slug]": {
       status: 301,
       destination: "/blog/[...slug]",
