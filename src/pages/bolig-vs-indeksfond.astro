@@ -753,11 +753,12 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
       <div class="head">
         <div class="eyebrow" data-en="Fixed capital">Fast egenkapital</div>
         <h2 data-en="Into the mortgage, or into the fund?">Inn i lånet, eller inn i fondet?</h2>
-        <p data-en="The amount is fixed now. Every krone you do not tie up as equity in the flat sits in the index fund beside it, and the alternative is the same kroner, all of them in the fund. That makes the two curves comparable in kroner right across the axis: low leverage is a lot in the flat and little in the fund, high leverage the other way round. Below the lowest loan-to-value your money stretches to, the flat cannot be bought at all — that stretch is shaded.">Nå er beløpet låst. Hver krone du ikke binder som egenkapital i boligen, står i
-        indeksfondet ved siden av — og alternativet er de samme kronene, alle sammen i fondet. Da kan
-        de to kurvene sammenlignes i kroner tvers over aksen: lav belåning er mye i boligen og lite i
-        fondet, høy belåning motsatt. Under den laveste belåningsgraden pengene rekker til, kan boligen
-        ikke kjøpes i det hele tatt — den strekningen er skravert.</p>
+        <p data-en="The amount is fixed now. Every krone you do not tie up as equity in the flat sits in the index fund beside it — and the alternative is not buying at all, with the whole amount in the fund. That option does not care what the loan-to-value is, so it is a straight line across the chart, while the flat moves: low leverage is a lot in the flat and little in the fund, high leverage the other way round. Below the lowest loan-to-value your money stretches to, the flat cannot be bought at all — that stretch is shaded.">Nå er beløpet låst. Hver krone du ikke binder som egenkapital i boligen, står i
+        indeksfondet ved siden av — og alternativet er å <em>ikke</em> kjøpe, med hele beløpet i fondet.
+        Det alternativet bryr seg ikke om hva belåningsgraden er, så det er en rett strek tvers over
+        grafen, mens boligen flytter seg: lav belåning er mye i boligen og lite i fondet, høy belåning
+        motsatt. Under den laveste belåningsgraden pengene rekker til, kan boligen ikke kjøpes i det
+        hele tatt — den strekningen er skravert.</p>
       </div>
       <div class="card">
         <div class="caption">
@@ -1157,6 +1158,20 @@ function terskler(o){
   };
 }
 
+/* Alternativet til å kjøpe er å la være. Da står hele beløpet i indeksfondet
+   hele eiertiden, uten innskudd underveis — og det tallet avhenger ikke av
+   belåningsgraden i det hele tatt. Samme regnestykke som fondssporet i motoren. */
+function fondAlene(K, N){
+  const R = S.indeks/100, fs = S.formue ? S.formuesats/100 : 0;
+  let fond = K, skjerm = 0;
+  for(let t=1; t<=N; t++){
+    skjerm += SKJERMING * K;
+    fond = fond*(1+R) - fs * Math.max(0, 0.8*fond);
+  }
+  const gev = S.skatt ? T_GEV_FOND * Math.max(0, fond - K - skjerm) : 0;
+  return fond - gev;
+}
+
 /* Fast egenkapital: hva boligen krever, hva som blir til overs, og den laveste
    belåningsgraden beløpet i det hele tatt rekker til. */
 function kapitalOppsett(o){
@@ -1331,10 +1346,12 @@ function drawKapital(){
   const info = kapitalOppsett();
   const K = S.ektot, N = Math.round(S.horisont);
   const xs = []; for(let b=0; b<=90; b++) xs.push(b);
+  const uten = fondAlene(K, N);                 // kjøper ikke bolig
   kapData = xs.map(b => {
     const sim = simuler({ltv:b}), a = sim.siste;
     return {b, mulig: sim.EK <= K + 0.5, ek: sim.EK, rest: Math.max(0, K - sim.EK),
-            bolig: a ? a.bolig : 0, fond: a ? a.fondNetto : 0};
+            bolig: a ? a.bolig : 0, fond: uten,
+            innskutt: a ? Math.max(0, a.innskuttSum - sim.KAP) : 0};
   });
   const ok = kapData.filter(d => d.mulig);
 
@@ -1360,9 +1377,9 @@ function drawKapital(){
   const naa  = kapData.reduce((b,d)=>Math.abs(d.b-S.ltv)<Math.abs(b.b-S.ltv)?d:b, kapData[0]);
   const ref  = naa.mulig ? naa : ok[0];          // fondssporet må leses av et mulig punkt
   const best = ok.reduce((b,d)=>d.bolig>b.bolig?d:b, ok[0]);
-  const dNaa = naa.bolig - naa.fond, dBest = best.bolig - best.fond;
+  const dNaa = naa.bolig - uten, dBest = best.bolig - uten;
 
-  const alle = ok.flatMap(d => [d.bolig, d.fond]);
+  const alle = ok.map(d => d.bolig).concat([uten]);
   let lo = Math.min(0, ...alle), hi = Math.max(...alle);
   const pad = (hi-lo)*0.10; hi += pad; lo -= pad*0.4;
   const X = b => ml + (b/90)*(W-ml-mr);
@@ -1396,20 +1413,20 @@ function drawKapital(){
 
   // gapet mellom sporene, i fargen til den som vinner ved den valgte belåningen
   g += '<path d="' + ok.map((d,i)=>(i?"L":"M")+X(d.b).toFixed(1)+" "+Y(d.bolig).toFixed(1)).join(" ")
-    + " " + ok.slice().reverse().map(d=>"L"+X(d.b).toFixed(1)+" "+Y(d.fond).toFixed(1)).join(" ")
-    + ' Z" fill="' + ((ref.bolig - ref.fond) >= 0 ? "var(--s1)" : "var(--s2)") + '" opacity=".10"/>';
+    + " L"+X(ok[ok.length-1].b).toFixed(1)+" "+Y(uten).toFixed(1)+" L"+X(ok[0].b).toFixed(1)+" "+Y(uten).toFixed(1)
+    + ' Z" fill="' + ((ref.bolig - uten) >= 0 ? "var(--s1)" : "var(--s2)") + '" opacity=".10"/>';
 
-  const linje = (key, farge) => '<path d="' + ok.map((d,i)=>(i?"L":"M")+X(d.b).toFixed(1)+" "+Y(d[key]).toFixed(1)).join(" ")
-    + '" fill="none" stroke="'+farge+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
-  g += linje("fond", "var(--s2)");
-  g += linje("bolig", "var(--s1)");
+  // fondet bryr seg ikke om belåningsgraden — linja er vannrett over hele aksen
+  g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(uten).toFixed(1)+'" y2="'+Y(uten).toFixed(1)
+     + '" stroke="var(--s2)" stroke-width="2" stroke-linecap="round"/>';
+  g += '<path d="' + ok.map((d,i)=>(i?"L":"M")+X(d.b).toFixed(1)+" "+Y(d.bolig).toFixed(1)).join(" ")
+    + '" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
 
   const sist = ok[ok.length-1];
-  [["bolig","var(--s1)"],["fond","var(--s2)"]].forEach(([k,c])=>{
-    g += '<circle cx="'+X(sist.b).toFixed(1)+'" cy="'+Y(sist[k]).toFixed(1)+'" r="4.5" fill="'+c+'" stroke="var(--surface)" stroke-width="2"/>';
-  });
+  g += '<circle cx="'+X(sist.b).toFixed(1)+'" cy="'+Y(sist.bolig).toFixed(1)+'" r="4.5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/>';
+  g += '<circle cx="'+(W-mr).toFixed(1)+'" cy="'+Y(uten).toFixed(1)+'" r="4.5" fill="var(--s2)" stroke="var(--surface)" stroke-width="2"/>';
   const ends = [{y:Y(sist.bolig), n:L("Bolig + rest i fond","Flat + rest in fund"), c:"var(--s1)", v:sist.bolig},
-                {y:Y(sist.fond),  n:L("Alt i indeksfond","All in the index fund"),  c:"var(--s2)", v:sist.fond}].sort((a,b)=>a.y-b.y);
+                {y:Y(uten),       n:L("Kjøper ikke bolig","No flat bought"),        c:"var(--s2)", v:uten}].sort((a,b)=>a.y-b.y);
   if(ends[1].y - ends[0].y < 17) ends[1].y = ends[0].y + 17;
   ends.forEach(e=>{
     g += '<text x="'+(W-mr+9)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(e.n)+'</text>';
@@ -1426,14 +1443,15 @@ function drawKapital(){
     const b = Math.round(Math.max(0,Math.min(90,(sx-ml)/(W-ml-mr)*90)));
     const d = kapData.find(x=>x.b===b); if(!d) return;
     cg.setAttribute("opacity",1); cl.setAttribute("x1",X(b)); cl.setAttribute("x2",X(b));
-    const diff = d.bolig - d.fond;
+    const diff = d.bolig - uten;
     place(tip, plot, svg, W, X(b), mt+8,
       '<div class="t">'+L('Belåningsgrad ','Loan-to-value ')+b+' %</div>'
       + (d.mulig
           ? tipRow(L("Egenkapital i bolig","Equity in the flat"), kr(d.ek))
             + tipRow(L("Står i indeksfond","Left in the index fund"), kr(d.rest))
+            + tipRow(L("Fylt på underveis","Topped up along the way"), kr(d.innskutt))
             + tipRow(L("Bolig + rest i fond","Flat + rest in fund"), krS(d.bolig), "var(--s1)")
-            + tipRow(L("Alt i indeksfond","All in the index fund"), krS(d.fond), "var(--s2)")
+            + tipRow(L("Kjøper ikke bolig","No flat bought"), krS(uten), "var(--s2)")
             + tipRow(L("Differanse","Difference"), (diff>=0?"+":"−")+kr(Math.abs(diff)))
           : tipRow(L("Krever egenkapital","Equity required"), kr(d.ek))
             + tipRow(L("Du mangler","You are short"), kr(Math.max(0, d.ek - K)))));
@@ -1442,7 +1460,7 @@ function drawKapital(){
 
   document.getElementById("legKap").innerHTML =
       '<span class="item"><span class="swatch" style="background:var(--s1)"></span>'+L('Bolig + resten i indeksfond','Flat + the rest in the index fund')+'</span>'
-    + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>'+L('Hele beløpet i indeksfond','The whole amount in the index fund')+'</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>'+L('Kjøper ikke bolig — hele beløpet i indeksfond','No flat bought — the whole amount in the index fund')+'</span>'
     + '<span class="item" style="color:var(--ink-3)">'+L('Begge etter skatt ved salg · ','Both after tax on sale · ')+kr(K)+L(' i kapital',' of capital')+'</span>';
 
   // ── oppsummering: hva valget faktisk koster ──────────────────────────
@@ -1450,18 +1468,19 @@ function drawKapital(){
   const tile = (k,v,cls,sub) => '<div class="h"><span class="k">'+esc(k)+'</span><span class="v'
     + (cls?" "+cls:"")+'">'+v+'</span><span class="s">'+sub+'</span></div>';
   document.getElementById("kapRad").innerHTML =
-      tile(L("Alt i indeksfond","All in the index fund"), mkr(ref.fond), "",
-           esc(kr(K)) + L(" pluss de samme innskuddene, ved " + ref.b + " % belåning",
-                          " plus the same deposits, read at " + ref.b + " % leverage"))
+      tile(L("Kjøper ikke bolig","No flat bought"), mkr(uten), "",
+           esc(kr(K)) + L(" i indeksfond i " + N + " år"," in the index fund for " + N + " years"))
     + tile(L("Ved " + S.ltv + " % belåning","At " + S.ltv + " % leverage"),
            naa.mulig ? (dNaa>=0?"+":"−")+mkr(Math.abs(dNaa)) : "—",
            naa.mulig ? (dNaa>=0?"pos":"neg") : "",
            naa.mulig
              ? esc(kr(naa.ek)) + L(" i boligen · "," in the flat · ") + esc(kr(naa.rest)) + L(" i fond"," in the fund")
+               + (naa.innskutt > 0 ? L(" · " + kr(naa.innskutt) + " fylt på underveis",
+                                       " · " + kr(naa.innskutt) + " topped up along the way") : "")
              : L("egenkapitalen rekker ikke hit","your equity does not reach this far"))
     + tile(dBest >= 0 ? L("Best belåningsgrad","Best loan-to-value") : L("Minst tap mot fondet","Smallest gap to the fund"),
            best.b + " %", "",
-           esc(mkr(best.bolig)) + " · " + (dBest>=0?"+":"−") + esc(mkr(Math.abs(dBest))) + L(" mot fondet"," against the fund"))
+           esc(mkr(best.bolig)) + " · " + (dBest>=0?"+":"−") + esc(mkr(Math.abs(dBest))) + L(" mot å la være"," against not buying"))
     + tile(info.ltvMin > 0.5 ? L("Laveste du får til","Lowest you can manage") : L("Kontantkjøp","Cash purchase"),
            lavest.b + " %", "",
            info.ltvMin > 0.5
@@ -1472,7 +1491,7 @@ function drawKapital(){
     L("Egenkapital ","Capital ") + kr(K) + L(" · eiertid "," · holding period ") + N + L(" år"," years")
     + L(" · rente "," · rate ") + pct1(S.rente) + L(" · indeksfond "," · index fund ") + pct1(S.indeks);
 
-  const kryss = ok.find((d,i)=> i>0 && Math.sign(d.bolig-d.fond) !== Math.sign(ok[i-1].bolig-ok[i-1].fond));
+  const kryss = ok.find((d,i)=> i>0 && Math.sign(d.bolig-uten) !== Math.sign(ok[i-1].bolig-uten));
   document.getElementById("kapFot").innerHTML = L(
     "Terskelkurvene over flytter seg ikke av dette: kravet til yield blir det samme enten den ubrukte "
     + "kapitalen står i fond eller ikke, fordi de samme kronene får den samme avkastningen i begge "
@@ -1481,6 +1500,11 @@ function drawKapital(){
     + " Det som endrer seg er kronene — hvor mye du sitter igjen med, og hvor stor del av det som henger "
     + "på én bolig."
     + (kryss ? " Her snur regnestykket ved <b style=\"color:var(--ink)\">" + kryss.b + " % belåning</b>." : "")
+    + (naa.mulig && naa.innskutt > 0
+        ? " Merk at boligen krever <b style=\"color:var(--ink)\">" + kr(naa.innskutt) + "</b> fylt på fra "
+          + "lønna gjennom eiertiden ved " + naa.b + " % belåning. Fondsalternativet krever ingenting, "
+          + "så de kronene er penger boligkurven har fått og fondskurven ikke."
+        : "")
     + " Kurven sier ingenting om risiko: den høyeste belåningen er nesten alltid det høyeste tallet, og "
     + "samtidig den eneste måten å tape hele beløpet på.",
     "The threshold curves above do not move because of this: the yield requirement is the same whether "
@@ -1488,15 +1512,20 @@ function drawKapital(){
     + (S.formue ? " (With wealth tax on they shift slightly, because that tax has to be paid in cash.)" : "")
     + " What changes is the kroner — how much you end up with, and how much of it hangs on one flat."
     + (kryss ? " Here the arithmetic turns at <b style=\"color:var(--ink)\">" + kryss.b + " % leverage</b>." : "")
+    + (naa.mulig && naa.innskutt > 0
+        ? " Note that at " + naa.b + " % leverage the flat needs <b style=\"color:var(--ink)\">" + kr(naa.innskutt)
+          + "</b> topped up out of your salary over the holding period. The fund option needs nothing, so "
+          + "those kroner are money the flat curve has received and the fund curve has not."
+        : "")
     + " The curve says nothing about risk: the highest leverage is nearly always the highest number, and "
     + "at the same time the only way to lose the whole amount.");
 
   document.getElementById("tblKap").innerHTML = tableHtml(
     [L("Belåningsgrad","Loan-to-value"),L("Egenkapital i bolig","Equity in the flat"),L("I indeksfond","In the index fund"),
-     L("Bolig + fond","Flat + fund"),L("Alt i fond","All in the fund"),L("Differanse","Difference")],
+     L("Fylt på underveis","Topped up"),L("Bolig + fond","Flat + fund"),L("Kjøper ikke bolig","No flat bought"),L("Differanse","Difference")],
     kapData.filter(d=>d.b%10===0).map(d=> d.mulig
-      ? [d.b+" %", kr(d.ek), kr(d.rest), krS(d.bolig), krS(d.fond), krS(d.bolig-d.fond)]
-      : [d.b+" %", kr(d.ek), "—", L("ikke mulig","not possible"), "—", "—"]));
+      ? [d.b+" %", kr(d.ek), kr(d.rest), kr(d.innskutt), krS(d.bolig), krS(uten), krS(d.bolig-uten)]
+      : [d.b+" %", kr(d.ek), "—", "—", L("ikke mulig","not possible"), krS(uten), "—"]));
 }
 
 /* ═══ 7. Graf 2 — dine 62 boliger ════════════════════════════════════════ */
