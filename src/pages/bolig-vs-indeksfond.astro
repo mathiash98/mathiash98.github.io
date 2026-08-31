@@ -183,6 +183,13 @@ a{color:var(--accent)}
 .field .top{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
 .field label{font-size:13px; color:var(--ink-2); font-weight:500}
 .field .val{font-family:var(--mono); font-size:13px; font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums}
+/* tallfeltene er skrivbare: usynlige til du peker på dem, felt når du står i dem */
+input.val{box-sizing:border-box; background:transparent; border:1px solid transparent; border-radius:6px;
+  text-align:right; padding:2px 5px; margin:-3px -6px; flex:none; cursor:text}
+input.val:hover{border-color:var(--line-2)}
+input.val:focus{outline:none; border-color:var(--accent); background:var(--surface);
+  box-shadow:0 0 0 3px var(--accent-soft)}
+input.val.bad{border-color:var(--crit); color:var(--crit)}
 .field .hint{font-size:11.5px; color:var(--ink-3); line-height:1.4}
 
 input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:18px; background:transparent; margin:0; display:block}
@@ -206,6 +213,7 @@ select{font-family:var(--sans); font-variant-numeric:normal}
 .switch input:checked + .track::after{transform:translateX(17px); background:var(--accent-ink)}
 .switch input:focus-visible + .track{outline:2px solid var(--accent); outline-offset:2px}
 
+[hidden]{display:none !important}
 .chips{display:flex; flex-wrap:wrap; gap:6px}
 .chip{
   font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.03em;
@@ -361,7 +369,7 @@ tbody td:first-child{font-family:var(--sans); color:var(--ink)}
   background:var(--surface-2); flex-wrap:wrap}
 .bidbar label{font-size:13px; color:var(--ink-2); font-weight:500; white-space:nowrap}
 .bidbar input[type=range]{flex:1 1 180px; min-width:150px}
-.bidbar .val{font-family:var(--mono); font-size:13px; font-weight:500; font-variant-numeric:tabular-nums; white-space:nowrap}
+.bidbar .val{font-family:var(--mono); font-size:13px; font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums; white-space:nowrap}
 .bidbar .hint{font-size:11.5px; color:var(--ink-3); flex:1 1 100%}
 
 table.bid td, table.bid th{padding:9px 11px}
@@ -518,29 +526,29 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
           <div class="hint" id="pickHint">Medianboligen av de 62.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="pris" data-en="Purchase price">Kjøpesum</label><span class="val" id="prisV"></span></div>
+          <div class="top"><label for="pris" data-en="Purchase price">Kjøpesum</label><input class="val" id="prisV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="pris" min="500000" max="20000000" step="50000">
         </div>
         <div class="field">
-          <div class="top"><label for="opp" data-en="Renovation">Oppussing</label><span class="val" id="oppV"></span></div>
+          <div class="top"><label for="opp" data-en="Renovation">Oppussing</label><input class="val" id="oppV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="opp" min="0" max="3000000" step="25000">
         </div>
         <div class="field">
-          <div class="top"><label for="leie" data-en="Rent per month">Leie per måned</label><span class="val" id="leieV"></span></div>
+          <div class="top"><label for="leie" data-en="Rent per month">Leie per måned</label><input class="val" id="leieV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="leie" min="0" max="150000" step="500">
         </div>
         <div class="field">
-          <div class="top"><label for="drift" data-en="Running costs per month">Driftskostnad per måned</label><span class="val" id="driftV"></span></div>
+          <div class="top"><label for="drift" data-en="Running costs per month">Driftskostnad per måned</label><input class="val" id="driftV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="drift" min="0" max="25000" step="100">
           <div class="hint" data-en="Shared costs, municipal fees, insurance, electricity for common areas.">Felleskostnader, kommunale avgifter, forsikring, strøm på fellesareal.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="ledig" data-en="Vacancy">Ledighet</label><span class="val" id="ledigV"></span></div>
+          <div class="top"><label for="ledig" data-en="Vacancy">Ledighet</label><input class="val" id="ledigV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="ledig" min="0" max="25" step="1">
           <div class="hint" data-en="8 % ≈ one empty month per year.">8 % ≈ én tom måned i året.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="vedl" data-en="Maintenance per year">Vedlikehold per år</label><span class="val" id="vedlV"></span></div>
+          <div class="top"><label for="vedl" data-en="Maintenance per year">Vedlikehold per år</label><input class="val" id="vedlV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="vedl" min="0" max="2" step="0.1">
           <div class="hint" data-en="Of the property value. The most common reason a yield looks better on paper than in your account.">Av boligverdien. Den vanligste grunnen til at yield ser bedre ut på papiret enn på konto.</div>
         </div>
@@ -555,11 +563,26 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
       <summary data-en="Financing">Finansiering</summary>
       <div class="body">
         <div class="field">
-          <div class="top"><label for="ltv" data-en="Loan-to-value">Belåningsgrad</label><span class="val" id="ltvV"></span></div>
+          <div class="top"><label for="ltv" data-en="Loan-to-value">Belåningsgrad</label><input class="val" id="ltvV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="ltv" min="0" max="90" step="1">
         </div>
+        <label class="switch" for="restfond">
+          <span style="font-size:13px;color:var(--ink-2)" data-en="Remaining equity into the index fund">Resterende egenkapital i indeksfond</span>
+          <input type="checkbox" id="restfond"><span class="track"></span>
+        </label>
+        <div class="hint" style="font-size:11.5px;color:var(--ink-3);line-height:1.4" data-en="You have a fixed amount. What you do not tie up as equity in the flat sits in the index fund beside it — so both options work with exactly the same capital, whatever the loan-to-value.">Du har et fast beløp. Det du ikke binder som egenkapital i boligen, står i indeksfond ved siden av — så begge alternativene jobber med nøyaktig samme kapital uansett belåningsgrad.</div>
+        <div class="field" id="ektotField" hidden>
+          <div class="top"><label for="ektot" data-en="Capital available">Egenkapital tilgjengelig</label><input class="val" id="ektotV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
+          <input type="range" id="ektot" min="0" max="15000000" step="50000">
+          <div class="chips" style="margin-top:2px">
+            <button class="chip" data-ek="1000000" data-en="1 m">1 mill.</button>
+            <button class="chip" data-ek="2000000" data-en="2 m">2 mill.</button>
+            <button class="chip" data-ek="kost" data-en="Whole price">Hele kjøpesummen</button>
+          </div>
+          <div class="hint" id="ektotHint"></div>
+        </div>
         <div class="field">
-          <div class="top"><label for="rente" data-en="Nominal interest rate">Nominell rente</label><span class="val" id="renteV"></span></div>
+          <div class="top"><label for="rente" data-en="Nominal interest rate">Nominell rente</label><input class="val" id="renteV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="rente" min="1" max="10" step="0.1">
           <div class="chips" style="margin-top:6px">
             <button class="chip" data-rente="2.5" data-en="2.5 % · 2021">2,5 % · 2021</button>
@@ -568,7 +591,7 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
           </div>
         </div>
         <div class="field">
-          <div class="top"><label for="lopetid" data-en="Loan term">Nedbetalingstid</label><span class="val" id="lopetidV"></span></div>
+          <div class="top"><label for="lopetid" data-en="Loan term">Nedbetalingstid</label><input class="val" id="lopetidV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="lopetid" min="5" max="40" step="1">
         </div>
         <label class="switch" for="avdragsfri">
@@ -582,25 +605,25 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
       <summary data-en="Market">Marked</summary>
       <div class="body">
         <div class="field">
-          <div class="top"><label for="vekstbolig" data-en="Property appreciation">Verdistigning bolig</label><span class="val" id="vekstboligV"></span></div>
+          <div class="top"><label for="vekstbolig" data-en="Property appreciation">Verdistigning bolig</label><input class="val" id="vekstboligV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="vekstbolig" min="-2" max="8" step="0.1">
           <div class="hint" data-en="Nominal per year. Inflation alone is about 2.5 %.">Nominelt per år. Inflasjonen alene er ~2,5 %.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="indeks" data-en="Index fund return">Avkastning indeksfond</label><span class="val" id="indeksV"></span></div>
+          <div class="top"><label for="indeks" data-en="Index fund return">Avkastning indeksfond</label><input class="val" id="indeksV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="indeks" min="0" max="14" step="0.1">
           <div class="hint" data-en="Nominal per year, after management fees.">Nominelt per år, etter forvaltningshonorar.</div>
         </div>
         <div class="field">
-          <div class="top"><label for="kpi" data-en="Rent and cost inflation">Leie- og kostnadsvekst</label><span class="val" id="kpiV"></span></div>
+          <div class="top"><label for="kpi" data-en="Rent and cost inflation">Leie- og kostnadsvekst</label><input class="val" id="kpiV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="kpi" min="0" max="6" step="0.1">
         </div>
         <div class="field">
-          <div class="top"><label for="horisont" data-en="Holding period">Eiertid</label><span class="val" id="horisontV"></span></div>
+          <div class="top"><label for="horisont" data-en="Holding period">Eiertid</label><input class="val" id="horisontV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="horisont" min="3" max="30" step="1">
         </div>
         <div class="field">
-          <div class="top"><label for="salgsomk" data-en="Selling costs">Salgsomkostninger</label><span class="val" id="salgsomkV"></span></div>
+          <div class="top"><label for="salgsomk" data-en="Selling costs">Salgsomkostninger</label><input class="val" id="salgsomkV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="salgsomk" min="0" max="6" step="0.1">
         </div>
       </div>
@@ -622,7 +645,7 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
           <input type="checkbox" id="formue"><span class="track"></span>
         </label>
         <div class="field">
-          <div class="top"><label for="formuesats" data-en="Wealth tax rate">Formuesskattesats</label><span class="val" id="formuesatsV"></span></div>
+          <div class="top"><label for="formuesats" data-en="Wealth tax rate">Formuesskattesats</label><input class="val" id="formuesatsV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
           <input type="range" id="formuesats" min="0" max="1.5" step="0.05">
           <div class="hint" data-en="A secondary home is valued at 100 % of market value, equity funds at 80 %. Works against the flat.">Sekundærbolig verdsettes til 100 % av markedsverdi, aksjefond til 80 %. Slår i boligens disfavør.</div>
         </div>
@@ -708,6 +731,11 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
         indeksfondet er det <em>laveste</em> kravet når renten er lav — å få boligen til å betale
         sine egne avdrag er det klart høyeste. Mellom kurvene ligger boliger som lønner seg på papiret,
         men som krever at du sprøyter inn penger hver måned i mange år.</p>
+        <p data-en="Note what the curves do &lt;em&gt;not&lt;/em&gt; answer. They compare a krone against a krone, so every loan-to-value along the axis puts a different amount of money to work. If instead you have a fixed sum — say one million — and the question is whether it belongs in the mortgage or in the fund, switch on &lt;b style=&quot;color:var(--ink)&quot;&gt;Remaining equity into the index fund&lt;/b&gt; in the panel. The amount is then locked, and the chapter below answers that question in kroner.">Legg merke til hva kurvene <em>ikke</em> svarer på. De sammenligner krone mot krone, så
+        hver belåningsgrad langs aksen setter ulike beløp i arbeid. Har du i stedet en fast sum — si
+        én million — og spørsmålet er om den hører hjemme i lånet eller i fondet, slår du på
+        <b style="color:var(--ink)">Resterende egenkapital i indeksfond</b> i panelet. Da låses beløpet,
+        og kapittelet under svarer på det i kroner.</p>
       </div>
       <div class="card">
         <div class="caption">
@@ -718,6 +746,30 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
         <div class="legend" id="legLtv"></div>
         <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblLtv"></div></details>
       </div>
+    </section>
+
+    <!-- 2b. egenkapitalvalget -->
+    <section class="section" id="kapSection" hidden>
+      <div class="head">
+        <div class="eyebrow" data-en="Fixed capital">Fast egenkapital</div>
+        <h2 data-en="Into the mortgage, or into the fund?">Inn i lånet, eller inn i fondet?</h2>
+        <p data-en="The amount is fixed now. Every krone you do not tie up as equity in the flat sits in the index fund beside it, and the alternative is the same kroner, all of them in the fund. That makes the two curves comparable in kroner right across the axis: low leverage is a lot in the flat and little in the fund, high leverage the other way round. Below the lowest loan-to-value your money stretches to, the flat cannot be bought at all — that stretch is shaded.">Nå er beløpet låst. Hver krone du ikke binder som egenkapital i boligen, står i
+        indeksfondet ved siden av — og alternativet er de samme kronene, alle sammen i fondet. Da kan
+        de to kurvene sammenlignes i kroner tvers over aksen: lav belåning er mye i boligen og lite i
+        fondet, høy belåning motsatt. Under den laveste belåningsgraden pengene rekker til, kan boligen
+        ikke kjøpes i det hele tatt — den strekningen er skravert.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3 data-en="Wealth at the end of the holding period vs loan-to-value">Formue ved slutten av eiertiden mot belåningsgrad</h3>
+          <span class="note" id="kapNote"></span>
+        </div>
+        <div class="plot" id="plotKap"><div class="tip" id="tipKap"></div></div>
+        <div class="legend" id="legKap"></div>
+        <div class="horisont" id="kapRad"></div>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblKap"></div></details>
+      </div>
+      <p style="margin-top:14px; color:var(--ink-3); font-size:13px; max-width:66ch" id="kapFot"></p>
     </section>
 
     <!-- 3. porteføljen -->
@@ -782,7 +834,7 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
         <div class="bidbar">
           <label for="driftandel" data-en="Running costs as a share of rent">Driftskostnader som andel av leien</label>
           <input type="range" id="driftandel" min="0" max="45" step="0.5">
-          <span class="val" id="driftandelV"></span>
+          <input class="val" id="driftandelV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi">
           <span class="hint" data-en="Shared costs, municipal fees, insurance and electricity. The median in the sample is 17.4 %.">Felleskostnader, kommunale avgifter, forsikring og strøm. Medianen i utvalget er 17,4 %.</span>
         </div>
       </div>
@@ -979,7 +1031,7 @@ const mkr  = v => { const a=Math.abs(v);
 /* ═══ 3. Tilstand ════════════════════════════════════════════════════════ */
 const DEFAULTS = {
   pris:3400000, opp:0, leie:19000, drift:3200, ledig:8, vedl:0.7, dokavg:true,
-  ltv:80, rente:5.0, lopetid:25, avdragsfri:false,
+  ltv:80, rente:5.0, lopetid:25, avdragsfri:false, restfond:false, ektot:2000000,
   vekstbolig:3.5, indeks:7.0, kpi:2.5, horisont:15, salgsomk:2.5,
   skatt:true, formue:false, formuesats:1.0, driftandel:17
 };
@@ -1001,15 +1053,21 @@ function simuler(o){
   const V0    = p.pris + p.opp;                                  // markedsverdi ved kjøp
   const kost  = p.pris * (1 + (p.dokavg ? 0.025 : 0)) + p.opp;   // totalpris / kostpris
   const laan0 = Math.min(p.ltv/100 * V0, kost);
-  const EK    = kost - laan0;
+  const EK    = kost - laan0;                                    // bundet i boligen
+  // Med «resterende egenkapital i fond» er beløpet du stiller med låst: det som ikke
+  // går inn som egenkapital står i indeksfond fra dag én, og fondssporet får nøyaktig
+  // den samme totalkapitalen. Rekker beløpet ikke til egenkapitalen, faller vi tilbake
+  // til EK — da er sammenligningen fortsatt krone mot krone.
+  const KAP   = p.restfond ? Math.max(p.ektot, EK) : EK;
+  const rest  = KAP - EK;
   const r     = p.rente/100, g = p.vekstbolig/100, R = p.indeks/100;
   const kpi   = p.kpi/100, v = p.ledig/100, N = Math.round(p.horisont);
   const fs    = p.formue ? p.formuesats/100 : 0;
   const sk    = p.skatt;
   const ann   = p.avdragsfri ? 0 : annuitet(r, p.lopetid, laan0);
 
-  let gjeld = laan0, side = 0, sideBasis = 0, sideSkjerm = 0;
-  let fond = EK, fondBasis = EK, fondSkjerm = 0;
+  let gjeld = laan0, side = rest, sideBasis = rest, sideSkjerm = 0;
+  let fond = KAP, fondBasis = KAP, fondSkjerm = 0;
 
   const aar = [];
   for(let t=1; t<=N; t++){
@@ -1054,13 +1112,13 @@ function simuler(o){
     });
   }
   // kumulativt innskutt
-  let sum = EK;
+  let sum = KAP;
   aar.forEach(a => { sum += a.innskudd; a.innskuttSum = sum; });
 
   const sisteAar = aar[aar.length-1] || null;
   const noi1 = p.leie*12*(1-v) - (p.drift*12 + p.vedl/100 * V0);
   return {
-    p, V0, kost, laan0, EK, ann, aar, siste: sisteAar,
+    p, V0, kost, laan0, EK, KAP, rest, ann, aar, siste: sisteAar,
     nettoYield: kost > 0 ? noi1/kost*100 : 0,
     bruttoYield: kost > 0 ? p.leie*12/kost*100 : 0,
     noi1
@@ -1096,6 +1154,21 @@ function terskler(o){
     indeks: slaaIndeks===null?null:yieldAvLeie(slaaIndeks,o),
     cf:     nullCf===null?null:yieldAvLeie(nullCf,o),
     rente:  dekkRente===null?null:yieldAvLeie(dekkRente,o)
+  };
+}
+
+/* Fast egenkapital: hva boligen krever, hva som blir til overs, og den laveste
+   belåningsgraden beløpet i det hele tatt rekker til. */
+function kapitalOppsett(o){
+  const p  = Object.assign({}, S, o||{});
+  const V0 = p.pris + p.opp;
+  const kost = p.pris*(1+(p.dokavg?0.025:0)) + p.opp;
+  const EK = kost - Math.min(p.ltv/100*V0, kost);
+  return {
+    paa: !!p.restfond, K: p.ektot, kost, V0, EK,
+    rest: Math.max(0, p.ektot - EK),
+    mangler: Math.max(0, EK - p.ektot),
+    ltvMin: V0 > 0 ? Math.max(0, Math.min(100, (kost - p.ektot)/V0*100)) : 0
   };
 }
 
@@ -1170,6 +1243,17 @@ function drawLtv(){
   });
   g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>'+L('Belåningsgrad','Loan-to-value')+'</text>';
 
+  // med fast egenkapital er de laveste belåningsgradene ikke finansierbare
+  const kapL = kapitalOppsett();
+  if(kapL.paa && kapL.ltvMin > 0.5){
+    const xc = X(Math.min(90, kapL.ltvMin));
+    g += '<rect x="'+ml+'" y="'+mt+'" width="'+(xc-ml).toFixed(1)+'" height="'+(H-mt-mb)+'" fill="var(--ink-3)" opacity=".08"/>';
+    g += '<line x1="'+xc.toFixed(1)+'" x2="'+xc.toFixed(1)+'" y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="3 3" opacity=".7"/>';
+    if(xc - ml > 190)
+      g += '<text x="'+(xc-9).toFixed(1)+'" y="'+(H-mb-10)+'" text-anchor="end" '+AX+'>'
+         + esc(L('krever mer egenkapital enn du har','needs more equity than you have'))+'</text>';
+  }
+
   // referanselinje: boligens egen yield
   g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(mine).toFixed(1)+'" y2="'+Y(mine).toFixed(1)+'" stroke="var(--ink-3)" stroke-width="1.5" opacity=".55"/>';
   const myY = Y(mine), myLab = myY < mt+18 ? myY+15 : myY-7;
@@ -1224,10 +1308,195 @@ function drawLtv(){
     '<span class="item"><span class="swatch" style="background:'+s.c+'"></span>'+esc(s.n)+'</span>').join("")
     + '<span class="item"><span class="swatch" style="background:var(--ink-3);opacity:.55"></span>'+L('Din bolig i dag','This flat today')+'</span>';
   document.getElementById("ltvNote").textContent =
-    L("Rente ","Rate ") + pct1(S.rente) + L(" · verdistigning "," · appreciation ") + pct1(S.vekstbolig) + L(" · indeksfond "," · index fund ") + pct1(S.indeks);
+    L("Rente ","Rate ") + pct1(S.rente) + L(" · verdistigning "," · appreciation ") + pct1(S.vekstbolig) + L(" · indeksfond "," · index fund ") + pct1(S.indeks)
+    + (kapL.paa && kapL.ltvMin > 0.5
+        ? L(" · under " + nf0.format(Math.ceil(kapL.ltvMin)) + " % rekker ikke egenkapitalen",
+            " · below " + nf0.format(Math.ceil(kapL.ltvMin)) + " % your equity is not enough") : "");
   document.getElementById("tblLtv").innerHTML = tableHtml(
     [L("Belåningsgrad","Loan-to-value"),L("Slå indeksfondet","Beat the index fund"),L("Null kontantstrøm","Break-even cash flow"),L("Dekke renten","Cover the interest")],
     ltvData.map(d=>[d.b+" %", d.indeks==null?"—":pct2(d.indeks), d.cf==null?"—":pct2(d.cf), d.rente==null?"—":pct2(d.rente)]));
+}
+
+/* ═══ 6b. Graf 1b — formue mot belåningsgrad med fast egenkapital ════════
+   Dilemmaet: du har et beløp, og skal velge mellom å binde det i boligen eller
+   la det stå i indeksfond. Her har begge sporene nøyaktig samme totalkapital
+   ved hver eneste belåningsgrad, så kronene kan sammenlignes langs hele aksen. */
+let kapData = [];
+function drawKapital(){
+  const sec = document.getElementById("kapSection");
+  if(!sec) return;
+  sec.hidden = !S.restfond;
+  if(!S.restfond) return;
+
+  const info = kapitalOppsett();
+  const K = S.ektot, N = Math.round(S.horisont);
+  const xs = []; for(let b=0; b<=90; b++) xs.push(b);
+  kapData = xs.map(b => {
+    const sim = simuler({ltv:b}), a = sim.siste;
+    return {b, mulig: sim.EK <= K + 0.5, ek: sim.EK, rest: Math.max(0, K - sim.EK),
+            bolig: a ? a.bolig : 0, fond: a ? a.fondNetto : 0};
+  });
+  const ok = kapData.filter(d => d.mulig);
+
+  const W=900, H=372, ml=74, mr=152, mt=20, mb=42;
+  const plotEl = document.getElementById("plotKap");
+
+  if(!ok.length){
+    const trengs = info.kost - 0.90*info.V0;
+    plotEl.innerHTML = '<div style="padding:44px 20px; color:var(--ink-2); font-size:14px; max-width:60ch">'
+      + esc(L("Med " + kr(K) + " rekker det ikke til denne boligen i det hele tatt. Selv på 90 % belåning kreves "
+              + kr(Math.max(0,trengs)) + " i egenkapital — " + kr(Math.max(0,trengs-K)) + " mer enn du har.",
+              "At " + kr(K) + " this flat is out of reach entirely. Even at 90 % leverage it needs "
+              + kr(Math.max(0,trengs)) + " of equity — " + kr(Math.max(0,trengs-K)) + " more than you have."))
+      + '</div>';
+    document.getElementById("legKap").innerHTML = "";
+    document.getElementById("kapRad").innerHTML = "";
+    document.getElementById("tblKap").innerHTML = "";
+    document.getElementById("kapNote").textContent = L("Egenkapital ","Capital ") + kr(K);
+    document.getElementById("kapFot").textContent = "";
+    return;
+  }
+
+  const naa  = kapData.reduce((b,d)=>Math.abs(d.b-S.ltv)<Math.abs(b.b-S.ltv)?d:b, kapData[0]);
+  const ref  = naa.mulig ? naa : ok[0];          // fondssporet må leses av et mulig punkt
+  const best = ok.reduce((b,d)=>d.bolig>b.bolig?d:b, ok[0]);
+  const dNaa = naa.bolig - naa.fond, dBest = best.bolig - best.fond;
+
+  const alle = ok.flatMap(d => [d.bolig, d.fond]);
+  let lo = Math.min(0, ...alle), hi = Math.max(...alle);
+  const pad = (hi-lo)*0.10; hi += pad; lo -= pad*0.4;
+  const X = b => ml + (b/90)*(W-ml-mr);
+  const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
+
+  let g = "";
+  niceTicks(lo,hi,5).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+mkr(v)+'</text>';
+  });
+  if(lo<0) g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--axis)"/>';
+  xs.filter(b=>b%15===0).forEach(b=>{
+    g += '<text x="'+X(b).toFixed(1)+'" y="'+(H-mb+20)+'" text-anchor="middle" '+AX+'>'+b+' %</text>';
+  });
+  g += '<text x="'+((ml+W-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" '+AXL+'>'+L('Belåningsgrad','Loan-to-value')+'</text>';
+  g += '<text transform="translate(15,'+((mt+H-mb)/2)+') rotate(-90)" text-anchor="middle" '+AXL+'>'
+     + L('Formue etter '+N+' år','Wealth after '+N+' years')+'</text>';
+
+  // skravert: her rekker ikke egenkapitalen til
+  if(info.ltvMin > 0.5){
+    const xc = X(Math.min(90, info.ltvMin));
+    g += '<rect x="'+ml+'" y="'+mt+'" width="'+(xc-ml).toFixed(1)+'" height="'+(H-mt-mb)+'" fill="var(--ink-3)" opacity=".08"/>';
+    g += '<line x1="'+xc.toFixed(1)+'" x2="'+xc.toFixed(1)+'" y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="3 3" opacity=".7"/>';
+    if(xc - ml > 130)
+      g += '<text x="'+(xc-9).toFixed(1)+'" y="'+((mt+H-mb)/2).toFixed(1)+'" text-anchor="end" '+AX+'>'
+         + esc(L('for lite egenkapital','not enough equity'))+'</text>';
+  }
+
+  // markør for valgt belåningsgrad
+  g += '<line x1="'+X(S.ltv).toFixed(1)+'" x2="'+X(S.ltv).toFixed(1)+'" y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--accent)" stroke-width="1.5" opacity=".35"/>';
+
+  // gapet mellom sporene, i fargen til den som vinner ved den valgte belåningen
+  g += '<path d="' + ok.map((d,i)=>(i?"L":"M")+X(d.b).toFixed(1)+" "+Y(d.bolig).toFixed(1)).join(" ")
+    + " " + ok.slice().reverse().map(d=>"L"+X(d.b).toFixed(1)+" "+Y(d.fond).toFixed(1)).join(" ")
+    + ' Z" fill="' + ((ref.bolig - ref.fond) >= 0 ? "var(--s1)" : "var(--s2)") + '" opacity=".10"/>';
+
+  const linje = (key, farge) => '<path d="' + ok.map((d,i)=>(i?"L":"M")+X(d.b).toFixed(1)+" "+Y(d[key]).toFixed(1)).join(" ")
+    + '" fill="none" stroke="'+farge+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  g += linje("fond", "var(--s2)");
+  g += linje("bolig", "var(--s1)");
+
+  const sist = ok[ok.length-1];
+  [["bolig","var(--s1)"],["fond","var(--s2)"]].forEach(([k,c])=>{
+    g += '<circle cx="'+X(sist.b).toFixed(1)+'" cy="'+Y(sist[k]).toFixed(1)+'" r="4.5" fill="'+c+'" stroke="var(--surface)" stroke-width="2"/>';
+  });
+  const ends = [{y:Y(sist.bolig), n:L("Bolig + rest i fond","Flat + rest in fund"), c:"var(--s1)", v:sist.bolig},
+                {y:Y(sist.fond),  n:L("Alt i indeksfond","All in the index fund"),  c:"var(--s2)", v:sist.fond}].sort((a,b)=>a.y-b.y);
+  if(ends[1].y - ends[0].y < 17) ends[1].y = ends[0].y + 17;
+  ends.forEach(e=>{
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y-3).toFixed(1)+'" fill="'+e.c+'" font-family="var(--sans)" font-size="11.5" font-weight="600">'+esc(e.n)+'</text>';
+    g += '<text x="'+(W-mr+9)+'" y="'+(e.y+10).toFixed(1)+'" '+AX+'>'+mkr(e.v)+'</text>';
+  });
+  g += '<g id="kapCross" opacity="0"><line y1="'+mt+'" y2="'+(H-mb)+'" stroke="var(--ink-3)" stroke-width="1"/></g>';
+
+  const svg = setSvg("plotKap","tipKap",g,W,H);
+  const plot = document.getElementById("plotKap"), tip = document.getElementById("tipKap");
+  const cg = svg.querySelector("#kapCross"), cl = cg.querySelector("line");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), sx = (ev.clientX-r.left)/r.width*W;
+    if(sx<ml-6 || sx>W-mr+6){ hide(tip); cg.setAttribute("opacity",0); return; }
+    const b = Math.round(Math.max(0,Math.min(90,(sx-ml)/(W-ml-mr)*90)));
+    const d = kapData.find(x=>x.b===b); if(!d) return;
+    cg.setAttribute("opacity",1); cl.setAttribute("x1",X(b)); cl.setAttribute("x2",X(b));
+    const diff = d.bolig - d.fond;
+    place(tip, plot, svg, W, X(b), mt+8,
+      '<div class="t">'+L('Belåningsgrad ','Loan-to-value ')+b+' %</div>'
+      + (d.mulig
+          ? tipRow(L("Egenkapital i bolig","Equity in the flat"), kr(d.ek))
+            + tipRow(L("Står i indeksfond","Left in the index fund"), kr(d.rest))
+            + tipRow(L("Bolig + rest i fond","Flat + rest in fund"), krS(d.bolig), "var(--s1)")
+            + tipRow(L("Alt i indeksfond","All in the index fund"), krS(d.fond), "var(--s2)")
+            + tipRow(L("Differanse","Difference"), (diff>=0?"+":"−")+kr(Math.abs(diff)))
+          : tipRow(L("Krever egenkapital","Equity required"), kr(d.ek))
+            + tipRow(L("Du mangler","You are short"), kr(Math.max(0, d.ek - K)))));
+  };
+  plot.onpointerleave = () => { hide(tip); cg.setAttribute("opacity",0); };
+
+  document.getElementById("legKap").innerHTML =
+      '<span class="item"><span class="swatch" style="background:var(--s1)"></span>'+L('Bolig + resten i indeksfond','Flat + the rest in the index fund')+'</span>'
+    + '<span class="item"><span class="swatch" style="background:var(--s2)"></span>'+L('Hele beløpet i indeksfond','The whole amount in the index fund')+'</span>'
+    + '<span class="item" style="color:var(--ink-3)">'+L('Begge etter skatt ved salg · ','Both after tax on sale · ')+kr(K)+L(' i kapital',' of capital')+'</span>';
+
+  // ── oppsummering: hva valget faktisk koster ──────────────────────────
+  const lavest = ok[0];
+  const tile = (k,v,cls,sub) => '<div class="h"><span class="k">'+esc(k)+'</span><span class="v'
+    + (cls?" "+cls:"")+'">'+v+'</span><span class="s">'+sub+'</span></div>';
+  document.getElementById("kapRad").innerHTML =
+      tile(L("Alt i indeksfond","All in the index fund"), mkr(ref.fond), "",
+           esc(kr(K)) + L(" pluss de samme innskuddene, ved " + ref.b + " % belåning",
+                          " plus the same deposits, read at " + ref.b + " % leverage"))
+    + tile(L("Ved " + S.ltv + " % belåning","At " + S.ltv + " % leverage"),
+           naa.mulig ? (dNaa>=0?"+":"−")+mkr(Math.abs(dNaa)) : "—",
+           naa.mulig ? (dNaa>=0?"pos":"neg") : "",
+           naa.mulig
+             ? esc(kr(naa.ek)) + L(" i boligen · "," in the flat · ") + esc(kr(naa.rest)) + L(" i fond"," in the fund")
+             : L("egenkapitalen rekker ikke hit","your equity does not reach this far"))
+    + tile(dBest >= 0 ? L("Best belåningsgrad","Best loan-to-value") : L("Minst tap mot fondet","Smallest gap to the fund"),
+           best.b + " %", "",
+           esc(mkr(best.bolig)) + " · " + (dBest>=0?"+":"−") + esc(mkr(Math.abs(dBest))) + L(" mot fondet"," against the fund"))
+    + tile(info.ltvMin > 0.5 ? L("Laveste du får til","Lowest you can manage") : L("Kontantkjøp","Cash purchase"),
+           lavest.b + " %", "",
+           info.ltvMin > 0.5
+             ? esc(kr(K)) + L(" rekker ikke lenger ned"," does not stretch below that")
+             : L("boligen betalt uten lån","the flat paid for without a loan"));
+
+  document.getElementById("kapNote").textContent =
+    L("Egenkapital ","Capital ") + kr(K) + L(" · eiertid "," · holding period ") + N + L(" år"," years")
+    + L(" · rente "," · rate ") + pct1(S.rente) + L(" · indeksfond "," · index fund ") + pct1(S.indeks);
+
+  const kryss = ok.find((d,i)=> i>0 && Math.sign(d.bolig-d.fond) !== Math.sign(ok[i-1].bolig-ok[i-1].fond));
+  document.getElementById("kapFot").innerHTML = L(
+    "Terskelkurvene over flytter seg ikke av dette: kravet til yield blir det samme enten den ubrukte "
+    + "kapitalen står i fond eller ikke, fordi de samme kronene får den samme avkastningen i begge "
+    + "alternativene."
+    + (S.formue ? " (Med formuesskatt på flytter de seg litt, fordi den skatten må betales i kontanter.)" : "")
+    + " Det som endrer seg er kronene — hvor mye du sitter igjen med, og hvor stor del av det som henger "
+    + "på én bolig."
+    + (kryss ? " Her snur regnestykket ved <b style=\"color:var(--ink)\">" + kryss.b + " % belåning</b>." : "")
+    + " Kurven sier ingenting om risiko: den høyeste belåningen er nesten alltid det høyeste tallet, og "
+    + "samtidig den eneste måten å tape hele beløpet på.",
+    "The threshold curves above do not move because of this: the yield requirement is the same whether "
+    + "the unused capital sits in a fund or not, because the same kroner earn the same return in both options."
+    + (S.formue ? " (With wealth tax on they shift slightly, because that tax has to be paid in cash.)" : "")
+    + " What changes is the kroner — how much you end up with, and how much of it hangs on one flat."
+    + (kryss ? " Here the arithmetic turns at <b style=\"color:var(--ink)\">" + kryss.b + " % leverage</b>." : "")
+    + " The curve says nothing about risk: the highest leverage is nearly always the highest number, and "
+    + "at the same time the only way to lose the whole amount.");
+
+  document.getElementById("tblKap").innerHTML = tableHtml(
+    [L("Belåningsgrad","Loan-to-value"),L("Egenkapital i bolig","Equity in the flat"),L("I indeksfond","In the index fund"),
+     L("Bolig + fond","Flat + fund"),L("Alt i fond","All in the fund"),L("Differanse","Difference")],
+    kapData.filter(d=>d.b%10===0).map(d=> d.mulig
+      ? [d.b+" %", kr(d.ek), kr(d.rest), krS(d.bolig), krS(d.fond), krS(d.bolig-d.fond)]
+      : [d.b+" %", kr(d.ek), "—", L("ikke mulig","not possible"), "—", "—"]));
 }
 
 /* ═══ 7. Graf 2 — dine 62 boliger ════════════════════════════════════════ */
@@ -1400,9 +1669,9 @@ function drawHeat(){
 function drawWealth(sim){
   const W=900, H=372, ml=66, mr=142, mt=20, mb=42;
   const N = sim.aar.length;
-  const b = [{t:0,v:sim.EK}].concat(sim.aar.map(a=>({t:a.t, v:a.bolig})));
-  const f = [{t:0,v:sim.EK}].concat(sim.aar.map(a=>({t:a.t, v:a.fondNetto})));
-  const inn = [{t:0,v:sim.EK}].concat(sim.aar.map(a=>({t:a.t, v:a.innskuttSum})));
+  const b = [{t:0,v:sim.KAP}].concat(sim.aar.map(a=>({t:a.t, v:a.bolig})));
+  const f = [{t:0,v:sim.KAP}].concat(sim.aar.map(a=>({t:a.t, v:a.fondNetto})));
+  const inn = [{t:0,v:sim.KAP}].concat(sim.aar.map(a=>({t:a.t, v:a.innskuttSum})));
   const all = b.concat(f, inn).map(d=>d.v);
   let lo=Math.min(0,...all), hi=Math.max(...all); const pad=(hi-lo)*0.10; hi+=pad; lo-=pad*0.4;
   const X = t => ml + (t/N)*(W-ml-mr);
@@ -1472,8 +1741,10 @@ function drawWealth(sim){
       + '</span></div>';
   }).join("");
 
-  document.getElementById("wealthNote").textContent =
-    L("Egenkapital ved kjøp ","Equity at purchase ") + kr(sim.EK) + L(" · lån "," · loan ") + kr(sim.laan0);
+  document.getElementById("wealthNote").textContent = sim.rest > 0
+    ? L("Kapital ved start ","Capital at the start ") + kr(sim.KAP) + L(" · derav "," · of which ") + kr(sim.EK)
+      + L(" i boligen og "," in the flat and ") + kr(sim.rest) + L(" i indeksfond · lån "," in the index fund · loan ") + kr(sim.laan0)
+    : L("Egenkapital ved kjøp ","Equity at purchase ") + kr(sim.EK) + L(" · lån "," · loan ") + kr(sim.laan0);
   document.getElementById("tblWealth").innerHTML = tableHtml(
     [L("År","Year"),L("Bolig","Flat"),L("Indeksfond","Index fund"),L("Differanse","Difference"),L("Innskutt","Invested"),L("Boligverdi","Property value"),L("Restgjeld","Debt left")],
     b.map((d,i)=>[d.t, krS(d.v), krS(f[i].v), krS(d.v-f[i].v), krS(inn[i].v),
@@ -1557,26 +1828,151 @@ function drawFall(sim){
 const $ = id => document.getElementById(id);
 const FMT = {
   pris:kr, opp:kr, leie:v=>kr(v)+"/mnd", drift:v=>kr(v)+"/mnd",
-  ledig:pct1, vedl:pct1, ltv:v=>nf0.format(v)+" %", rente:pct1,
+  ledig:pct1, vedl:pct1, ltv:v=>nf0.format(v)+" %", rente:pct1, ektot:kr,
   lopetid:v=>v+" år", vekstbolig:pct1, indeks:pct1, kpi:pct1,
   horisont:v=>v+" år", salgsomk:pct1, formuesats:pct2, driftandel:pct1
 };
-const RANGES = ["pris","opp","leie","drift","ledig","vedl","ltv","rente","lopetid",
+/* beløpssnarveiene: faste summer, pluss «hele kjøpesummen» som følger boligen */
+function ekChip(c){
+  const raw = c.dataset.ek === "kost" ? kapitalOppsett().kost : parseFloat(c.dataset.ek);
+  const el = $("ektot");
+  return Math.min(parseFloat(el.max), Math.max(parseFloat(el.min), Math.round(raw/50000)*50000));
+}
+const RANGES = ["pris","opp","leie","drift","ledig","vedl","ltv","rente","lopetid","ektot",
                 "vekstbolig","indeks","kpi","horisont","salgsomk","formuesats","driftandel"];
-const TOGGLES = ["dokavg","avdragsfri","skatt","formue"];
+const TOGGLES = ["dokavg","avdragsfri","skatt","formue","restfond"];
 let picked = -1;
 
+/* ═══ Tallfeltene ════════════════════════════════════════════════════════
+   Hver skyver har et felt du kan klikke i og skrive tallet rett inn i.
+   Feltet viser det formaterte tallet («2 080 000 kr», «8,0 %»), så det
+   formatet må også kunne leses tilbake igjen. */
+/* monospace: én ch er nøyaktig ett tegn, så feltet blir like bredt som tallet */
+const bredde = box => { box.style.width = "calc(" + Math.max(4, box.value.length) + "ch + 12px)"; };
+
+function visTall(k){
+  const box = $(k+"V");
+  if(!box) return;
+  if(box.tagName !== "INPUT"){ box.textContent = FMT[k](S[k]); return; }
+  const lab = document.querySelector('label[for="'+k+'"]');
+  if(lab) box.setAttribute("aria-label", lab.textContent.trim());
+  if(document.activeElement === box) return;      // ikke overskriv det du skriver
+  box.value = FMT[k](S[k]);
+  bredde(box);
+  box.classList.remove("bad");
+}
+
+/* I redigering vises tallet uten enhet og tusenskille — da slipper du å
+   slette « kr» før du kan skrive. Ved blur formateres det tilbake. */
+function raaTall(k){
+  return String(S[k]).replace(".", LANG === "en" ? "." : ",");
+}
+
+function lesTall(txt){
+  const t = String(txt).replace(/[\s  ]/g, "").replace(/[^0-9,.\-]/g, "");
+  if(!t || t === "-") return null;
+  let n;
+  if(t.includes(",")) n = parseFloat(t.replace(/\./g, "").replace(",", "."));
+  else {
+    // «2.080.000» er tusenskille, «5.5» er desimaltall
+    const d = t.split(".");
+    n = (d.length > 2 || (d.length === 2 && d[1].length === 3)) ? parseFloat(t.replace(/\./g, "")) : parseFloat(t);
+  }
+  return isFinite(n) ? n : null;
+}
+
+/* Felt som vises eller brukes som hele tall må rundes til trinnet; kroner
+   og prosent med desimaler får stå nøyaktig slik de er skrevet. */
+const HELTALL = ["ltv","lopetid","horisont"];
+function settTall(k, v, box){
+  const r = $(k), steg = parseFloat(r.step) || 1;
+  if(steg < 1 || HELTALL.includes(k)) v = Math.round(v/steg)*steg;
+  v = Math.min(parseFloat(r.max), Math.max(parseFloat(r.min), v));
+  v = +v.toFixed(6);
+  S[k] = v;
+  if(picked >= 0 && AVLEDET.includes(k)){ picked = -1; $("pick").value = "-1"; }
+  if(box){ box.value = FMT[k](v); bredde(box); box.classList.remove("bad"); box.select(); }
+  schedule();
+}
+
+function skrivTall(k, box){
+  const n = lesTall(box.value);
+  if(n === null){ box.classList.add("bad"); return false; }
+  settTall(k, n, null);
+  return true;
+}
+
+/* Tab hopper til neste tall, ikke til skyveren imellom. Skjulte felt
+   (lukkede paneler, kapitalfeltet når bryteren er av) hoppes over. */
+function nesteTallfelt(box, retning){
+  const alle = [...document.querySelectorAll("input.val")].filter(e => e.offsetParent !== null);
+  const i = alle.indexOf(box);
+  if(i < 0) return;
+  const neste = alle[(i + retning + alle.length) % alle.length];
+  if(neste){ neste.focus(); neste.select(); }
+}
+
+function koblTallfelt(){
+  RANGES.forEach(k => {
+    const box = $(k+"V");
+    if(!box || box.tagName !== "INPUT") return;
+    box.addEventListener("focus", () => {
+      box.value = raaTall(k);
+      bredde(box);
+      box.__velg = true;
+      box.select();
+    });
+    // musetrykk kollapser markeringen fra focus — merk hele tallet på nytt
+    box.addEventListener("mouseup", e => { if(box.__velg){ e.preventDefault(); box.select(); box.__velg = false; } });
+    box.addEventListener("blur",  () => { box.__velg = false; if(!skrivTall(k, box)) visTall(k); });
+    box.addEventListener("keydown", e => {
+      if(e.key === "Enter" || e.key === "Tab"){
+        e.preventDefault();
+        if(skrivTall(k, box)) nesteTallfelt(box, e.shiftKey ? -1 : 1);
+      } else if(e.key === "Escape"){
+        e.preventDefault(); box.classList.remove("bad"); box.value = FMT[k](S[k]); box.select();
+      } else if(e.key === "ArrowUp" || e.key === "ArrowDown"){
+        e.preventDefault();
+        const n = lesTall(box.value); if(n === null) return;
+        const steg = parseFloat($(k).step) * (e.shiftKey ? 10 : 1);
+        settTall(k, n + (e.key === "ArrowUp" ? steg : -steg), box);
+      }
+    });
+  });
+}
+
 function syncInputs(){
-  RANGES.forEach(k=>{ const el=$(k); if(el){ el.value = S[k]; const v=$(k+"V"); if(v) v.textContent = FMT[k](S[k]); } });
+  RANGES.forEach(k=>{ const el=$(k); if(!el) return; el.value = S[k]; visTall(k); });
   TOGGLES.forEach(k=>{ const el=$(k); if(el) el.checked = !!S[k]; });
   document.querySelectorAll(".chip[data-rente]").forEach(c=>
     c.setAttribute("aria-pressed", Math.abs(parseFloat(c.dataset.rente)-S.rente)<0.05));
+  document.querySelectorAll(".chip[data-ek]").forEach(c=>
+    c.setAttribute("aria-pressed", Math.abs(ekChip(c)-S.ektot) < 25000));
   const fn = $("fabNum");
   if(fn) fn.textContent = S.ltv + " % lån · " + pct1(S.rente);
+
+  // fast egenkapital: feltet vises bare når bryteren står på, og forteller fordelingen
+  const ekf = $("ektotField");
+  if(ekf){
+    ekf.hidden = !S.restfond;
+    const i = kapitalOppsett();
+    const naaLtv = Math.min(90, Math.ceil(i.ltvMin));
+    const knapp = i.ltvMin <= 90
+      ? ' <button type="button" class="chip" id="ektotFix" style="margin-top:5px">'
+        + L("Sett belåningen til " + naaLtv + " %", "Set leverage to " + naaLtv + " %") + '</button>'
+      : "";
+    $("ektotHint").innerHTML = i.mangler > 0
+      ? L("Boligen krever " + kr(i.EK) + " ved " + S.ltv + " % belåning — du mangler <b>" + kr(i.mangler)
+          + "</b>. Regnestykket bruker det boligen faktisk krever." + knapp,
+          "The flat needs " + kr(i.EK) + " at " + S.ltv + " % leverage — you are <b>" + kr(i.mangler)
+          + "</b> short. The model uses what the flat actually requires." + knapp)
+      : L(kr(i.EK) + " går inn i boligen, <b>" + kr(i.rest) + "</b> blir stående i indeksfond.",
+          kr(i.EK) + " goes into the flat, <b>" + kr(i.rest) + "</b> stays in the index fund.");
+  }
 }
 
 /* ═══ Tilstand i adressefeltet — hver innstilling kan deles som lenke ═════ */
-const BOOLS = ["dokavg","avdragsfri","skatt","formue"];
+const BOOLS = ["dokavg","avdragsfri","skatt","formue","restfond"];
 const AVLEDET = ["pris","opp","leie","drift"];   // følger av valgt bolig
 
 function writeUrl(){
@@ -1697,6 +2093,7 @@ function render(){
   writeUrl();
 
   drawLtv();
+  drawKapital();
   drawScatter(th);
   drawHeat();
   drawWealth(sim);
@@ -2071,6 +2468,7 @@ async function importerFinn(){
     schedule();
   };
 
+  koblTallfelt();
   RANGES.forEach(k => $(k).addEventListener("input", e => {
     S[k] = parseFloat(e.target.value);
     if(picked >= 0 && ["pris","opp","leie","drift"].includes(k)){ picked=-1; sel.value="-1"; }
@@ -2079,6 +2477,15 @@ async function importerFinn(){
   TOGGLES.forEach(k => $(k).addEventListener("change", e => { S[k] = e.target.checked; schedule(); }));
   document.querySelectorAll(".chip[data-rente]").forEach(c =>
     c.addEventListener("click", () => { S.rente = parseFloat(c.dataset.rente); schedule(); }));
+  document.querySelectorAll(".chip[data-ek]").forEach(c =>
+    c.addEventListener("click", () => { S.ektot = ekChip(c); schedule(); }));
+  // knappen bygges på nytt hver render, så lytteren må ligge på feltet
+  $("ektotField").addEventListener("click", e => {
+    if(e.target.id !== "ektotFix") return;
+    const i = kapitalOppsett();
+    S.ltv = Math.min(parseFloat($("ltv").max), Math.ceil(i.ltvMin));
+    schedule();
+  });
   $("reset").addEventListener("click", () => {
     S = Object.assign({}, DEFAULTS);
     SOV = SOV_DEFAULT.map(r => r.slice());
