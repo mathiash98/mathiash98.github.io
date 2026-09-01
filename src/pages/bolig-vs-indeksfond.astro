@@ -655,6 +655,39 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
       </div>
     </details>
 
+    <details class="panel">
+      <summary data-en="Time and residence">Tid og botid</summary>
+      <div class="body">
+        <div class="field">
+          <div class="top"><label for="timer" data-en="Hours per year">Timer per år</label><input class="val" id="timerV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
+          <input type="range" id="timer" min="0" max="200" step="5">
+          <div class="hint" data-en="Viewings, contracts, water leaks, debt collection, refurbishing between tenants.">Visninger, kontrakter, vannlekkasjer, inkasso, oppussing mellom leietakere.</div>
+        </div>
+        <div class="field">
+          <div class="top"><label for="timepris" data-en="Your hourly rate">Timeprisen din</label><input class="val" id="timeprisV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
+          <input type="range" id="timepris" min="0" max="2000" step="50">
+          <div class="hint" data-en="What an hour is worth to you. The hours are put in the index fund instead.">Hva timen er verdt for deg. Timene legges i indeksfondet i stedet.</div>
+        </div>
+        <label class="switch" for="botid">
+          <span style="font-size:13px;color:var(--ink-2)" data-en="Live there the last year before selling">Bo i boligen det siste året før salg</span>
+          <input type="checkbox" id="botid"><span class="track"></span>
+        </label>
+        <div class="hint" style="font-size:11.5px;color:var(--ink-3);line-height:1.4" data-en="A gain on a home is tax free once you have owned it for more than a year and lived in it for at least 12 of the last 24 months before the sale.">Gevinst på bolig er skattefri når du har eid i mer enn ett år og bodd der minst 12 av de siste 24 månedene før salget.</div>
+        <div id="botidFelt" hidden style="display:flex; flex-direction:column; gap:15px">
+          <div class="field">
+            <div class="top"><label for="egenleie" data-en="What you pay to live elsewhere">Bokostnaden du slipper</label><input class="val" id="egenleieV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
+            <input type="range" id="egenleie" min="0" max="50000" step="500">
+            <div class="hint" data-en="Rent or housing cost you avoid for the year you live in the flat yourself.">Husleie eller bokostnad du slipper det året du bor i utleieboligen selv.</div>
+          </div>
+          <div class="field">
+            <div class="top"><label for="flytting" data-en="Moving costs">Flyttekostnader</label><input class="val" id="flyttingV" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="verdi"></div>
+            <input type="range" id="flytting" min="0" max="200000" step="5000">
+            <div class="hint" data-en="In, and out again.">Inn, og ut igjen.</div>
+          </div>
+        </div>
+      </div>
+    </details>
+
     <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center">
       <button class="reset" id="reset" data-en="↺ Reset everything">↺ Tilbakestill alt</button>
       <button class="reset" id="share" data-en="⧉ Copy link">⧉ Kopier lenke</button>
@@ -916,6 +949,31 @@ body.calc > footer svg{vertical-align:middle; color:var(--ink-3)}
       </div>
     </section>
 
+    <!-- 6b. alternativkostnaden -->
+    <section class="section">
+      <div class="head">
+        <div class="eyebrow" data-en="Everything in">Alt tatt med</div>
+        <h2 data-en="Your time, and the year you move in">Tiden din, og året du flytter inn</h2>
+        <p data-en="Everything above counts kroner in and out of the account. Two things it does not count: the hours you put in, and the fact that you can move into the flat for the last year and sell it tax free. Both are big enough to turn the answer around — in opposite directions.">Alt over teller kroner inn og ut av konto. To ting teller det ikke: timene du legger ned,
+        og at du kan flytte inn i boligen det siste året og selge skattefritt. Begge er store nok til å
+        snu svaret — i hver sin retning.</p>
+        <p data-en="The hours are priced at what an hour is worth to you and put in the index fund instead, year by year — that is what they actually cost. The year of residence removes the 22 % tax on the gain, but the rent stops, the running costs stop being deductible, and you have to move twice. What is left is what you have to show for the whole thing.">Timene prises til det en time er verdt for deg og legges i indeksfondet i stedet, år for år —
+        det er hva de faktisk koster. Botidsåret fjerner 22 % gevinstskatt, men leien stopper,
+        driftskostnadene slutter å være fradragsberettiget, og du må flytte to ganger. Det som står igjen,
+        er det du sitter igjen med for hele greia.</p>
+      </div>
+      <div class="card">
+        <div class="caption">
+          <h3 data-en="From the model's answer to the real one">Fra modellens svar til det virkelige</h3>
+          <span class="note" id="altNote"></span>
+        </div>
+        <div class="plot" id="plotAlt"><div class="tip" id="tipAlt"></div></div>
+        <div class="horisont" id="altRad"></div>
+        <details class="tblwrap"><summary data-en="Show as table">Vis som tabell</summary><div class="tblscroll" id="tblAlt"></div></details>
+      </div>
+      <p style="margin-top:14px; color:var(--ink-3); font-size:13px; max-width:66ch" id="altFot"></p>
+    </section>
+
     <!-- 7. hva modellen ikke fanger -->
     <section class="section">
       <div class="head">
@@ -1037,7 +1095,8 @@ const DEFAULTS = {
   pris:3400000, opp:0, leie:19000, drift:3200, ledig:8, vedl:0.7, dokavg:true,
   ltv:80, rente:5.0, lopetid:25, avdragsfri:false, restfond:false, ektot:2000000,
   vekstbolig:3.5, indeks:7.0, kpi:2.5, horisont:15, salgsomk:2.5,
-  skatt:true, formue:false, formuesats:1.0, driftandel:17
+  skatt:true, formue:false, formuesats:1.0, driftandel:17,
+  timer:20, timepris:600, botid:false, egenleie:15000, flytting:25000
 };
 /* soveromsbånd: [leie fra, leie til, areal m²] */
 const SOV_DEFAULT = [[17000,22000,45],[18000,22000,62],[26000,30000,85],[32000,38000,108]];
@@ -1173,6 +1232,21 @@ function fondAlene(K, N){
   }
   const gev = S.skatt ? T_GEV_FOND * Math.max(0, fond - K - skjerm) : 0;
   return fond - gev;
+}
+
+/* Terminalverdien av en rekke årlige innskudd i indeksfondet, etter skatt.
+   Brukes til å prise timene dine: hver time du legger i boligen er en time
+   som ikke ble lagt i fondet. */
+function fondSerie(innskudd, N){
+  const R = S.indeks/100;
+  let v = 0, basis = 0, skjerm = 0;
+  for(let t=1; t<=N; t++){
+    skjerm += SKJERMING * basis;
+    v = v*(1+R) + (innskudd[t-1] || 0);
+    basis += (innskudd[t-1] || 0);
+  }
+  const gev = S.skatt ? T_GEV_FOND * Math.max(0, v - basis - skjerm) : 0;
+  return v - gev;
 }
 
 /* Årlig avkastning på pengene du faktisk har stilt med. Boligsporet får ikke
@@ -1902,13 +1976,169 @@ function drawFall(sim){
 
 <script is:inline>
 "use strict";
+/* ═══ 10b. Graf 6 — alternativkostnaden ══════════════════════════════════
+   Modellen teller kroner inn og ut av konto. Timene dine står ikke der, og
+   heller ikke skattefritaket du får ved å bo i boligen det siste året før
+   salg. Begge regnes her, oppå modellens svar. */
+function altPoster(sim){
+  const p = sim.p, a = sim.siste, N = sim.aar.length;
+  if(!a) return null;
+  const kpi = S.kpi/100;
+
+  // utgangspunktet: hva boligen ga mer eller mindre enn fondet
+  const start = a.bolig - a.fondNetto;
+
+  // timene, år for år, priset til det de kunne blitt i fondet i stedet
+  const serie = [];
+  for(let t=1; t<=N; t++) serie.push(S.timer * S.timepris * Math.pow(1+kpi, t-1));
+  const tid = fondSerie(serie, N);
+
+  // botidsåret: gevinsten blir skattefri, men leien uteblir og driften
+  // slutter å være fradragsberettiget
+  const nettoSalg = a.V * (1 - p.salgsomk/100);
+  const gevinst = p.skatt ? T_GEV_BOLIG * Math.max(0, nettoSalg - sim.kost) : 0;
+  const tapt    = p.skatt ? (1 - T_LEIE)*a.leie + T_LEIE*a.drift : a.leie;
+  const spart   = S.egenleie * 12 * Math.pow(1+kpi, N-1);
+  const formue  = p.formue ? Math.min(a.fBolig, (p.formuesats/100) * 0.75 * a.V) : 0;
+  const flytt   = S.flytting;
+  const bo      = gevinst - tapt + spart + formue - flytt;
+
+  return {start, tid, gevinst, tapt, spart, formue, flytt, bo, N,
+          netto: start - tid + (S.botid ? bo : 0)};
+}
+
+function drawAlt(sim){
+  const A = altPoster(sim); if(!A) return;
+  const N = A.N;
+
+  const steps = [
+    {n:L("Modellens svar","The model's answer"), v:A.start},
+    {n:L("Tiden din","Your time"),               v:-A.tid}
+  ];
+  if(S.botid){
+    steps.push({n:L("Skattefri gevinst","Tax-free gain"), v:A.gevinst});
+    steps.push({n:L("Tapt leie","Rent lost"),             v:-A.tapt});
+    if(A.spart > 0)  steps.push({n:L("Spart bokostnad","Housing saved"), v:A.spart});
+    if(A.formue > 0) steps.push({n:L("Mindre formuesskatt","Less wealth tax"), v:A.formue});
+    if(A.flytt > 0)  steps.push({n:L("Flytting","Moving"), v:-A.flytt});
+  }
+
+  const W=900, H=330, ml=68, mr=24, mt=30, mb=68;
+  const n = steps.length+1, bw = (W-ml-mr)/n*0.62, gapw = (W-ml-mr)/n;
+  let run = 0; const bars = [];
+  steps.forEach((st,i)=>{ const from = run; run += st.v; bars.push({n:st.n, from, to:run, v:st.v, i}); });
+  bars.push({n:L("Til slutt","What is left"), from:0, to:run, v:run, i:steps.length, total:true});
+
+  const vals = bars.flatMap(b=>[b.from,b.to]).concat([0]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = (hi-lo)*0.18 || 1; lo -= pad; hi += pad;
+  const Y = v => mt + (1-(v-lo)/(hi-lo))*(H-mt-mb);
+  const Xc = i => ml + gapw*i + gapw/2;
+
+  let g = "";
+  niceTicks(lo,hi,4).forEach(v=>{
+    g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+    g += '<text x="'+(ml-10)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" '+AX+'>'+mkr(v)+'</text>';
+  });
+  g += '<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--axis)"/>';
+
+  bars.forEach((b,i)=>{
+    const y0 = Y(b.from), y1 = Y(b.to), top = Math.min(y0,y1), h = Math.max(2, Math.abs(y1-y0));
+    const fill = b.total ? (b.v>=0?"var(--good)":"var(--crit)")
+               : i===0   ? (b.v>=0?"var(--s1)":"var(--crit)")
+               : b.v>=0  ? "var(--s3)" : "var(--ink-3)";
+    g += '<rect x="'+(Xc(i)-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)
+      + '" rx="3" fill="'+fill+'"/>';
+    if(i < bars.length-1 && !bars[i+1].total)
+      g += '<line x1="'+(Xc(i)+bw/2).toFixed(1)+'" x2="'+(Xc(i+1)-bw/2).toFixed(1)+'" y1="'+y1.toFixed(1)+'" y2="'+y1.toFixed(1)+'" stroke="var(--line-2)" stroke-width="1"/>';
+    g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(top-8).toFixed(1)+'" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="500" fill="'
+      + (b.total ? (b.v>=0?"var(--good)":"var(--crit)") : "var(--ink-2)") + '">'
+      + (b.v>=0?"+":"−") + esc(mkr(Math.abs(b.v))) + '</text>';
+    const ord = b.n.split(" ");
+    if(ord.length > 2){
+      g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(H-mb+18)+'" text-anchor="middle" '+AXL+'>'+esc(ord.slice(0,2).join(" "))+'</text>';
+      g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(H-mb+32)+'" text-anchor="middle" '+AXL+'>'+esc(ord.slice(2).join(" "))+'</text>';
+    } else {
+      g += '<text x="'+Xc(i).toFixed(1)+'" y="'+(H-mb+18)+'" text-anchor="middle" '+AXL+'>'+esc(b.n)+'</text>';
+    }
+  });
+
+  const svg = setSvg("plotAlt","tipAlt",g,W,H);
+  const plot = document.getElementById("plotAlt"), tip = document.getElementById("tipAlt");
+  plot.onpointermove = ev => {
+    const r = svg.getBoundingClientRect(), sx = (ev.clientX-r.left)/r.width*W;
+    const i = Math.floor((sx-ml)/gapw);
+    if(i<0 || i>=bars.length){ hide(tip); return; }
+    const b = bars[i];
+    place(tip, plot, svg, W, Xc(i), Math.min(Y(b.from),Y(b.to)),
+      '<div class="t">'+esc(b.n)+'</div>'
+      + tipRow(b.total ? L("Etter alt","After everything") : L("Endring","Change"), krS(b.v))
+      + (b.total ? "" : tipRow(L("Står igjen","Running total"), krS(b.to))));
+  };
+  plot.onpointerleave = () => hide(tip);
+
+  // ── flisene ──────────────────────────────────────────────────────────
+  const flis = (k,v,cls,sub) => '<div class="h"><span class="k">'+esc(k)+'</span><span class="v'
+    + (cls?" "+cls:"")+'">'+v+'</span><span class="s">'+sub+'</span></div>';
+  const fortegn = v => (v>=0?"+":"−") + mkr(Math.abs(v));
+  document.getElementById("altRad").innerHTML =
+      flis(L("Modellens svar","The model's answer"), fortegn(A.start), A.start>=0?"pos":"neg",
+           L("bolig mot fond, før tid og botid","flat vs fund, before time and residence"))
+    + flis(L("Tiden din","Your time"), "−" + mkr(A.tid), "neg",
+           esc(nf0.format(S.timer)) + L(" timer i året à "," hours a year at ") + esc(kr(S.timepris))
+           + L(" · lagt i fondet i stedet"," · put in the fund instead"))
+    + flis(S.botid ? L("Botidsåret","The year of residence") : L("Hvis du flytter inn","If you move in"),
+           fortegn(A.bo), A.bo>=0?"pos":"neg",
+           [[L("skattefri gevinst","tax-free gain"), A.gevinst],
+            [L("tapt leie","rent lost"), -A.tapt],
+            [L("spart bokostnad","housing saved"), A.spart],
+            [L("mindre formuesskatt","less wealth tax"), A.formue],
+            [L("flytting","moving"), -A.flytt]]
+             .filter(([,v]) => Math.abs(v) > 500)
+             .map(([nvn,v]) => esc(fortegn(v) + " " + nvn)).join(" · ")
+           + (S.botid ? "" : L(" · ikke med i grafen"," · not in the chart yet")))
+    + flis(L("Til slutt","What is left"), fortegn(A.netto), A.netto>=0?"pos":"neg",
+           A.netto>=0 ? L("boligen er fortsatt foran","the flat is still ahead")
+                      : L("fondet er foran når alt er med","the fund is ahead once everything is counted"));
+
+  document.getElementById("altNote").textContent =
+    L("Etter ","After ") + N + L(" år"," years") + " · " + nf0.format(S.timer) + L(" timer i året"," hours a year")
+    + L(" à "," at ") + kr(S.timepris) + (S.botid ? L(" · med botidsåret"," · with the year of residence") : "");
+
+  document.getElementById("altFot").innerHTML = L(
+    "Timene er priset til det de kunne blitt i indeksfondet i stedet, og timeprisen vokser med "
+    + "inflasjonen. Er tallet lavt, er det fordi 20 timer i året er lite for en utleiebolig — "
+    + "én vannlekkasje spiser det alene."
+    + (S.botid
+        ? " Botidsåret forutsetter at du faktisk bor der: kravet er eid i mer enn ett år og bodd der "
+          + "minst 12 av de siste 24 månedene før salget. Det året er boligen primærbolig, så leien "
+          + "uteblir og driftskostnadene slutter å være fradragsberettiget — begge deler er trukket fra."
+        : " Botidsåret er ikke med i grafen. Slå på bryteren i panelet for å legge det inn.")
+    + " Regnestykket sammenligner fortsatt forventning mot forventning, ikke risiko mot risiko.",
+    "The hours are priced at what they could have become in the index fund instead, and the hourly rate "
+    + "grows with inflation. If the number looks small, it is because 20 hours a year is little for a "
+    + "rental flat — one water leak eats that on its own."
+    + (S.botid
+        ? " The year of residence assumes you actually live there: the rule is ownership for more than a "
+          + "year and residence for at least 12 of the last 24 months before the sale. For that year the "
+          + "flat is your primary home, so the rent stops and the running costs stop being deductible — "
+          + "both are subtracted."
+        : " The year of residence is not in the chart. Switch it on in the panel to include it.")
+    + " The arithmetic still compares expectation with expectation, not risk with risk.");
+
+  document.getElementById("tblAlt").innerHTML = tableHtml(
+    [L("Post","Item"), L("Beløp","Amount"), L("Står igjen","Running total")],
+    bars.map(b => [esc(b.n), krS(b.v), krS(b.to)]));
+}
+
 /* ═══ 11. Kontroller og oppdatering ══════════════════════════════════════ */
 const $ = id => document.getElementById(id);
 const FMT = {
   pris:kr, opp:kr, leie:v=>kr(v)+"/mnd", drift:v=>kr(v)+"/mnd",
   ledig:pct1, vedl:pct1, ltv:v=>nf0.format(v)+" %", rente:pct1, ektot:kr,
   lopetid:v=>v+" år", vekstbolig:pct1, indeks:pct1, kpi:pct1,
-  horisont:v=>v+" år", salgsomk:pct1, formuesats:pct2, driftandel:pct1
+  horisont:v=>v+" år", salgsomk:pct1, formuesats:pct2, driftandel:pct1,
+  timer:v=>nf0.format(v)+" t", timepris:v=>kr(v)+"/t", egenleie:v=>kr(v)+"/mnd", flytting:kr
 };
 /* beløpssnarveiene: faste summer, pluss «hele kjøpesummen» som følger boligen */
 function ekChip(c){
@@ -1917,8 +2147,9 @@ function ekChip(c){
   return Math.min(parseFloat(el.max), Math.max(parseFloat(el.min), Math.round(raw/50000)*50000));
 }
 const RANGES = ["pris","opp","leie","drift","ledig","vedl","ltv","rente","lopetid","ektot",
-                "vekstbolig","indeks","kpi","horisont","salgsomk","formuesats","driftandel"];
-const TOGGLES = ["dokavg","avdragsfri","skatt","formue","restfond"];
+                "vekstbolig","indeks","kpi","horisont","salgsomk","formuesats","driftandel",
+                "timer","timepris","egenleie","flytting"];
+const TOGGLES = ["dokavg","avdragsfri","skatt","formue","restfond","botid"];
 let picked = -1;
 
 /* ═══ Tallfeltene ════════════════════════════════════════════════════════
@@ -2029,6 +2260,9 @@ function syncInputs(){
   const fn = $("fabNum");
   if(fn) fn.textContent = S.ltv + " % lån · " + pct1(S.rente);
 
+  const bof = $("botidFelt");
+  if(bof) bof.hidden = !S.botid;
+
   // fast egenkapital: feltet vises bare når bryteren står på, og forteller fordelingen
   const ekf = $("ektotField");
   if(ekf){
@@ -2050,7 +2284,7 @@ function syncInputs(){
 }
 
 /* ═══ Tilstand i adressefeltet — hver innstilling kan deles som lenke ═════ */
-const BOOLS = ["dokavg","avdragsfri","skatt","formue","restfond"];
+const BOOLS = ["dokavg","avdragsfri","skatt","formue","restfond","botid"];
 const AVLEDET = ["pris","opp","leie","drift"];   // følger av valgt bolig
 
 function writeUrl(){
@@ -2176,6 +2410,7 @@ function render(){
   drawHeat();
   drawWealth(sim);
   drawFall(sim);
+  drawAlt(sim);
   LAST.th = th;
   drawBidTable();
   drawBidChart();
@@ -2192,7 +2427,7 @@ function drawCaveats(sim){
     ["Concentration", "One flat is not a portfolio.",
      "One building, one city, one tenant at a time. A global index fund is thousands of companies across dozens of countries. The same expected return does not mean the same spread."],
     ["Time", "The flat is a job.",
-     "Viewings, contracts, water leaks, debt collection, refurbishing between tenants. Put an hourly rate on that and subtract it from the yield — 20 hours a year at " + kr(600) + " an hour is " + pct2(12000/sim.kost*100) + " of the total price."],
+     "Viewings, contracts, water leaks, debt collection, refurbishing between tenants. The chapter above prices those hours and subtracts them — " + nf0.format(S.timer) + " hours a year at " + kr(S.timepris) + " is " + pct2(S.timer*S.timepris/sim.kost*100) + " of the total price per year."],
     ["Liquidity", "The fund sells in a day, the flat in a quarter.",
      "The " + pct1(S.salgsomk) + " selling cost is in the model. The time it takes, and the fact that you cannot sell half a bathroom, is not."],
     ["Financing", "The bank sets a limit the model cannot see.",
@@ -2207,7 +2442,7 @@ function drawCaveats(sim){
     ["Konsentrasjon", "Én bolig er ikke en portefølje.",
      "Ett bygg, én by, én leietaker om gangen. Et globalt indeksfond er tusenvis av selskaper i titalls land. Samme forventede avkastning betyr ikke samme spredning."],
     ["Tid", "Boligen er en jobb.",
-     "Visninger, kontrakter, vannlekkasjer, inkasso, oppussing mellom leietakere. Sett en timepris på det og trekk den fra yielden — 20 timer i året på " + kr(600) + " timen er " + pct2(12000/sim.kost*100) + " av totalprisen."],
+     "Visninger, kontrakter, vannlekkasjer, inkasso, oppussing mellom leietakere. Kapittelet over priser timene og trekker dem fra — " + nf0.format(S.timer) + " timer i året à " + kr(S.timepris) + " er " + pct2(S.timer*S.timepris/sim.kost*100) + " av totalprisen i året."],
     ["Likviditet", "Fondet selges på en dag, boligen på et kvartal.",
      "Salgsomkostningene på " + pct1(S.salgsomk) + " ligger inne i modellen. Tiden det tar, og at du ikke kan selge et halvt bad, gjør det ikke."],
     ["Finansiering", "Banken setter en grense modellen ikke ser.",
