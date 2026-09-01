@@ -1175,6 +1175,23 @@ function fondAlene(K, N){
   return fond - gev;
 }
 
+/* Årlig avkastning på pengene du faktisk har stilt med. Boligsporet får ikke
+   bare kapitalen ved start, men også det du fyller på underveis — da er
+   (formue/kapital)^(1/N) feil mål, for de kronene har ikke ligget der like
+   lenge. Renten som nuller kontantstrømmen har det. */
+function internrente(kapital, innskudd, sluttverdi, N){
+  if(!(kapital > 0) || !(sluttverdi > 0) || N < 1) return null;
+  const npv = r => {
+    let v = -kapital;
+    for(let t=1; t<=N; t++) v -= (innskudd[t-1] || 0)/Math.pow(1+r, t);
+    return v + sluttverdi/Math.pow(1+r, N);
+  };
+  let lo = -0.95, hi = 3;
+  if(npv(lo) <= 0 || npv(hi) >= 0) return null;
+  for(let i=0; i<80; i++){ const m = (lo+hi)/2; if(npv(m) > 0) lo = m; else hi = m; }
+  return (lo+hi)/2*100;
+}
+
 /* Fast egenkapital: hva boligen krever, hva som blir til overs, og den laveste
    belåningsgraden beløpet i det hele tatt rekker til. */
 function kapitalOppsett(o){
@@ -1355,11 +1372,14 @@ function drawKapital(){
   const K = S.ektot, N = Math.round(S.horisont);
   const xs = []; for(let b=0; b<=90; b++) xs.push(b);
   const uten = fondAlene(K, N);                 // kjøper ikke bolig
+  const utenAvk = internrente(K, [], uten, N);  // og hva det gir per år
   kapData = xs.map(b => {
     const sim = simuler({ltv:b}), a = sim.siste;
+    const avk = a ? internrente(K, sim.aar.map(x => x.innskudd), a.bolig, N) : null;
     return {b, mulig: sim.EK <= K + 0.5, ek: sim.EK, rest: Math.max(0, K - sim.EK),
             bolig: a ? a.bolig : 0, fond: uten,
-            innskutt: a ? Math.max(0, a.innskuttSum - sim.KAP) : 0};
+            innskutt: a ? Math.max(0, a.innskuttSum - sim.KAP) : 0,
+            avk, mer: (avk == null || utenAvk == null) ? null : avk - utenAvk};
   });
   const ok = kapData.filter(d => d.mulig);
 
@@ -1472,6 +1492,7 @@ function drawKapital(){
             + tipRow(L("Bolig + rest i fond","Flat + rest in fund"), krS(d.bolig), "var(--s1)")
             + tipRow(L("Kjøper ikke bolig","No flat bought"), krS(uten), "var(--s2)")
             + tipRow(L("Differanse","Difference"), (diff>=0?"+":"−")+kr(Math.abs(diff)))
+            + tipRow(L("Meravkastning","Excess return"), d.mer==null?"—":ppS(d.mer)+L(" per år"," per year"))
           : tipRow(L("Krever egenkapital","Equity required"), kr(d.ek))
             + tipRow(L("Du mangler","You are short"), kr(Math.max(0, d.ek - K)))));
   };
@@ -1489,18 +1510,22 @@ function drawKapital(){
     + (cls?" "+cls:"")+'">'+v+'</span><span class="s">'+sub+'</span></div>';
   document.getElementById("kapRad").innerHTML =
       tile(L("Kjøper ikke bolig","No flat bought"), mkr(uten), "",
-           esc(kr(K)) + L(" i indeksfond i " + N + " år"," in the index fund for " + N + " years"))
+           esc(kr(K)) + L(" i indeksfond i " + N + " år"," in the index fund for " + N + " years")
+           + (utenAvk == null ? "" : " · " + esc(pct1(utenAvk)) + L(" per år"," per year")))
     + tile(L("Ved " + S.ltv + " % belåning","At " + S.ltv + " % leverage"),
            naa.mulig ? (dNaa>=0?"+":"−")+mkr(Math.abs(dNaa)) : "—",
            naa.mulig ? (dNaa>=0?"pos":"neg") : "",
            naa.mulig
-             ? esc(kr(naa.ek)) + L(" i boligen · "," in the flat · ") + esc(kr(naa.rest)) + L(" i fond"," in the fund")
+             ? (naa.mer == null ? "" : "<b>" + esc(ppS(naa.mer)) + L(" per år</b> · "," per year</b> · "))
+               + esc(kr(naa.ek)) + L(" i boligen · "," in the flat · ") + esc(kr(naa.rest)) + L(" i fond"," in the fund")
                + (naa.innskutt > 0 ? L(" · " + kr(naa.innskutt) + " fylt på underveis",
                                        " · " + kr(naa.innskutt) + " topped up along the way") : "")
              : L("egenkapitalen rekker ikke hit","your equity does not reach this far"))
     + tile(dBest >= 0 ? L("Best belåningsgrad","Best loan-to-value") : L("Minst tap mot fondet","Smallest gap to the fund"),
            best.b + " %", "",
-           esc(mkr(best.bolig)) + " · " + (dBest>=0?"+":"−") + esc(mkr(Math.abs(dBest))) + L(" mot å la være"," against not buying"))
+           esc(mkr(best.bolig)) + " · " + (dBest>=0?"+":"−") + esc(mkr(Math.abs(dBest)))
+           + (best.mer == null ? "" : " · " + esc(ppS(best.mer)) + L(" per år"," per year"))
+           + L(" mot å la være"," against not buying"))
     + tile(info.ltvMin > 0.5 ? L("Laveste du får til","Lowest you can manage") : L("Kontantkjøp","Cash purchase"),
            lavest.b + " %", "",
            info.ltvMin > 0.5
@@ -1523,7 +1548,8 @@ function drawKapital(){
     + (naa.mulig && naa.innskutt > 0
         ? " Merk at boligen krever <b style=\"color:var(--ink)\">" + kr(naa.innskutt) + "</b> fylt på fra "
           + "lønna gjennom eiertiden ved " + naa.b + " % belåning. Fondsalternativet krever ingenting, "
-          + "så de kronene er penger boligkurven har fått og fondskurven ikke."
+          + "så de kronene er penger boligkurven har fått og fondskurven ikke. Meravkastningen er regnet "
+          + "som internrente, så innskuddene teller fra den dagen de går inn og blåser ikke opp prosenten."
         : "")
     + " Kurven sier ingenting om risiko: den høyeste belåningen er nesten alltid det høyeste tallet, og "
     + "samtidig den eneste måten å tape hele beløpet på.",
@@ -1535,17 +1561,20 @@ function drawKapital(){
     + (naa.mulig && naa.innskutt > 0
         ? " Note that at " + naa.b + " % leverage the flat needs <b style=\"color:var(--ink)\">" + kr(naa.innskutt)
           + "</b> topped up out of your salary over the holding period. The fund option needs nothing, so "
-          + "those kroner are money the flat curve has received and the fund curve has not."
+          + "those kroner are money the flat curve has received and the fund curve has not. The excess return "
+          + "is an internal rate of return, so the top-ups count from the day they go in and do not inflate it."
         : "")
     + " The curve says nothing about risk: the highest leverage is nearly always the highest number, and "
     + "at the same time the only way to lose the whole amount.");
 
   document.getElementById("tblKap").innerHTML = tableHtml(
     [L("Belåningsgrad","Loan-to-value"),L("Egenkapital i bolig","Equity in the flat"),L("I indeksfond","In the index fund"),
-     L("Fylt på underveis","Topped up"),L("Bolig + fond","Flat + fund"),L("Kjøper ikke bolig","No flat bought"),L("Differanse","Difference")],
+     L("Fylt på underveis","Topped up"),L("Bolig + fond","Flat + fund"),L("Kjøper ikke bolig","No flat bought"),
+     L("Differanse","Difference"),L("Meravkastning","Excess return")],
     kapData.filter(d=>d.b%10===0).map(d=> d.mulig
-      ? [d.b+" %", kr(d.ek), kr(d.rest), kr(d.innskutt), krS(d.bolig), krS(uten), krS(d.bolig-uten)]
-      : [d.b+" %", kr(d.ek), "—", "—", L("ikke mulig","not possible"), krS(uten), "—"]));
+      ? [d.b+" %", kr(d.ek), kr(d.rest), kr(d.innskutt), krS(d.bolig), krS(uten), krS(d.bolig-uten),
+         d.mer==null?"—":ppS(d.mer)]
+      : [d.b+" %", kr(d.ek), "—", "—", L("ikke mulig","not possible"), krS(uten), "—", "—"]));
 }
 
 /* ═══ 7. Graf 2 — dine 62 boliger ════════════════════════════════════════ */
