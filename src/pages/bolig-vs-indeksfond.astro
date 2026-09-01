@@ -292,10 +292,13 @@ tbody td{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(-
 tbody td:first-child{font-family:var(--sans); color:var(--ink)}
 
 /* ─── tooltip ───────────────────────────────────────────────────────────── */
+/* Boblene henger på <body> og er posisjonert mot vinduet. Ellers klipper
+   .card{overflow:hidden} dem i overkant, og rullefeltet i .plot på små
+   skjermer klipper dem i sidekant. */
 .tip{
-  position:absolute; pointer-events:none; opacity:0; transform:translate(-50%,-100%);
+  position:fixed; pointer-events:none; opacity:0; transform:translate(-50%,-100%);
   background:var(--surface); border:1px solid var(--line-2); border-radius:9px;
-  box-shadow:var(--shadow); padding:9px 11px; font-size:12.5px; min-width:130px; z-index:5;
+  box-shadow:var(--shadow); padding:9px 11px; font-size:12.5px; min-width:130px; z-index:52;
   transition:opacity .1s;
 }
 .tip .t{font-weight:600; margin-bottom:5px; font-size:12.5px}
@@ -1205,18 +1208,23 @@ const AXL= 'fill="var(--ink-2)" font-family="var(--sans)" font-size="11.5"';
 function setSvg(plotId, tipId, inner, w, h){
   const el = document.getElementById(plotId), tip = document.getElementById(tipId);
   el.innerHTML = '<svg viewBox="0 0 '+w+' '+h+'" role="img">'+inner+'</svg>';
-  if(tip) el.appendChild(tip);
+  // boblen flyttes ut av kortet én gang, så ingen overflow:hidden kan klippe den
+  if(tip && tip.parentElement !== document.body) document.body.appendChild(tip);
   return el.querySelector("svg");
 }
+/* plot-argumentet er ikke lenger i bruk — boblen måles mot vinduet. */
 function place(tip, plot, svg, vbW, x, y, text){
-  const r = svg.getBoundingClientRect(), pr = plot.getBoundingClientRect(), k = r.width/vbW;
+  const r = svg.getBoundingClientRect(), k = r.width/vbW;
   tip.innerHTML = text;
   tip.style.opacity = 1;
-  const tw = tip.offsetWidth;
-  let px = (r.left - pr.left) + x*k;
-  px = Math.max(tw/2+4, Math.min(pr.width - tw/2 - 4, px));
-  tip.style.left = (px + plot.scrollLeft) + "px";
-  tip.style.top  = ((r.top - pr.top) + y*k - 10) + "px";
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  const ax = r.left + x*k, ay = r.top + y*k;
+  // vannrett: hele boblen skal være innenfor vinduet
+  const px = Math.max(tw/2 + 8, Math.min(window.innerWidth - tw/2 - 8, ax));
+  // loddrett: over punktet, men snudd under når det ikke er plass over
+  const py = (ay - 10 - th < 8) ? ay + 18 + th : ay - 10;
+  tip.style.left = px.toFixed(1) + "px";
+  tip.style.top  = py.toFixed(1) + "px";
 }
 const hide = tip => { tip.style.opacity = 0; };
 function tipRow(k, v, color){
@@ -2541,6 +2549,11 @@ async function importerFinn(){
   $("finnInn").addEventListener("keydown", e => {
     if((e.metaKey || e.ctrlKey) && e.key === "Enter"){ e.preventDefault(); importerFinn(); }
   });
+
+  // boblene står fast mot vinduet, så de må vekk når noe ruller under dem
+  document.addEventListener("scroll", () => {
+    document.querySelectorAll(".tip").forEach(t => { t.style.opacity = 0; });
+  }, {capture:true, passive:true});
 
   // skuff på smale skjermer
   const rail = $("rail"), scrim = $("scrim"), fab = $("fab");
