@@ -1,0 +1,522 @@
+---
+title: "Comparing SLAM models for 3DGS, floorplan and dollhouse"
+pubDate: 2026-09-11T21:30:00+02:00
+description: "One phone video should document a whole property: listing photos, inventory, floor plan and dollhouse. 11 monocular pose sources (ORB-SLAM3, DPVO, DPV-SLAM, MASt3R-SLAM, MapAnything, Pi3X) compared on two apartments, same depth maps, only the camera poses change. Interactive viewers included."
+tags: ["slam", "3dgs", "3d reconstruction", "computer vision", "english"]
+author: "Mathias Haugsbø"
+heroImage: "/walkthrough-slam/hero.jpg"
+showToc: true
+draft: false
+---
+
+> **Warning: this post is AI-generated.** An AI agent (Claude Code) did the work behind it under my direction. It
+> ran the experiments on a rented GPU, wrote the code, made the figures and viewers, and drafted this text. The
+> listing photos in the image-generation section are AI images too. Read the numbers and claims with that in mind,
+> and check the pipeline yourself before relying on it.
+
+**TL;DR.** We're building an onboarding portal where **one phone video documents a whole property**: listing-ready
+photos (from a **3D Gaussian splat**), a complete inventory, a **floor plan** and a **dollhouse** (a 3D model with the
+roof cut off), all in minutes. Monocular depth networks are good enough now. What decides whether the result holds
+together is the **camera trajectory**. Every pose error becomes a doubled wall, a bent corridor, a storey in the
+wrong place, or a blurry splat. So I fused the *same* depth maps with the poses from 11 pose sources:
+ORB-SLAM3 and the other monocular methods on the [LaMAria leaderboard](https://www.lamaria.ethz.ch/leaderboard),
+MASt3R-SLAM, our old MapAnything poses, and my colleague Njål's Pi3X setup.
+
+- **MapAnything**, our default until now, jitters per view (8° local rotation error on apartment B), which smears
+  the floor plan into doubled walls.
+- **Stock ORB-SLAM3 and MASt3R-SLAM lose the apartment** at the first fast pan past a door. They pose only
+  12–71 % of the video.
+- **DPV-SLAM++ never loses track** and was the **only** method to put apartment A's upper floor at the right
+  height (2.84 m above the ground floor).
+- A ~40-line patch to MASt3R-SLAM gets it to full coverage and the best loop consistency we could measure. But
+  a segment that is never revisited floats: it stacked apartment A's upstairs into the ground floor.
+- **For the splats**, swapping MapAnything's poses for DPV-SLAM++'s lifts held-out PSNR from **21.4 → 27.4 dB** and
+  **15.7 → 22.7 dB**, with the same trainer, frames and depth.
+- **Inventory and listing photos from the same video**: SAM 3 labels every room, the poses pin each item into the
+  dollhouse, and ChatGPT's image model turns frames into listing photos. It is faithful from real frames, and
+  it invents a different apartment when given only the dollhouse.
+- **Everything is replicable**: the full pipeline, commands and settings are in [Replicate it](#replicate-it).
+
+<iframe src="/walkthrough-slam/dollhouse.html" title="Dollhouse viewer: same depth maps, different camera poses" width="100%" height="620" style="border:1px solid #dedbd4;border-radius:10px;" loading="lazy"></iframe>
+
+*All three dollhouses fuse the identical depth maps. Only the camera poses differ. Drag to orbit, use the roof-cut
+slider to peel the model, and switch to a single method to look closer. On apartment A, raise the roof cut past
+3 m and only DPV-SLAM++ has an upper floor. The red pins are inventory items (see below).*
+
+## Why we care
+
+At [Proptonomy](https://proptonomy.ai) we manage short-term rentals, and onboarding a new property is slow: a
+photographer for the listing, someone to write the inventory, someone to document where things are. The portal we're
+building replaces that with **one phone video**: a calm 70–80 s walk through every room, portrait. From that video it
+should produce:
+
+- **listing-ready photography**: a 3D Gaussian splat of the apartment that can be rendered from better angles than
+  the phone ever took;
+- a **complete inventory** ("where is the fuse box?"), with a timestamp and a photo for every item;
+- a **floor plan** with room areas, and a **dollhouse** that a cleaner, a guest or an owner can spin around.
+
+All of it hangs off the same thing: where the camera was for every frame.
+
+The geometry step used [MapAnything](https://github.com/facebookresearch/map-anything): one feed-forward pass,
+metric, about 60 s. It made plausible floor plans, but rooms leaked into each other, walls came out doubled, a
+two-storey flat lost its upper floor, and the splats capped out around 21 dB. The trigger for this bench was
+[microSLAM](https://www.microagi.ai/articles/microslam), announced on 10 September. It is #1 among monocular
+methods on LaMAria and #2 overall, beating Meta's stereo + IMU Aria SLAM on moving-platform and long sequences.
+Its code isn't out yet, so I ran what is.
+
+## Setup
+
+Two apartments in Norway, anonymised here. People in the frames are blurred or removed.
+
+- **Apartment A**: two storeys joined by a stair, 73 s, 576×1024 at 25 fps, heavily compressed.
+- **Apartment B**: one storey, white walls, identical doors, tiled wet rooms, 78 s, 720×1280 at 30 fps.
+
+| Pose source | What it is |
+| --- | --- |
+| ORB-SLAM3 (mono, no IMU) | feature-based, Atlas multi-map; best of 3 runs, largest map exported |
+| DPVO | deep patch visual odometry, no loop closure |
+| DPV-SLAM | DPVO + proximity loop closure |
+| DPV-SLAM++ | DPV-SLAM + DBoW2 image-retrieval loop closure |
+| MapAnything | feed-forward multi-view geometry, 146 views, our old default |
+| Pi3X | feed-forward [π³](https://github.com/yyfz/Pi3), 146 views, Njål's exact recipe |
+| MASt3R-SLAM (± K) | dense SLAM on MASt3R priors, retrieval loop closure ([CVPR 2025](https://edexheim.github.io/mast3r-slam/)) |
+| MASt3R-SLAM + K, low-support | Njål's config: `min_match_frac` 0.05 → 0.01, single-threaded |
+| MASt3R-SLAM + segments (± K) | our patch (below) |
+
+Everything that takes intrinsics got the same K, from COLMAP bundle adjustment on a subset of each video. The
+learned guesses were unreliable: MoGe-2 was 13 % and 6 % too high, MapAnything 4 % too low and 18 % too high.
+Pi3X, as a side effect, recovered the focal length within **0.4 %** of bundle adjustment on both videos.
+
+## From poses to a dollhouse and a floor plan
+
+1. **Same frames, same depth.** Every trajectory is resampled to the same ~290 frames per video. Each frame's
+   [MoGe-2](https://github.com/microsoft/MoGe) metric depth map is placed with that method's camera pose and
+   fused into a TSDF mesh. That mesh *is* the dollhouse. Because the depth is identical for everyone, any doubled
+   wall, fanned-out room or misplaced storey is pose error. (This is also microSLAM's own comparison protocol.)
+2. **Level and align.** Gravity comes from the upright phone's camera axes, and the walls are rotated onto the
+   grid using the dominant horizontal surface normals.
+3. **Storeys.** A storey is a dominant up-facing surface with the cameras 0.6–2.4 m above it, at least 2 m from
+   the next one (so a table top doesn't count).
+4. **Floor plan per storey.** A wall is a 4 cm cell holding vertical surface that spans at least 0.7 m of height,
+   between 0.3 and 2.1 m above that storey's floor. The floor is up-facing surface within 12 cm of it. Same scale
+   and extent for every method.
+
+To score the poses without ground truth, I built a pseudo-GT: SIFT matches lifted with the same depth, then
+PnP-RANSAC with sanity checks. *Local* pairs are 0.5–1 s apart. *Revisit* pairs are places filmed twice more than
+10 s apart, found by DINOv2 retrieval: exactly what a floor plan needs to agree with itself. Scores are
+LaMAria-style recall at 2°/10 cm, 5°/25 cm and 10°/50 cm (0–100), with untracked frames counted as misses.
+
+## Floor plans
+
+![Floor plans, apartment B](/walkthrough-slam/apt-b-plans-s1.jpg)
+*Apartment B, the same depth maps under three trajectories. Black is wall, beige is floor, red is the camera path.
+MapAnything's zig-zag path is per-view jitter, and it turns every wall into two.*
+
+![Floor plans, apartment A, ground floor](/walkthrough-slam/apt-a-plans-s1.jpg)
+*Apartment A, ground floor.*
+
+![Floor plans, apartment A, upper floor](/walkthrough-slam/apt-a-plans-s2.jpg)
+*Apartment A, upper floor. Only DPV-SLAM++ recovers a second storey, 2.84 m above the first. MASt3R-SLAM
+(patched) and MapAnything both collapse it into the ground floor.*
+
+The dollhouses, as static renders for four of the pose sources:
+
+![Dollhouses, apartment A](/walkthrough-slam/apt-a-dollhouse.jpg)
+![Dollhouses, apartment B](/walkthrough-slam/apt-b-dollhouse.jpg)
+*Roof cut at 1.9 m. Same depth in every tile; only the poses differ.*
+
+## Inventory: what's in every room
+
+The same video also feeds the inventory. Every analysed frame goes through [SAM 3](https://ai.meta.com/sam3/)
+with a 165-phrase rental vocabulary ("dishwasher", "fire extinguisher", "fuse box", "stain", …). A human review of
+456 crops measured **81.6 % precision**. Each item keeps the timestamp of its best view, a crop, a ±7 s clip for "where
+is the …?", the room it was seen in, and a size.
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+  <img src="/walkthrough-slam/apt-b-inventory-living-room.jpg" alt="SAM 3 inventory labels, living room" loading="lazy" />
+  <img src="/walkthrough-slam/apt-b-inventory-kitchen.jpg" alt="SAM 3 inventory labels, kitchen" loading="lazy" />
+  <img src="/walkthrough-slam/apt-b-inventory-bedroom.jpg" alt="SAM 3 inventory labels, bedroom" loading="lazy" />
+</div>
+
+*Apartment B: living room, kitchen and bedroom, one tag per item type. From the whole walkthrough the inventory
+lists, among others:*
+
+| Room | Items |
+| --- | --- |
+| Living room | sofa, coffee table, TV, soundbar, rug, cushions, plants, vases, remote controls, balcony door |
+| Kitchen | fridge, oven, microwave, coffee machine, dishwasher, cooktop, sink, cutting board, dining table, chairs |
+| Bedroom | double bed, headboard, bedside lamp, bedding, cabinet |
+| Whole flat | 2 bedrooms, 1 bathroom (toilet + shower + sink), washing machine, balcony, fire extinguisher, water heater |
+
+Where the pose source comes in: to put an item *in* the dollhouse, its best frame needs a camera pose. With the
+DPV-SLAM++ pose for that exact moment, a ray through the item's box is cast onto the mesh. The **Inventory** checkbox in
+the viewer above shows the result: about 20 pins per apartment (appliances, beds, sofa, sanitary fixtures, safety
+equipment). That turns "where is the fire extinguisher?" into a point in 3D as well as a timestamp. Room assignment is still the weak part: the August run voted three
+"bathrooms" in a one-bathroom flat, and at least one pin (a "bathtub" beside apartment A's sofa) is a false positive.
+
+## The numbers
+
+### Apartment A (two storeys, 28 verified revisit pairs)
+
+| Pose source | Frames posed | Local score | Local drift | Revisit score | Revisit error |
+| --- | --- | --- | --- | --- | --- |
+| ORB-SLAM3 (mono) | 37 % | 45.9 | 2.5 cm | 46.4 | 21.4 cm |
+| DPVO | 100 % | 99.4 | 2.1 cm | 65.5 | 15.2 cm |
+| DPV-SLAM | 100 % | 78.5 | 5.3 cm | 33.3 | 41.6 cm |
+| DPV-SLAM++ | 100 % | **99.7** | 2.1 cm | 45.2 | 25.7 cm |
+| MapAnything (our old default) | 99 % | 74.7 | 5.5 cm | 61.9 | 19.5 cm |
+| Pi3X (Njål's setup) | 99 % | 90.4 | 3.5 cm | 73.8 | 12.1 cm |
+| MASt3R-SLAM | 57 % | 74.5 | 3.0 cm | 46.4 | 26.9 cm |
+| MASt3R-SLAM + K | 71 % | 84.2 | **1.6 cm** | 71.4 | 12.4 cm |
+| MASt3R-SLAM + K, low-support (Njål) | 72 % | 84.2 | **1.6 cm** | 71.4 | 12.4 cm |
+| MASt3R-SLAM + segments | 100 % | 91.8 | 3.7 cm | 47.6 | 26.5 cm |
+| MASt3R-SLAM + K + segments (ours) | 100 % | 97.3 | 1.8 cm | **77.4** | **10.6 cm** |
+
+### Apartment B (one storey)
+
+| Pose source | Frames posed | Local score | Local drift | Local rotation error | Camera-height spread |
+| --- | --- | --- | --- | --- | --- |
+| ORB-SLAM3 (mono) | 23 % | 12.0 | 46.7 cm | **0.39°** | – |
+| DPVO | 100 % | 77.1 | 5.2 cm | 0.59° | 0.95 m |
+| DPV-SLAM | 100 % | 83.7 | **2.8 cm** | 0.55° | 6.04 m |
+| DPV-SLAM++ | 100 % | **84.5** | 3.7 cm | 0.50° | 0.66 m |
+| MapAnything (our old default) | 100 % | 20.9 | 26.9 cm | 8.34° | 0.47 m |
+| Pi3X (Njål's setup) | 100 % | 56.9 | 9.4 cm | 2.47° | 0.36 m |
+| MASt3R-SLAM | 12 % | 2.0 | 44.0 cm | 1.52° | – |
+| MASt3R-SLAM + K | 12 % | 2.2 | 42.9 cm | 0.90° | – |
+| MASt3R-SLAM + K, low-support (Njål) | 12 % | 2.2 | 42.9 cm | 0.90° | – |
+| MASt3R-SLAM + segments | 100 % | 76.3 | 7.0 cm | 0.92° | 1.15 m |
+| MASt3R-SLAM + K + segments (ours) | 98 % | 80.8 | 4.7 cm | 0.43° | 0.82 m |
+
+Bold marks the best in each column. Local drift is the median translation error over 0.5–1 s. Camera-height
+spread is the p5–p95 camera height above the detected floor; in a one-storey flat it should stay near your arm's
+range. The floor fit is RANSAC, so treat it as ±0.2 m.
+
+Apartment B has **no revisit score**. Its revisit candidates only verified via essential matrices, and those
+turned out to be confident false matches on repeated white doors and tiles. So it's reported as missing rather than
+as a number.
+
+## Where tracking dies, and a floating storey
+
+Both stock SLAM families lose the apartment at the same kind of moment. The phone swings past a door, one frame is
+mostly blur or white paint, and matching drops below MASt3R-SLAM's 5 % threshold. From that single frame it
+switches to relocalisation. Relocalisation only compares against keyframes it already has, and the next room has
+none, so it never comes back. ORB-SLAM3 handles this better by opening a new map (12–14 per run), but it exports
+only the largest one.
+
+![Doorway pan, apartment A](/walkthrough-slam/apt-a-doorway.jpg)
+*Apartment A: kitchen → door frame → a bedroom never seen before. Stock MASt3R-SLAM ends here, at 57 % of the video.*
+
+The patch is small. Skip up to 15 consecutive bad frames instead of giving up. After 20 failed relocalisation
+attempts, seed a new keyframe at the last known pose and keep tracking. When the camera later returns somewhere it
+has been, retrieval loop closure pulls the new segment into place (ORB-SLAM3's Atlas idea, inside one pose graph).
+On apartment B that works: full coverage and a clean plan.
+
+Apartment A shows the catch. The walkthrough goes up the stair and **never comes back down**, so the segment that
+starts after the stair has nothing to close a loop against. It keeps the pose it was seeded with, and the upper
+floor lands inside the ground floor. DPV-SLAM++ is pure odometry with loop closure on top. It never breaks the
+chain, so the storey height survives. Without K, MASt3R-SLAM's segments also drift in scale. Njål's lower match
+threshold goes about 20 frames further on apartment A and then loses the same doorway.
+
+## Njål's setup
+
+My colleague **Njål** had built a pipeline for another apartment with [Pi3X](https://huggingface.co/yyfz233/Pi3X)
+poses, a low-support MASt3R-SLAM config, and a fast splat trainer. I ran his recipes unchanged on these two videos.
+Pi3X is the best feed-forward option here. It has the second-best loop consistency on apartment A (revisit score
+73.8), and it nails the focal length. On apartment B, though, it has 2.5° of local rotation error, and like
+MapAnything it collapses apartment A's two storeys.
+
+## 3DGS: the listing photos
+
+The splat is where listing photography comes from, and it is the most pose-sensitive output of all. I trained a
+3DGS (gsplat, 20k steps, SSIM, densification, per-view pose refinement) on each method's poses. Everything else is
+the same: frames, depth-based initialisation, trainer. PSNR is measured on every 8th frame, held out. As a second
+opinion, Njål's trainer, spirula, was run on three of the pose sources. It scores without test-time pose
+alignment, so compare within a column.
+
+| Pose source | A: PSNR | B: PSNR | A: spirula | B: spirula |
+| --- | --- | --- | --- | --- |
+| DPV-SLAM++ | **27.4 dB** | **22.7 dB** | **24.2 dB** | **21.6 dB** |
+| DPVO | 27.2 dB | 21.9 dB | – | – |
+| MASt3R-SLAM + K + segments (ours) | 26.9 dB | 21.6 dB | – | – |
+| DPV-SLAM | 24.4 dB | 20.8 dB | – | – |
+| Pi3X (Njål's setup) | 24.1 dB | 18.5 dB | 20.5 dB | 17.4 dB |
+| MASt3R-SLAM + segments | 23.8 dB | 19.9 dB | – | – |
+| MapAnything | 21.4 dB | 15.7 dB | 19.2 dB | 15.0 dB |
+
+Methods that pose less than 90 % of the video are left out, because a splat of half the apartment isn't comparable.
+Two trainers give the same ranking, so the poses set the ceiling. Run-to-run variance is about ±0.6 dB.
+
+![Held-out views, apartment B](/walkthrough-slam/apt-b-heldout.jpg)
+*Held-out frames the splat never trained on: photo left, render right. Same trainer, same frames, same depth.*
+
+<iframe src="/walkthrough-slam/viewer.html" title="Splat viewer: same frame, different poses" width="100%" height="620" style="border:1px solid #2e2e34;border-radius:8px;" loading="lazy"></iframe>
+
+*The splat viewer renders each method's splat from **that method's own camera** for the chosen video frame, next to
+the real frame. If the pose is wrong, the view is wrong. ← → to scrub, 1/2/3 to switch the pose source. Splats are
+pruned to ≤ 400k Gaussians (visually lossless: > 49 dB against the full splat).*
+
+## Generated listing photos: from video frames vs. from the dollhouse
+
+Can an image model turn this into listing photography directly? I tried OpenAI's newest ChatGPT image generation
+on the living room, kitchen and a bedroom of apartment B, with four jobs per room:
+
+1. **Video frame → listing photo**, same viewpoint: "straighten verticals, balance exposure, change nothing".
+2. **Frame + dollhouse → new viewpoint**: the scan for geometry, the frame for appearance, a wide-angle shot from the
+   corner that the phone never took.
+3. **Dollhouse only → eye-level photo**: no photo input at all, just the scan.
+4. **Dollhouse → cleaned dollhouse**: fill the holes, same viewpoint.
+
+*A note on the model: the images were made with the image tool in OpenAI's Codex CLI (logged in with ChatGPT) on
+11 September. Its C2PA provenance labels them `gpt-image` 2.0, so this may not yet be the Images 2.5 model announced on
+8 September. The API's `gpt-image-2.5-flare` is the version-certain route.*
+
+![Generated images, living room](/walkthrough-slam/apt-b-gen-living.jpg)
+![Generated images, kitchen](/walkthrough-slam/apt-b-gen-kitchen.jpg)
+![Generated images, bedroom](/walkthrough-slam/apt-b-gen-bedroom.jpg)
+*Top row: the real frame, the listing edit, and a new viewpoint from frame + dollhouse. Bottom row: the scan, an
+eye-level "photo" from the scan alone, and a cleaned-up dollhouse.*
+
+What it can do, and where it breaks:
+
+- **From a frame it is an excellent editor.** Verticals, exposure and colour come out at listing quality, and the room
+  stays the room: the same sofa and cushions, the marble table, the zebra print, the Electrolux ovens, even the towel
+  on the oven door. It keeps clutter too, like the pillow on the bedroom floor, because it was told to change nothing.
+  Staging is a separate, disclosed step. One catch: the portrait frame becomes a 3:2 landscape, so roughly half of
+  every image is outpainting. It is plausible, but not observed.
+- **Frame + dollhouse gives new camera angles.** The kitchen pulled back to show the whole L, and the living room
+  seen from further along the sofa, both look like a photographer's shots with the real materials. The geometry is only loosely followed: the sideboard gets longer and gains a plant,
+  and room depths are guessed. It needs a human check before it goes on a listing.
+- **From the dollhouse alone it shows a different apartment.** It produces a generic modern interior with the right
+  rough layout, such as the L-shaped sofa and low table in the living room. But the materials, windows and furniture
+  are invented. The living room gets an armchair and a city view, the kitchen gets wood cabinets, a window and a range
+  hood it doesn't have, and the bedroom gets **a TV** (on a dresser in the photo, on a stand in the cleaned dollhouse).
+  The black headboard in the scan may be what reads as a screen. That's fine
+  for a staging mood board, and misrepresentation on a listing.
+- **The cleaned dollhouse** is the most tempting and the most dangerous output: it looks like documentation. The
+  kitchen's L-shape is roughly right, but the living-room sofa is split in two, the kitchen gets a freestanding
+  fridge, and the bedroom gets carpet, a dresser and a TV. Keep the scan as the record.
+
+The rule I take from this: **appearance from real pixels, geometry from the scan, never geometry alone.** For the
+portal that means listing photos from the best frames (labelled as edited), extra angles from frame + scan with a
+review step, and the splat for truthful novel views, since it can't invent a TV.
+
+## What I'd use now
+
+- **DPV-SLAM++ as the default pose source, for all three outputs.** It never loses track, has the best local
+  accuracy on both flats, gives the best splats, and is the only method that got the storeys right. Avoid plain DPV-SLAM: its proximity loop closure bent both flats
+  (about 6 m of camera-height spread in a one-storey flat).
+- **MASt3R-SLAM + K + segments when the walkthrough loops back.** Where rooms are revisited it has the most
+  consistent layout, but an unrevisited segment floats.
+- **Pi3X for the intrinsics** if bundle adjustment won't register on white walls.
+- **For listing photos: generate from real frames, not from the scan.** Image models are superb editors of a real
+  frame and can add angles when given the scan for geometry, but from geometry alone they invent the apartment.
+- **When filming: go slowly through doorways, and walk back down the stairs.** Every tracking loss here was a
+  doorway pan. A return trip is what ties the storeys together.
+
+microSLAM's two stated ingredients are dynamic-object-aware tracking and robust loop closure. Those are exactly the
+gaps left here: people in mirrors, doorways, and a storey with no loop back. I'll rerun this bench when its code is out.
+
+## Caveats
+
+Two apartments, 73 and 78 s each. The pseudo-GT inherits MoGe-2's depth errors, and every method is scored against
+the same pseudo-GT, so rankings are more trustworthy than absolute numbers. The floor plans are raw geometry: no
+room segmentation or wall regularisation, on purpose, so pose errors stay visible. ORB-SLAM3 ran without IMU (the
+videos have none) and is reported as best-of-3. DPVO and DPV-SLAM ran at stride 2 on 432×768 frames.
+
+## Replicate it
+
+Everything here runs on open code, on one rented GPU. This is the exact pipeline, in order, with the settings that
+matter. The hard-won details are in **Gotchas** at the end.
+
+```text
+phone video (portrait, 70–80 s)
+ ├─ ffmpeg ─────────────▶ all frames, upright
+ ├─ COLMAP BA ──────────▶ one K for everyone
+ ├─ MoGe-2 (K fixed) ───▶ metric depth on ~290 eval frames
+ ├─ 11 pose sources ────▶ traj.txt (TUM, timestamp = frame index)
+ │     └─ resample → metric scale → pseudo-GT scores
+ ├─ TSDF (same depth, method's poses) ─▶ mesh = dollhouse ─▶ floor plans, three.js viewer
+ ├─ gsplat 3DGS (TSDF init) ───────────▶ held-out PSNR, splat viewer
+ ├─ SAM 3 (165 phrases) ───────────────▶ inventory ─▶ pins ray-cast into the mesh
+ └─ best frames + dollhouse ───────────▶ image model ─▶ listing photos
+```
+
+**Machine.** One RTX 4090 (24 GB) on RunPod, Ubuntu 22.04, CUDA 12.4, the image's PyTorch 2.4.1. Use one virtualenv per
+family, because their pins clash: DPVO wants `numpy<2`, MASt3R-SLAM wants torch 2.4.1, and a third env holds MoGe,
+MapAnything, Open3D and `gsplat==1.5.3`. Whole bench, including dead ends and the blog assets: about 6.5 GPU-hours,
+about $5.
+
+**1. Frames.** Extract all frames at full rate; ffmpeg applies the phone's rotation flag. DPVO gets a 432×768 copy.
+
+```bash
+ffmpeg -i walk.mp4 -vsync 0 -q:v 2 -start_number 0 frames/%06d.jpg
+ffmpeg -i walk.mp4 -vsync 0 -q:v 2 -vf scale=432:768 -start_number 0 frames432/%06d.jpg
+```
+
+**2. Intrinsics.** Run pycolmap incremental SfM on every 5th frame:
+
+- one shared `SIMPLE_RADIAL` camera, initialised with MoGe-2's median focal;
+- 8192 SIFT features, sequential matching with overlap 15;
+- bundle adjustment refines the focal.
+
+Accept the result only if at least 40 frames (and 15 %) register with under 1.5 px reprojection error. Every method gets this
+pinhole K (distortion set to 0). Pi3X's focal matches it to 0.4 %, so it's a good fallback.
+
+**3. Depth.** Run [MoGe-2](https://github.com/microsoft/MoGe) (`Ruicheng/moge-2-vitl-normal`) with `fov_x` fixed from
+step 2. It runs on the eval frames (every 6th frame for apartment A and every 8th for B, about 290 each). Store depth at
+288×512 with nearest-neighbour resizing, so edges don't smear into flying pixels.
+
+**4. Poses.** Each method writes TUM text with the frame index as timestamp, so every method lines up on the same
+frames.
+
+| Method | How it was run |
+| --- | --- |
+| ORB-SLAM3 | v1.0 + Pangolin v0.8, built with `-std=c++14`. A small headless mono driver feeds frames at real-time pace, so local mapping keeps up, and saves `SaveTrajectoryEuRoC` (largest map). 2000 ORB features, scale 1.2, 8 levels. Best of 3 runs. |
+| DPVO | `python demo.py --imagedir frames432 --calib calib.txt --stride 2 --save_trajectory` (K scaled to 432 px wide) |
+| DPV-SLAM | the same, plus `--opts LOOP_CLOSURE True` |
+| DPV-SLAM++ | the same, plus `--opts LOOP_CLOSURE True CLASSIC_LOOP_CLOSURE True` (build DBoW2 and DPRetrieval first) |
+| MASt3R-SLAM | `python main.py --dataset frames/ --config config/base.yaml --no-viz --calib intrinsics.yaml`, patched to log every frame's pose (stock saves keyframes only) |
+| … low-support | `config/base.yaml` plus `single_thread: True` and `tracking.min_match_frac: 0.01` |
+| … + segments | the patch below |
+| MapAnything | `facebook/map-anything`, 146 views, FOV of the long image side given |
+| Pi3X | `yyfz233/Pi3X` weights, unconditioned, `PIXEL_LIMIT=128000`, bf16, all ~146 views in one forward pass; K from the predicted rays with a centred principal point |
+
+The segment patch goes into MASt3R-SLAM's `main.py` frame loop. Stock behaviour switches to relocalisation on the first
+bad frame and stays there until a known keyframe matches:
+
+```python
+MAX_SKIP, REINIT_AFTER = 15, 20
+if mode == Mode.TRACKING:
+    n_reloc = 0
+    add_new_kf, match_info, try_reloc = tracker.track(frame)
+    if try_reloc and n_skip < MAX_SKIP:      # transient failure: blur, a door in the face
+        n_skip += 1; i += 1; continue        # drop the frame, keep the last keyframe
+    n_skip = 0
+    if try_reloc:
+        states.set_mode(Mode.RELOC)
+    ...
+elif mode == Mode.RELOC:
+    X, C = mast3r_inference_mono(model, frame); frame.update_pointmap(X, C)
+    n_reloc += 1
+    if n_reloc > REINIT_AFTER:               # a room it has never seen: start a new segment
+        frame.T_WC = lietorch.Sim3(keyframes.T_WC[len(keyframes) - 1].clone())
+        keyframes.append(frame)              # seeded at the last known pose
+        states.queue_global_optimization(len(keyframes) - 1)
+        states.set_mode(Mode.TRACKING)
+        n_reloc = 0; i += 1; continue
+    states.queue_reloc()
+```
+
+It also makes relocalisation always try the last keyframe, not only retrieval hits. In the config,
+`reloc.min_match_frac` goes from 0.3 to 0.15, with `strict: False`.
+
+**5. Resample and scale.** Slerp each trajectory onto the eval frames, without bridging gaps longer than 1.5 s (those
+frames count as untracked). Metric scale per method is the median of |t<sub>PnP</sub>| / |t<sub>method</sub>| over
+the local pseudo-GT pairs (step 6). Don't fit scale by warping depth with a truncated cost: that fit is biased toward
+zero translation.
+
+**6. Pseudo-GT and scores.** Build relative-pose pairs without looking at any method's poses:
+
+- **Matching:** 4000 SIFT features at 576×1024, ratio test 0.8. Frame a's keypoints are lifted with its MoGe depth,
+  then solved with EPnP-RANSAC (3 px) and LM-refined into frame b.
+- **Rejection:** fewer than 30 inliers, an inlier ratio under 25 %, |t| over 6 m, under 95 % of points in front of
+  the camera, or a median reprojection error over 2 px.
+- **Local pairs:** 2 and 4 eval steps apart.
+- **Revisit pairs:** DINOv2 ViT-S/14 top-3 retrievals more than 10 s apart; only PnP-verified pairs count.
+- **Score:** LaMAria-style recall at 2°/10 cm, 5°/25 cm and 10°/50 cm.
+
+**7. Dollhouse.** Open3D `ScalableTSDFVolume` (2 cm voxels, `sdf_trunc` 8 cm, depth cut at 5 m). Integrate every
+eval frame's MoGe depth at that method's scaled pose. For the web, the mesh is re-clustered to 6 cm and shipped as
+gzipped binary PLY. The viewer is three.js with one clipping plane for the roof cut, and `CSS2DRenderer` for the
+inventory pins.
+
+**8. Floor plans.** Plain numpy on the TSDF mesh, using the rules in
+[From poses to a dollhouse and a floor plan](#from-poses-to-a-dollhouse-and-a-floor-plan). Gravity is the mean camera
++y. Yaw comes from the dominant horizontal normal (mod 90°). Storeys are up-facing peaks at least 2 m apart with
+cameras 0.6–2.4 m above them. Walls are 4 cm cells with vertical surface spanning at least 0.7 m in the 0.3–2.1 m band.
+
+**9. Splats.** [gsplat](https://github.com/nerfstudio-project/gsplat) 1.5.3 `rasterization` with `DefaultStrategy`:
+
+| Setting | Value |
+| --- | --- |
+| Iterations | 20k at 0.7× resolution |
+| Densification | refine from step 500 to 65 % of iterations, every 100 steps; opacity reset every 3000 |
+| Loss | 0.8·L1 + 0.2·(1 − SSIM) + 0.005·mean opacity; SH degree 0 |
+| Initialisation | the method's TSDF vertices, at most 250k |
+| Pose refinement | per-view SE(3) from step 800, lr 1e-4 |
+| Held-out views | every 8th view starting at index 4 |
+
+Before measuring PSNR, each held-out camera gets 150 steps of pose alignment against the frozen splat. That scores
+the splat rather than the pose of one test frame. spirula is Njål's own trainer; the gsplat recipe above is enough to
+reproduce the ranking.
+
+**10. Inventory.** Use [SAM 3](https://github.com/facebookresearch/sam3) (`build_sam3_image_model`,
+`Sam3Processor(confidence_threshold=0.35)`):
+
+- **Frame selection:** frames at 10 fps; keep the sharpest per window and drop near-duplicates by histogram distance
+  (782 → 150 frames on apartment B).
+- **Detection:** all 165 phrases are batched per image, followed by cross-phrase NMS at IoU 0.85 that keeps the
+  runner-up labels.
+- **Instances:** detections of the same label are clustered in 3D.
+- **Pins:** each instance's best frame gets the DPV-SLAM++ pose at that timestamp. A ray through the box centre hits
+  the TSDF mesh at the 5th-percentile depth of the points near the ray.
+
+**11. Listing photos.** The images came from [Codex CLI](https://github.com/openai/codex) 0.153.1, logged in with
+ChatGPT: `codex exec --skip-git-repo-check -s workspace-write "<prompt>" -i frame.jpg doll.png`. Put the prompt
+*before* `-i`, which takes several files and otherwise swallows the prompt. The same jobs go through
+`POST /v1/images/edits` with an explicit `model` if you need a certain model version.
+
+<details>
+<summary>The four prompts (shown for the living room)</summary>
+
+- **From the frame:** "The attached image is a frame from a phone walkthrough video of a real apartment's living room.
+  Generate a professional real-estate listing photo of this SAME room from the same viewpoint, landscape 3:2: straighten
+  the verticals, balance the exposure so windows are not blown out, natural daylight, crisp and clean. Keep every
+  object, piece of furniture, fixture, wall, window and the layout exactly as in the frame; do not add, remove, restyle
+  or move anything."
+- **From the scan only:** "The attached image is a rough, holey 3D scan (a roof-off dollhouse cutaway) of a real
+  apartment's living room, reconstructed from a phone video. There is no photo. Generate a photorealistic eye-level
+  real-estate listing photo of this living room, landscape 3:2, as if standing in the room: keep the room shape, wall
+  and window positions, and the placement, size and type of the furniture and fixtures you can see in the scan. Invent
+  only what the scan cannot show (materials, finishes, small details), and keep it plausible for a modern Scandinavian
+  apartment."
+- **Cleaned dollhouse:** "The attached image is a rough, holey 3D scan (a roof-off dollhouse cutaway) of a real
+  apartment's living room. Generate a clean, photorealistic 3D dollhouse cutaway render of this exact room from the same
+  viewpoint, landscape 4:3: solid walls with the top cut off, fill the holes and remove the noise, keep the room shape,
+  the wall and window openings, and the position, size and type of every piece of furniture exactly as in the scan.
+  White background, soft daylight, architectural visualisation style."
+- **Frame + dollhouse:** "The first attached image is a phone video frame of a real apartment's living room; the second
+  is a 3D scan (roof-off dollhouse cutaway) of the same room. Using the scan for the room's geometry and layout and the
+  photo for how everything actually looks, generate a professional real-estate listing photo of this living room from a
+  NEW viewpoint: a wide-angle eye-level shot from the corner that shows as much of the room as possible, landscape 3:2,
+  natural daylight, straight verticals. Keep all furniture, fixtures, finishes and colours true to the photo and their
+  positions true to the scan; do not add or remove anything."
+
+</details>
+
+**Gotchas that cost me time**
+
+- **Open3D TSDF:** with default OpenMP on a shared 96-core host it took 17 s per frame. `OMP_NUM_THREADS=2` brought it
+  to 0.12 s.
+- **MoGe:** its current `pyproject` pulls `flex-gemm`, which needs torch ≥ 2.6 and is only used by MoGe v3. Install it
+  with `pip install --no-deps`.
+- **DPVO weights:** the README's Dropbox `models.zip` is dead. The Google Drive mirror works:
+  `gdown 1dRqftpImtHbbIPNBIseCv9EvrlHEnjhX`.
+- **ORB-SLAM3 build:** extra executables land in the *last* `CMAKE_RUNTIME_OUTPUT_DIRECTORY` in its CMakeLists
+  (`Examples_old/Stereo-Inertial/`).
+- **ORB-SLAM3 output:** in mono mode it can't `SaveTrajectoryTUM`. Use `SaveTrajectoryEuRoC`, which saves the largest
+  map only.
+- **Pseudo-GT on white walls:** EPnP can return nonsense (translations around 10¹³ m) that LM then runs away with.
+  Keep the sanity checks.
+- **Revisit pairs:** essential-matrix revisits are unsafe with repeated white doors and tiles. Every method
+  "disagreed" by about 120°.
+- **Serving PLYs:** Astro's dev server sent `.ply.gz` with `Content-Encoding: gzip`, so the browser decompressed it
+  before my code saw it. Name the file `.plygz` and check the gzip magic bytes, so it works either way.
+
+Tools: [ORB-SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3), [DPVO / DPV-SLAM](https://github.com/princeton-vl/DPVO),
+[MASt3R-SLAM](https://github.com/rmurai0610/MASt3R-SLAM), [MapAnything](https://github.com/facebookresearch/map-anything),
+[Pi3](https://github.com/yyfz/Pi3), [MoGe-2](https://github.com/microsoft/MoGe), [COLMAP / pycolmap](https://colmap.github.io),
+[DINOv2](https://github.com/facebookresearch/dinov2), [SAM 3](https://github.com/facebookresearch/sam3),
+[Open3D](https://www.open3d.org), [gsplat](https://github.com/nerfstudio-project/gsplat), [three.js](https://threejs.org),
+[Spark](https://sparkjs.dev).

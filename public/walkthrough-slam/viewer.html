@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Same frame, different poses — splat viewer</title>
+<style>
+  :root { --bg:#141416; --panel:#1d1d21; --line:#2e2e34; --ink:#ececf0; --ink2:#a3a3ad; --accent:#e8a33d; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .app { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 12px 16px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+  .seg { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .seg button { font: inherit; font-weight: 600; color: var(--ink2); background: none; border: 0; border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; }
+  .seg button.on { background: var(--ink); color: var(--bg); }
+  .seg button:focus-visible, .ctl:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .views { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pane { position: relative; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+  .frame { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+    background: #0c0c0e; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .frame canvas, .frame img { max-width: 100%; max-height: 100%; aspect-ratio: 9 / 16; display: block; }
+  .frame canvas { height: 100%; width: auto; touch-action: none; }
+  .frame img { height: 100%; width: auto; object-fit: contain; }
+  .cap { display: flex; justify-content: space-between; gap: 8px; color: var(--ink2); font-size: 12.5px; }
+  .cap b { color: var(--ink); font-weight: 600; }
+  .loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: var(--ink2); background: rgba(12,12,14,.6); font-size: 13px; }
+  .scrub { display: flex; gap: 12px; align-items: center; }
+  .scrub input { flex: 1; accent-color: var(--accent); }
+  .ctl { font: inherit; font-weight: 600; color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+    border-radius: 6px; padding: 5px 10px; cursor: pointer; white-space: nowrap; }
+  .hint { color: var(--ink2); font-size: 12.5px; }
+  .tabnum { font-variant-numeric: tabular-nums; }
+  @media (max-width: 640px) { .views { grid-template-columns: 1fr 1fr; gap: 6px; } .app { padding: 8px 10px; } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+  "@sparkjsdev/spark": "https://cdn.jsdelivr.net/npm/@sparkjsdev/spark@2.1.0/dist/spark.module.js"
+} }
+</script>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <div class="seg" role="group" aria-label="Apartment">
+      <button type="button" id="apt-a" class="on" data-apt="apt-a">Apartment A</button>
+      <button type="button" id="apt-b" data-apt="apt-b">Apartment B</button>
+    </div>
+    <div class="seg" role="group" aria-label="Pose source">
+      <button type="button" id="m-dpv" class="on" data-m="dpv_slam_pp">DPV-SLAM++</button>
+      <button type="button" id="m-pi3x" data-m="pi3x">Pi3X</button>
+      <button type="button" id="m-ma" data-m="mapanything">MapAnything</button>
+    </div>
+    <span class="hint">Keys: ← → step · 1 2 3 pose source · drag to look around</span>
+  </div>
+  <div class="views">
+    <div class="pane">
+      <div class="frame" id="splat-frame"><canvas id="c" aria-label="Gaussian splat render"></canvas>
+        <div class="loading" id="loading">Loading splat…</div></div>
+      <div class="cap"><span><b id="lab">DPV-SLAM++</b> splat, seen from <i>its own</i> camera for this frame</span><span id="stats" class="tabnum"></span></div>
+    </div>
+    <div class="pane">
+      <div class="frame"><img id="photo" alt="Video frame from the walkthrough"></div>
+      <div class="cap"><span><b>Phone video</b> frame</span><span id="fno" class="tabnum"></span></div>
+    </div>
+  </div>
+  <div class="scrub">
+    <button type="button" class="ctl" id="play">▶ Play</button>
+    <input type="range" id="slider" min="0" max="100" value="0" aria-label="Frame">
+    <button type="button" class="ctl" id="reset">Snap to frame</button>
+  </div>
+</div>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0c0c0e);
+scene.add(new SparkRenderer({ renderer }));
+// near = 25 cm: clips the dark floaters that sit right in front of each training camera (they black out the view)
+const camera = new THREE.PerspectiveCamera(60, 9 / 16, 0.25, 200);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.enabled = false;
+
+const el = (id) => document.getElementById(id);
+const state = { apt: "apt-a", m: "dpv_slam_pp", k: 0, manifest: null, meshes: {}, free: false, playing: null };
+const cache = {};
+
+function resize() {
+  const box = el("splat-frame").getBoundingClientRect();
+  let h = box.height, w = h * 9 / 16;
+  if (w > box.width) { w = box.width; h = w * 16 / 9; }
+  renderer.setSize(Math.floor(w), Math.floor(h), true);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(el("splat-frame"));
+
+async function manifest(apt) {
+  if (!cache[apt]) cache[apt] = await (await fetch(`./${apt}/viewer.json`)).json();
+  return cache[apt];
+}
+
+function mesh(apt, m) {
+  const key = `${apt}/${m}`;
+  if (!state.meshes[key]) {
+    const s = new SplatMesh({ url: `./${apt}/${m}.splat`, lod: false,
+      onProgress: (e) => { if (e.lengthComputable && `${state.apt}/${state.m}` === key)
+        el("loading").textContent = `Loading splat… ${Math.round(100 * e.loaded / e.total)} %`; } });
+    s.visible = false; scene.add(s);
+    state.meshes[key] = s;
+  }
+  return state.meshes[key];
+}
+
+function frameUI() {
+  const man = state.manifest, f = man.frames[state.k];
+  el("photo").src = `./${state.apt}/photos/${String(f).padStart(6, "0")}.jpg`;
+  el("fno").textContent = `${state.k + 1} / ${man.frames.length}`;
+  el("slider").value = state.k;
+}
+
+function placeCamera() {
+  const man = state.manifest, f = man.frames[state.k];
+  frameUI();
+  const cam = man.methods[state.m].cams[String(f)];
+  camera.position.set(...cam.p);
+  camera.quaternion.set(...cam.q);
+  const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+  controls.target.copy(camera.position).addScaledVector(fwd, 1.2);
+  camera.fov = man.fov_y_deg; camera.updateProjectionMatrix();
+  controls.enabled = false; state.free = false;
+}
+
+async function show() {
+  state.manifest = await manifest(state.apt);
+  el("slider").max = state.manifest.frames.length - 1;
+  state.k = Math.min(state.k, state.manifest.frames.length - 1);
+  for (const [key, s] of Object.entries(state.meshes)) s.visible = false;
+  const s = mesh(state.apt, state.m);
+  const info = state.manifest.methods[state.m];
+  el("lab").textContent = info.label;
+  el("stats").textContent = `${(info.gaussians / 1000).toFixed(0)}k Gaussians · ${info.mb} MB`;
+  frameUI();
+  el("loading").textContent = "Loading splat…"; el("loading").hidden = false;
+  const t0 = performance.now();
+  await s.initialized;
+  console.info(`[viewer] ${state.apt}/${state.m} ready in ${Math.round(performance.now() - t0)} ms`);
+  s.visible = true; el("loading").hidden = true;
+  placeCamera();
+  for (const m of Object.keys(state.manifest.methods)) mesh(state.apt, m);  // preload the other two: instant toggling
+}
+
+document.querySelectorAll("[data-apt]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-apt]").forEach((x) => x.classList.toggle("on", x === b));
+  state.apt = b.dataset.apt; state.k = 0; show();
+}));
+document.querySelectorAll("[data-m]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-m]").forEach((x) => x.classList.toggle("on", x === b));
+  state.m = b.dataset.m; show();
+}));
+el("slider").addEventListener("input", (e) => { state.k = +e.target.value; placeCamera(); });
+el("reset").addEventListener("click", placeCamera);
+canvas.addEventListener("pointerdown", () => { controls.enabled = true; state.free = true; });
+el("play").addEventListener("click", () => {
+  if (state.playing) { clearInterval(state.playing); state.playing = null; el("play").textContent = "▶ Play"; return; }
+  el("play").textContent = "❚❚ Pause";
+  state.playing = setInterval(() => { state.k = (state.k + 1) % state.manifest.frames.length; placeCamera(); }, 140);
+});
+window.addEventListener("keydown", (e) => {
+  if (!state.manifest) return;
+  if (e.key === "ArrowRight") { state.k = Math.min(state.k + 1, state.manifest.frames.length - 1); placeCamera(); }
+  if (e.key === "ArrowLeft") { state.k = Math.max(state.k - 1, 0); placeCamera(); }
+  const pick = { "1": "m-dpv", "2": "m-pi3x", "3": "m-ma" }[e.key];
+  if (pick) el(pick).click();
+});
+
+renderer.setAnimationLoop(() => { if (state.free) controls.update(); renderer.render(scene, camera); });
+resize();
+state.k = 20;
+show();
+</script>
+</body>
+</html>

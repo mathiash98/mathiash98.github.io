@@ -1,0 +1,266 @@
+[
+ {
+  "label": "sofa",
+  "room": "living room",
+  "pos": [
+   2.409,
+   0.689,
+   4.055
+  ],
+  "t": 47.1,
+  "obs": 73,
+  "score": 0.957
+ },
+ {
+  "label": "bed",
+  "room": "bedroom",
+  "pos": [
+   -2.109,
+   1.131,
+   4.91
+  ],
+  "t": 53.0,
+  "obs": 25,
+  "score": 0.965
+ },
+ {
+  "label": "balcony",
+  "room": "living room",
+  "pos": [
+   -2.59,
+   1.294,
+   7.602
+  ],
+  "t": 53.0,
+  "obs": 21,
+  "score": 0.672
+ },
+ {
+  "label": "dining table",
+  "room": "kitchen",
+  "pos": [
+   4.188,
+   0.535,
+   2.47
+  ],
+  "t": 45.8,
+  "obs": 15,
+  "score": 0.875
+ },
+ {
+  "label": "oven",
+  "room": "kitchen",
+  "pos": [
+   3.523,
+   1.199,
+   -2.141
+  ],
+  "t": 20.2,
+  "obs": 14,
+  "score": 0.727
+ },
+ {
+  "label": "bed",
+  "room": "bedroom",
+  "pos": [
+   1.476,
+   0.844,
+   -7.741
+  ],
+  "t": 8.7,
+  "obs": 13,
+  "score": 0.949
+ },
+ {
+  "label": "stove",
+  "room": "kitchen",
+  "pos": [
+   4.466,
+   0.857,
+   -0.408
+  ],
+  "t": 35.5,
+  "obs": 13,
+  "score": 0.98
+ },
+ {
+  "label": "toilet",
+  "room": "bathroom",
+  "pos": [
+   -1.077,
+   0.167,
+   -5.596
+  ],
+  "t": 14.2,
+  "obs": 9,
+  "score": 0.973
+ },
+ {
+  "label": "fridge",
+  "room": "kitchen",
+  "pos": [
+   2.62,
+   0.718,
+   -2.243
+  ],
+  "t": 23.4,
+  "obs": 7,
+  "score": 0.961
+ },
+ {
+  "label": "shower",
+  "room": "bathroom",
+  "pos": [
+   0.037,
+   1.084,
+   -2.668
+  ],
+  "t": 62.1,
+  "obs": 7,
+  "score": 0.805
+ },
+ {
+  "label": "microwave",
+  "room": "kitchen",
+  "pos": [
+   3.473,
+   1.574,
+   -2.052
+  ],
+  "t": 20.2,
+  "obs": 5,
+  "score": 0.941
+ },
+ {
+  "label": "dishwasher",
+  "room": "kitchen",
+  "pos": [
+   3.917,
+   0.539,
+   -1.985
+  ],
+  "t": 31.4,
+  "obs": 4,
+  "score": 0.797
+ },
+ {
+  "label": "microwave",
+  "room": "kitchen",
+  "pos": [
+   3.91,
+   0.774,
+   -2.112
+  ],
+  "t": 31.4,
+  "obs": 4,
+  "score": 0.723
+ },
+ {
+  "label": "TV",
+  "room": "living room",
+  "pos": [
+   -0.713,
+   1.928,
+   5.007
+  ],
+  "t": 48.1,
+  "obs": 4,
+  "score": 0.98
+ },
+ {
+  "label": "bathtub",
+  "room": "bathroom",
+  "pos": [
+   -2.082,
+   0.898,
+   0.714
+  ],
+  "t": 60.1,
+  "obs": 3,
+  "score": 0.973
+ },
+ {
+  "label": "shower",
+  "room": "bathroom",
+  "pos": [
+   -2.411,
+   1.448,
+   0.255
+  ],
+  "t": 59.7,
+  "obs": 3,
+  "score": 0.852
+ },
+ {
+  "label": "wardrobe",
+  "room": "bathroom",
+  "pos": [
+   1.383,
+   1.452,
+   -8.525
+  ],
+  "t": 2.9,
+  "obs": 3,
+  "score": 0.625
+ },
+ {
+  "label": "washing machine",
+  "room": "laundry",
+  "pos": [
+   -1.757,
+   1.017,
+   -2.368
+  ],
+  "t": 67.4,
+  "obs": 3,
+  "score": 0.957
+ },
+ {
+  "label": "water heater",
+  "room": "bathroom",
+  "pos": [
+   -1.56,
+   0.971,
+   -3.294
+  ],
+  "t": 69.1,
+  "obs": 3,
+  "score": 0.781
+ },
+ {
+  "label": "fire extinguisher",
+  "room": "bathroom",
+  "pos": [
+   -2.474,
+   0.89,
+   -3.682
+  ],
+  "t": 70.4,
+  "obs": 2,
+  "score": 0.895
+ },
+ {
+  "label": "wardrobe",
+  "room": "bedroom",
+  "pos": [
+   -3.593,
+   1.412,
+   3.298
+  ],
+  "t": 49.7,
+  "obs": 2,
+  "score": 0.945
+ },
+ {
+  "label": "washing machine",
+  "room": "laundry",
+  "pos": [
+   -1.645,
+   1.435,
+   -3.515
+  ],
+  "t": 71.0,
+  "obs": 2,
+  "score": 0.77
+ }
+]

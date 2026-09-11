@@ -1,0 +1,242 @@
+[
+ {
+  "label": "bed",
+  "room": "bedroom",
+  "pos": [
+   4.624,
+   0.402,
+   -0.544
+  ],
+  "t": 31.5,
+  "obs": 79,
+  "score": 0.891
+ },
+ {
+  "label": "shower",
+  "room": "bathroom",
+  "pos": [
+   -1.951,
+   1.178,
+   -3.292
+  ],
+  "t": 12.0,
+  "obs": 38,
+  "score": 0.906
+ },
+ {
+  "label": "sofa",
+  "room": "living room",
+  "pos": [
+   1.892,
+   0.429,
+   1.779
+  ],
+  "t": 35.7,
+  "obs": 34,
+  "score": 0.977
+ },
+ {
+  "label": "balcony",
+  "room": "living room",
+  "pos": [
+   3.926,
+   0.975,
+   2.051
+  ],
+  "t": 34.5,
+  "obs": 28,
+  "score": 0.797
+ },
+ {
+  "label": "balcony",
+  "room": "balcony",
+  "pos": [
+   1.013,
+   3.99,
+   -0.316
+  ],
+  "t": 61.9,
+  "obs": 24,
+  "score": 0.84
+ },
+ {
+  "label": "bed",
+  "room": "bedroom",
+  "pos": [
+   4.316,
+   0.393,
+   3.02
+  ],
+  "t": 43.0,
+  "obs": 24,
+  "score": 0.965
+ },
+ {
+  "label": "dining table",
+  "room": "living room",
+  "pos": [
+   -1.468,
+   -0.09,
+   0.472
+  ],
+  "t": 47.6,
+  "obs": 20,
+  "score": 0.895
+ },
+ {
+  "label": "TV",
+  "room": "living room",
+  "pos": [
+   3.171,
+   1.525,
+   -1.401
+  ],
+  "t": 25.4,
+  "obs": 18,
+  "score": 0.984
+ },
+ {
+  "label": "dishwasher",
+  "room": "kitchen",
+  "pos": [
+   2.983,
+   0.715,
+   4.045
+  ],
+  "t": 41.5,
+  "obs": 11,
+  "score": 0.973
+ },
+ {
+  "label": "sofa",
+  "room": "balcony",
+  "pos": [
+   1.802,
+   2.692,
+   0.842
+  ],
+  "t": 59.5,
+  "obs": 10,
+  "score": 0.977
+ },
+ {
+  "label": "fridge",
+  "room": "kitchen",
+  "pos": [
+   1.346,
+   0.874,
+   4.324
+  ],
+  "t": 39.8,
+  "obs": 8,
+  "score": 0.969
+ },
+ {
+  "label": "oven",
+  "room": "kitchen",
+  "pos": [
+   2.349,
+   0.869,
+   3.361
+  ],
+  "t": 40.6,
+  "obs": 8,
+  "score": 0.875
+ },
+ {
+  "label": "washing machine",
+  "room": "bathroom",
+  "pos": [
+   -0.598,
+   0.754,
+   -1.401
+  ],
+  "t": 17.0,
+  "obs": 8,
+  "score": 0.961
+ },
+ {
+  "label": "stove",
+  "room": "kitchen",
+  "pos": [
+   2.29,
+   0.971,
+   3.861
+  ],
+  "t": 40.3,
+  "obs": 6,
+  "score": 0.812
+ },
+ {
+  "label": "range hood",
+  "room": "kitchen",
+  "pos": [
+   2.259,
+   1.455,
+   3.466
+  ],
+  "t": 40.6,
+  "obs": 5,
+  "score": 0.945
+ },
+ {
+  "label": "toilet",
+  "room": "bathroom",
+  "pos": [
+   -2.053,
+   0.263,
+   -2.24
+  ],
+  "t": 11.8,
+  "obs": 5,
+  "score": 0.977
+ },
+ {
+  "label": "range hood",
+  "room": "bedroom",
+  "pos": [
+   3.151,
+   2.714,
+   -1.609
+  ],
+  "t": 28.5,
+  "obs": 3,
+  "score": 0.789
+ },
+ {
+  "label": "bathtub",
+  "room": "living room",
+  "pos": [
+   3.113,
+   0.893,
+   2.248
+  ],
+  "t": 20.5,
+  "obs": 2,
+  "score": 0.578
+ },
+ {
+  "label": "kettle",
+  "room": "kitchen",
+  "pos": [
+   2.229,
+   1.076,
+   4.741
+  ],
+  "t": 39.8,
+  "obs": 2,
+  "score": 0.539
+ },
+ {
+  "label": "wardrobe",
+  "room": "bedroom",
+  "pos": [
+   0.863,
+   3.679,
+   -2.323
+  ],
+  "t": 70.0,
+  "obs": 2,
+  "score": 0.953
+ }
+]

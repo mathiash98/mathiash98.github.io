@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dollhouse — same depth, different poses</title>
+<style>
+  :root { --bg:#f4f2ee; --panel:#ffffff; --line:#dedbd4; --ink:#1c1c1c; --ink2:#6b6862; --accent:#c47f64; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .app { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 12px 16px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+  .seg { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .seg button { font: inherit; font-weight: 600; color: var(--ink2); background: none; border: 0; border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; }
+  .seg button.on { background: var(--ink); color: #fff; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .stage { position: relative; flex: 1; min-height: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    background: linear-gradient(#fbfaf8, #ece9e3); }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  .loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink2);
+    background: rgba(244,242,238,.7); font-size: 13px; }
+  .labels { position: absolute; left: 0; right: 0; bottom: 10px; display: flex; justify-content: space-around; pointer-events: none;
+    font-weight: 700; font-size: 13px; color: var(--ink); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; color: var(--ink2); font-size: 13px; }
+  .row label { display: inline-flex; gap: 8px; align-items: center; }
+  .row input[type=range] { width: 180px; accent-color: var(--accent); }
+  .tabnum { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+  .pin { font: 600 11px/1 ui-sans-serif, system-ui, sans-serif; color: #fff; background: rgba(28,28,28,.82); padding: 3px 6px;
+    border-radius: 999px; white-space: nowrap; transform: translateY(-14px); pointer-events: none; }
+  .pin::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 2px; height: 5px; background: rgba(28,28,28,.82); }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <div class="seg" role="group" aria-label="Apartment">
+      <button type="button" id="apt-a" class="on" data-apt="apt-a">Apartment A</button>
+      <button type="button" id="apt-b" data-apt="apt-b">Apartment B</button>
+    </div>
+    <div class="seg" role="group" aria-label="Pose source">
+      <button type="button" id="m-all" class="on" data-m="all">All three</button>
+      <button type="button" id="m-mast3r" data-m="mast3r_slam_calib_robust">MASt3R-SLAM + seg.</button>
+      <button type="button" id="m-dpv" data-m="dpv_slam_pp">DPV-SLAM++</button>
+      <button type="button" id="m-ma" data-m="mapanything">MapAnything</button>
+    </div>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="c" aria-label="Dollhouse view of the reconstructed apartment"></canvas>
+    <div class="labels" id="labels"></div>
+    <div class="loading" id="loading">Loading meshes…</div>
+  </div>
+  <div class="row">
+    <label for="cut">Roof cut <input type="range" id="cut" min="0.3" max="6" step="0.05" value="1.9"> <span id="cutv" class="tabnum">1.90 m</span></label>
+    <label for="path"><input type="checkbox" id="path" checked> Camera path</label>
+    <label for="pins"><input type="checkbox" id="pins" checked> Inventory (on DPV-SLAM++)</label>
+    <span>Drag to orbit, scroll to zoom. Every mesh fuses the <i>same</i> depth maps; only the camera poses differ.
+      Raise the roof cut to look for apartment A's upper floor.</span>
+  </div>
+</div>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { PLYLoader } from "three/addons/loaders/PLYLoader.js";
+import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
+
+const el = (id) => document.getElementById(id);
+const canvas = el("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0);  // let the stage gradient show through
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.localClippingEnabled = true;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb8b2a6, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1.4); sun.position.set(4, 10, 6); scene.add(sun);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.05, 400);
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.domElement.style.cssText = "position:absolute;inset:0;pointer-events:none";
+el("stage").appendChild(labelRenderer.domElement);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+const clip = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1.9);
+const ORDER = ["mast3r_slam_calib_robust", "dpv_slam_pp", "mapanything"];
+const state = { apt: "apt-a", m: "all", man: {}, groups: {} };
+
+function resize() {
+  const r = el("stage").getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false); labelRenderer.setSize(r.width, r.height);
+  camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(el("stage"));
+
+async function loadGz(url) {
+  // meshes are gzipped PLY; some servers add Content-Encoding and the browser has already inflated them
+  const buf = await (await fetch(url)).arrayBuffer();
+  const b = new Uint8Array(buf, 0, 2);
+  if (b[0] !== 0x1f || b[1] !== 0x8b) return buf;
+  return await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+}
+
+async function group(apt) {
+  if (state.groups[apt]) return state.groups[apt];
+  const man = await (await fetch(`./dollhouse/${apt}/dollhouse.json`)).json();
+  state.man[apt] = man;
+  const g = new THREE.Group(); const items = {};
+  const loader = new PLYLoader();
+  await Promise.all(man.methods.map(async (m) => {
+    const geo = loader.parse(await loadGz(`./dollhouse/${apt}/${m.mesh}`));
+    geo.computeVertexNormals();
+    const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide, clippingPlanes: [clip] });
+    const mesh = new THREE.Mesh(geo, mat);
+    const pts = m.path.map((p) => new THREE.Vector3(...p));
+    const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+      new THREE.LineBasicMaterial({ color: 0xc4522e, clippingPlanes: [clip] }));
+    const holder = new THREE.Group(); holder.add(mesh); holder.add(line);
+    geo.computeBoundingBox();
+    items[m.key] = { holder, line, box: geo.boundingBox, label: m.label, storeys: m.storey_heights, pins: [] };
+    g.add(holder);
+  }));
+  // inventory pins (SAM 3 items placed with the DPV-SLAM++ poses) live on the DPV-SLAM++ model
+  const pins = await (await fetch(`./dollhouse/${apt}/pins.json`)).json();
+  for (const p of pins) {
+    const div = document.createElement("div"); div.className = "pin"; div.textContent = p.label;
+    const o = new CSS2DObject(div); o.position.set(...p.pos); o.userData.y = p.pos[1];
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 8), new THREE.MeshBasicMaterial({ color: 0xc4522e }));
+    dot.position.set(...p.pos); items.dpv_slam_pp.holder.add(dot); items.dpv_slam_pp.holder.add(o); items.dpv_slam_pp.pins.push(o, dot);
+  }
+  state.groups[apt] = { g, items };
+  return state.groups[apt];
+}
+
+function layout() {
+  const { items } = state.groups[state.apt];
+  const all = state.m === "all";
+  const gap = 1.2;
+  const w = Math.max(...ORDER.map((k) => items[k].box.max.x - items[k].box.min.x));
+  const d = Math.max(...ORDER.map((k) => items[k].box.max.z - items[k].box.min.z));
+  ORDER.forEach((k, i) => {
+    const it = items[k];
+    it.holder.visible = all || state.m === k;
+    it.holder.position.set(all ? (i - 1) * (w + gap) : 0, 0, 0);
+    it.line.visible = el("path").checked;
+  });
+  el("labels").innerHTML = all ? ORDER.map((k) => `<span>${items[k].label}</span>`).join("") : "";
+  // fit: the whole row (or one mesh) inside the horizontal field of view, seen from ~50 deg above
+  const width = all ? 3 * w + 2 * gap : w;
+  const hfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
+  const dist = Math.max(width / 2 / Math.tan(hfov / 2), d / 2 / Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 1.35;
+  controls.target.set(0, 0.8, 0);
+  camera.position.set(0, 0.8 + dist * Math.sin(0.87), dist * Math.cos(0.87));
+  controls.update();
+}
+
+async function show() {
+  el("loading").hidden = false;
+  for (const [apt, v] of Object.entries(state.groups)) if (v.g.parent) scene.remove(v.g);
+  const { g } = await group(state.apt);
+  scene.add(g); layout(); pinVis(); el("loading").hidden = true;
+}
+
+document.querySelectorAll("[data-apt]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-apt]").forEach((x) => x.classList.toggle("on", x === b));
+  state.apt = b.dataset.apt; show();
+}));
+document.querySelectorAll("[data-m]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-m]").forEach((x) => x.classList.toggle("on", x === b));
+  state.m = b.dataset.m; if (state.groups[state.apt]) layout();
+}));
+function pinVis() {
+  const g = state.groups[state.apt]; if (!g) return;
+  for (const o of g.items.dpv_slam_pp.pins) o.visible = el("pins").checked && o.position.y <= clip.constant;
+}
+el("cut").addEventListener("input", (e) => { clip.constant = +e.target.value; el("cutv").textContent = `${(+e.target.value).toFixed(2)} m`; pinVis(); });
+el("pins").addEventListener("change", pinVis);
+el("path").addEventListener("change", () => {
+  const g = state.groups[state.apt]; if (!g) return;
+  for (const it of Object.values(g.items)) it.line.visible = el("path").checked;
+});
+
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); });
+resize();
+show();
+</script>
+</body>
+</html>
