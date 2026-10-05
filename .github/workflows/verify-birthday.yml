@@ -1,0 +1,111 @@
+name: Verify birthday world
+on:
+  push:
+    branches: [main]
+    paths:
+      - public/birthday28/**
+      - .github/workflows/verify-birthday.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: birthday-smoke
+  cancel-in-progress: true
+jobs:
+  phone-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install browser test tools
+        run: |
+          mkdir -p "$RUNNER_TEMP/birthday-smoke"
+          cd "$RUNNER_TEMP/birthday-smoke"
+          npm init -y
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium webkit
+      - name: Check the actual public URL and phone controls
+        env:
+          EXPECTED_VERSION: ingrid-world-2.0.0
+        run: |
+          cd "$RUNNER_TEMP/birthday-smoke"
+          cat > verify.cjs <<'JS'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const { chromium, webkit } = require('playwright');
+          (async () => {
+            fs.mkdirSync('results', { recursive: true });
+            const base = 'https://mathiash98.github.io/birthday28/';
+            const url = base + '?v=2&check=' + process.env.GITHUB_SHA.slice(0, 12);
+            let ready = false;
+            for (let i = 0; i < 60; i++) {
+              try {
+                const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+                const html = await response.text();
+                console.log('Public URL attempt', i + 1, 'HTTP', response.status);
+                if (response.status === 200 && html.includes(process.env.EXPECTED_VERSION)) { ready = true; break; }
+              } catch (e) { console.log(e.message); }
+              await new Promise(r => setTimeout(r, 5000));
+            }
+            assert(ready, 'The NEW birthday world must be publicly available with HTTP 200');
+            const results = [];
+            for (const [name, engine] of [['chromium', chromium], ['webkit', webkit]]) {
+              const browser = await engine.launch(name === 'chromium' ? { args: ['--enable-unsafe-swiftshader'] } : {});
+              const context = await browser.newContext({ viewport: { width: 393, height: 852 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
+              const page = await context.newPage();
+              const errors = [];
+              page.on('pageerror', e => errors.push(e.message));
+              const response = await page.goto(url, { waitUntil: 'load' });
+              assert.equal(response.status(), 200);
+              await page.waitForFunction(() => window.__birthdayWorld?.frames > 5, { timeout: 30000 });
+              assert.equal(await page.evaluate(() => window.__birthdayWorld.version), process.env.EXPECTED_VERSION);
+              assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+              await page.screenshot({ path: `results/${name}-phone.png` });
+              const start = await page.evaluate(() => window.__birthdayWorld.player);
+              const r = await page.locator('#joy').boundingBox();
+              const x = r.x + r.width / 2, y = r.y + r.height / 2;
+              if (name === 'chromium') {
+                const cdp = await context.newCDPSession(page);
+                await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 7 }] });
+                await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x + 24, y: y + 17, id: 7 }] });
+                await page.waitForFunction(p => Math.hypot(window.__birthdayWorld.player[0] - p[0], window.__birthdayWorld.player[2] - p[2]) > 0.2, start);
+                await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+              } else {
+                await page.mouse.move(x, y); await page.mouse.down(); await page.mouse.move(x + 24, y + 17);
+                await page.waitForFunction(p => Math.hypot(window.__birthdayWorld.player[0] - p[0], window.__birthdayWorld.player[2] - p[2]) > 0.2, start);
+                await page.mouse.up();
+              }
+              await page.locator('#home').tap();
+              await page.waitForFunction(() => Math.abs(window.__birthdayWorld.player[0] + 2.4) < 0.01);
+              await page.locator('#wave').tap();
+              await page.waitForFunction(() => window.__birthdayWorld.waving);
+              await page.locator('#party').tap();
+              await page.waitForFunction(() => window.__birthdayWorld.confetti > 0);
+              await page.locator('#jump').tap();
+              await page.waitForFunction(() => window.__birthdayWorld.player[1] > 0.1);
+              const before = await page.evaluate(() => window.__birthdayWorld.elephant);
+              await page.locator('#elephant').tap();
+              await page.waitForFunction(p => Math.hypot(window.__birthdayWorld.elephant[0] - p[0], window.__birthdayWorld.elephant[1] - p[1]) > 0.15, before);
+              await page.setViewportSize({ width: 852, height: 393 });
+              await page.waitForFunction(() => window.__birthdayWorld.canvas[0] === 852);
+              await page.screenshot({ path: `results/${name}-landscape.png` });
+              assert.deepEqual(errors, [], 'No JavaScript exceptions');
+              const state = await page.evaluate(() => window.__birthdayWorld);
+              results.push({ browser: name, publicStatus: response.status(), joystick: true, wave: true, confetti: true, jump: true, elephant: true, portrait: true, landscape: true, errors, state });
+              await browser.close();
+            }
+            fs.writeFileSync('results/report.json', JSON.stringify({ url: base + '?v=2', results }, null, 2));
+            console.log('PASS: public HTTP 200, version 2, Chromium and WebKit phone layouts, movement, wave, jump, elephant and confetti.');
+          })().catch(e => { console.error(e); process.exit(1); });
+          JS
+          xvfb-run -a node verify.cjs
+      - name: Save browser screenshots and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: birthday-browser-tests
+          path: ${{ runner.temp }}/birthday-smoke/results
+          retention-days: 7
