@@ -41,8 +41,6 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Support old RSS subscriptions
-        run: cp ./dist/old-rss.xml ./dist/index.xml
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v4
