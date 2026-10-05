@@ -1,0 +1,78 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Ingrid's Birthday World</title>
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<style>
+html,body{margin:0;overflow:hidden;background:#8fd8ff;font-family:system-ui,sans-serif;touch-action:none}
+#ui{position:fixed;inset:0;z-index:9;pointer-events:none}
+#title{position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:#fff9;border:3px solid #fff;border-radius:24px;padding:8px 15px;font-weight:800;color:#694b3c;box-shadow:0 4px 15px #0002;white-space:nowrap}
+#joy{pointer-events:auto;position:absolute;left:20px;bottom:max(24px,env(safe-area-inset-bottom));width:122px;height:122px;border-radius:50%;background:#ffffff66;border:4px solid white;box-shadow:0 4px 20px #0002}
+#nub{position:absolute;width:52px;height:52px;left:35px;top:35px;border-radius:50%;background:#fff;border:2px solid #ddd}
+#jump{pointer-events:auto;position:absolute;right:20px;bottom:max(30px,env(safe-area-inset-bottom));width:84px;height:84px;border:4px solid white;border-radius:50%;background:#ff6fa9cc;color:white;font-size:17px;font-weight:800;box-shadow:0 4px 20px #0002}
+#hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;color:#345;background:#fff8;border-radius:12px;padding:3px 8px}
+</style></head>
+<body>
+<div id="ui"><div id="title">🎂 Mathias 28 — Ingrid's world 🐘</div><div id="joy"><div id="nub"></div></div><button id="jump">WAVE 👋</button><div id="hint">Drag to walk • drag the sky to look around</div></div>
+<a-scene renderer="antialias:true;colorManagement:true" shadow="type:pcfsoft" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
+<a-assets><a-mixin id="soft" material="roughness:.85;metalness:0"></a-mixin></a-assets>
+<a-sky color="#82CEFF"></a-sky>
+<a-entity light="type:hemisphere;color:#fff;groundColor:#7cb66a;intensity:2"></a-entity>
+<a-entity light="type:directional;color:#fff8d7;intensity:1.3;castShadow:true" position="-4 8 3"></a-entity>
+<!-- meadow -->
+<a-cylinder position="0 -.3 -5" radius="22" height=".5" color="#8ED66D"></a-cylinder>
+<!-- sun/clouds -->
+<a-sphere position="7 8 -14" radius="1.2" color="#FFE35C"></a-sphere>
+<a-entity position="-5 7 -12"><a-sphere radius=".8" color="white"></a-sphere><a-sphere position="1 0 0" radius="1" color="white"></a-sphere><a-sphere position="2 0 0" radius=".7" color="white"></a-sphere></a-entity>
+<!-- hills -->
+<a-sphere position="-9 -1 -14" scale="8 3 3" color="#71BD65"></a-sphere><a-sphere position="8 -1 -16" scale="10 4 4" color="#7BC76B"></a-sphere>
+<!-- cake from Ingrid's drawing -->
+<a-entity id="cake" position="0 0 -7">
+<a-cylinder radius="2.4" height="1.25" position="0 .65 0" color="#F0E7D7"></a-cylinder>
+<a-torus radius="2.12" radius-tubular=".23" rotation="90 0 0" position="0 1.2 0" color="#9B603A"></a-torus>
+<a-cylinder radius="1.85" height="1.25" position="0 1.8 0" color="#E8C59B"></a-cylinder>
+<a-torus radius="1.58" radius-tubular=".23" rotation="90 0 0" position="0 2.35 0" color="#855132"></a-torus>
+<a-cylinder radius="1.3" height="1.25" position="0 2.95 0" color="#F1F1F1"></a-cylinder>
+<a-torus radius="1.08" radius-tubular=".23" rotation="90 0 0" position="0 3.5 0" color="#3978E6"></a-torus>
+<!-- 28 candles -->
+<a-text value="28" align="center" color="#B78042" width="5" position="0 4.35 1.15"></a-text>
+<!-- grandma -->
+<a-entity id="grandma" position="0 4.15 0">
+<a-sphere radius=".48" color="#F5AFC3" position="0 .55 0"></a-sphere><a-sphere radius=".18" color="#F5AFC3" position=".43 .58 0"></a-sphere>
+<a-sphere radius=".07" color="#222" position=".16 .68 .43"></a-sphere><a-sphere radius=".07" color="#222" position="-.15 .68 .43"></a-sphere>
+<a-torus radius=".13" radius-tubular=".025" color="#555" position=".16 .68 .46"></a-torus><a-torus radius=".13" radius-tubular=".025" color="#555" position="-.15 .68 .46"></a-torus>
+<a-sphere radius=".27" scale="1 .45 1" color="#DDD" position="-.18 1.02 -.05"></a-sphere>
+<a-cone radius-bottom=".62" radius-top=".38" height="1.05" color="#9B72C9" position="0 -.2 0"></a-cone>
+<a-cylinder id="armL" radius=".07" height=".72" color="#F5AFC3" position="-.55 .1 0" rotation="0 0 -55"></a-cylinder>
+<a-cylinder id="armR" radius=".07" height=".72" color="#F5AFC3" position=".55 .1 0" rotation="0 0 55"></a-cylinder>
+</a-entity></a-entity>
+<!-- elephant -->
+<a-entity id="elephant" position="4 .65 -5">
+<a-sphere radius=".85" scale="1.25 .85 .8" color="#8586C9"></a-sphere><a-sphere radius=".58" position="-.8 .3 0" color="#8F90D2"></a-sphere>
+<a-sphere radius=".42" scale=".35 1 1" position="-.95 .35 .48" color="#C78FCE"></a-sphere>
+<a-cylinder radius=".16" height="1.05" rotation="0 0 65" position="-1.2 .35 0" color="#8F90D2"></a-cylinder>
+<a-sphere radius=".06" position="-1.08 .52 .52" color="#111"></a-sphere>
+<a-cylinder radius=".14" height=".65" position="-.5 -.65 -.35" color="#7779BB"></a-cylinder><a-cylinder radius=".14" height=".65" position=".5 -.65 -.35" color="#7779BB"></a-cylinder>
+</a-entity>
+<!-- xylophone gift inspired by card -->
+<a-entity position="-4 .35 -6" rotation="0 15 0">
+<a-box width="2.2" height=".45" depth=".65" color="#9BD06B"></a-box><a-box width="1.9" height=".4" depth=".65" position="0 .43 0" color="#F05D9C"></a-box><a-box width="1.55" height=".38" depth=".65" position="0 .82 0" color="#7779C5"></a-box><a-box width="1.2" height=".35" depth=".65" position="0 1.18 0" color="#F3C850"></a-box>
+<a-cylinder radius=".08" height="2.2" color="#F5E8D2" rotation="0 0 42" position="0 .65 .4"></a-cylinder><a-cylinder radius=".08" height="2.2" color="#F5E8D2" rotation="0 0 -42" position="0 .65 .42"></a-cylinder>
+</a-entity>
+<!-- balloons -->
+<a-entity position="5 2 -8"><a-sphere radius=".55" color="#F45A9A"></a-sphere><a-cylinder radius=".012" height="2.7" position="0 -1.6 0" color="#eee"></a-cylinder></a-entity>
+<a-entity position="-5 2.5 -8"><a-sphere radius=".55" color="#FFD447"></a-sphere><a-cylinder radius=".012" height="3.2" position="0 -1.8 0" color="#eee"></a-cylinder></a-entity>
+<!-- camera/player -->
+<a-entity id="rig" position="0 1.6 3"><a-camera id="cam" look-controls="touchEnabled:true;mouseEnabled:true" wasd-controls="enabled:false" fov="72"></a-camera></a-entity>
+</a-scene>
+<script>
+const rig=document.querySelector('#rig'), joy=document.querySelector('#joy'), nub=document.querySelector('#nub');
+let vx=0,vz=0,active=false,sy=0,sx=0;
+function point(e){return e.touches?e.touches[0]:e}
+function moveJoy(e){if(!active)return;e.preventDefault();let p=point(e),r=joy.getBoundingClientRect(),dx=p.clientX-(r.left+r.width/2),dy=p.clientY-(r.top+r.height/2),m=Math.hypot(dx,dy)||1,lim=42;if(m>lim){dx*=lim/m;dy*=lim/m}nub.style.transform=`translate(${dx}px,${dy}px)`;vx=dx/lim;vz=dy/lim}
+joy.addEventListener('touchstart',e=>{active=true;moveJoy(e)},{passive:false});joy.addEventListener('touchmove',moveJoy,{passive:false});
+window.addEventListener('touchend',()=>{active=false;vx=vz=0;nub.style.transform=''});
+let last=performance.now(),t=0;function tick(now){let dt=Math.min(.04,(now-last)/1000);last=now;t+=dt;let cam=document.querySelector('#cam').object3D,dir=new THREE.Vector3();cam.getWorldDirection(dir);dir.y=0;dir.normalize();let right=new THREE.Vector3(-dir.z,0,dir.x);rig.object3D.position.addScaledVector(dir,-vz*dt*3);rig.object3D.position.addScaledVector(right,vx*dt*3);
+let el=document.querySelector('#elephant').object3D;el.position.x=4*Math.cos(t*.35);el.position.z=-6+2*Math.sin(t*.35);el.rotation.y=-t*.35+Math.PI/2;el.position.y=.65+Math.abs(Math.sin(t*2.8))*.08;
+requestAnimationFrame(tick)}requestAnimationFrame(tick);
+document.querySelector('#jump').onclick=()=>{let a=document.querySelector('#armR');a.setAttribute('animation','property:rotation;from:0 0 55;to:0 0 145;dir:alternate;dur:350;loop:2');document.querySelector('#grandma').setAttribute('animation','property:position;from:0 4.15 0;to:0 4.35 0;dir:alternate;dur:350;loop:2')};
+</script></body></html>
