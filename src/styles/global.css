@@ -110,6 +110,24 @@ input {
 }
 table {
   width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.92em;
+  line-height: 1.45;
+}
+th,
+td {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  vertical-align: top;
+}
+th {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.24);
+}
+tbody tr:last-child td {
+  border-bottom: none;
 }
 img {
   max-width: 100%;
@@ -117,9 +135,12 @@ img {
   border-radius: 8px;
 }
 code {
-  padding: 2px 5px;
-  background-color: var(--color-text-secondary-light);
-  border-radius: 2px;
+  padding: 0.15em 0.4em;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  font-size: 0.88em;
 }
 pre {
   padding: 1.5em;
