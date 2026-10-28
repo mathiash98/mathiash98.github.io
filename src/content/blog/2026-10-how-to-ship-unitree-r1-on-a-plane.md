@@ -61,13 +61,13 @@ Turns out you don't need to touch the chest cover at all. When we unscrewed the 
 
 Down to the left of my finger on the white round shoulder-arm part, there is a small connector sitting right on the arm part itself (not inside the body).
 
-So the whole process takes about 10 minutes with a normal set of Allen keys (2.5 mm, 3 mm, 4 mm) and some tape:
+So the whole process takes about 10 minutes, and you only need a **T-10 Torx wrench** and some tape:
 
 1. Turn off the robot and take out the battery.
 2. Unscrew the dark-blue plastic cover on the shoulder.
 3. Unplug the cable from the connector on the white shoulder-arm part.
 4. Tape the loose cable end to the shoulder frame on the robot so it doesn't slide inside the hole during the flight.
-5. Unscrew the bolts holding the shoulder joint and lift the arm off.
+5. Unscrew the bolts holding the shoulder joint with the T-10 wrench and lift the arm off.
 
 We took off both arms (-6.00 kg) and put them in our normal suitcase together with the charger. That brought the robot down to **20.45 kg**, and the whole foam case landed at **28–29 kg**—well below the 32 kg limit.
 
