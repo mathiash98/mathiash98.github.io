@@ -1,7 +1,7 @@
 ---
 title: "How to fly with a Unitree R1 humanoid robot as checked luggage (for 650 NOK)"
 pubDate: 2026-10-28T16:00:00+01:00
-description: "The Unitree R1 in its wheeled foam case weighs 33.83 kg without the battery—1.83 kg above the strict 32.0 kg airline limit. Here is how to unbolt the arms in 10 minutes using the hidden inline shoulder connector so you don't even have to open the chest cover."
+description: "The Unitree R1 in its wheeled foam case weighs 33.83 kg without the battery—1.83 kg above the strict 32.0 kg airline limit. Here is how to unbolt the arms in 10 minutes using the connector on the shoulder/arm part itself so you don't even have to open the chest cover."
 tags: ["robotics", "unitree", "hardware", "travel", "english"]
 author: "Mathias Haugsbø"
 heroImage: "/unitree-r1-flight/proppy-barcelona-laptop.jpg"
@@ -66,15 +66,15 @@ Looking at the table, the math is simple:
 - **Unbolting one arm removes 3.00 kg in a single piece**, dropping the packed case from 33.83 kg straight to **30.83 kg**.
 - **Unbolting both arms removes 6.00 kg**, dropping the robot itself to **20.45 kg** and the packed case to **~27.8–29 kg**—giving a massive 3–4 kg safety margin on any airport scale.
 
-## The best discovery: the inline connector inside the shoulder
+## The best discovery: the connector is on the shoulder-arm part itself
 
 At first, we assumed the arm's motor and RS485 cable ran in one continuous piece all the way to the circuit board inside the chest. We even walked 150 meters down the street to a local *ferretería* (*Alaball Suministros Industriales* on Carrer de Sepúlveda) to buy a set of long metric Allen keys and Torx keys, and took off the 320 g front plastic chest cover.
 
-Then we popped off the dark-blue plastic shoulder shell and looked closely at the thin black rubber cable running into the arm:
+Then we popped off the dark-blue plastic shoulder shell and looked at where the thin black rubber cable enters the white shoulder/upper-arm housing:
 
-![Unitree R1 shoulder shell and inline arm cable connector under black fabric tape](/unitree-r1-flight/shoulder-inline-connector.jpg)
+![Unitree R1 shoulder shell and connector on the shoulder arm part](/unitree-r1-flight/shoulder-inline-connector.jpg)
 
-Right where my finger is pointing—**under the black fabric tape inside the shoulder/upper-arm shell—there is a small inline connector on the arm itself.**
+Look at the bottom-left of the photo on the white spherical shoulder-arm part (just to the left of my finger): **there is a small connector mounted directly on the shoulder-arm part itself** (not inside the torso/body).
 
 That means **you do not need to remove the front chest cover at all** to take the arms off a Unitree R1.
 
@@ -87,11 +87,11 @@ That means **you do not need to remove the front chest cover at all** to take th
 
 #### Procedure
 1. **Power off and remove the battery.** Lay the R1 flat on its back.
-2. **Unscrew the dark-blue shoulder shell.** Remove the hex screws holding the dark-blue shoulder cover so it opens up and exposes the shoulder joint and cable (as shown in the photo above).
-3. **Unplug the inline connector under the black fabric tape.** Peel back the black fabric tape on the arm cable inside the shoulder shell and disconnect the small inline plug.
-4. **Tape the robot-side cable end to the shoulder frame!** Put a strip of electrical tape holding the robot-side connector against the shoulder bracket so it cannot slip back inside the hollow motor shaft during flight.
+2. **Unscrew the dark-blue shoulder shell.** Remove the hex screws holding the dark-blue shoulder cover so it opens up and exposes the shoulder joint and the white upper-arm housing (as shown in the photo above).
+3. **Unplug the connector on the shoulder-arm part.** Disconnect the small cable plug directly from the socket on the shoulder-arm part (not the body side).
+4. **Tape the loose cable end to the shoulder frame!** Put a strip of electrical tape holding the unplugged cable against the shoulder bracket so it cannot slip back inside the hollow motor shaft during flight.
 5. **Unbolt the shoulder joint.** Mark the joint orientation with a pen line across the flange, hold the arm, and unscrew the hex bolts securing the shoulder link. Lift the arm (3.00 kg) straight off.
-6. **Keep screws with their threads.** Thread the bolts a few turns back into the tapped holes (or put them in a labeled `L` / `R` zip bag) and wrap a t-shirt around the connector on each detached arm before packing them in your regular checked suitcase.
+6. **Keep screws with their threads.** Thread the bolts a few turns back into the tapped holes (or put them in a labeled `L` / `R` zip bag) and pack the detached arms between clothes in your regular checked suitcase.
 
 With both arms removed (-6.00 kg) and the front chest cover screwed back on, the robot weighed **20.45 kg** and the entire packed EPP case landed around **28–29 kg**.
 
