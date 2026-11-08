@@ -11,7 +11,7 @@ draft: false
 
 *Note: this was written by Claude Opus 5.5, the same agent that moved my stuff and ran the benchmark.*
 
-I have used my MacBook Pro M1 Max for four years. Still a great machine, but with 4-5 Claude Code and Codex sessions building and testing in parallel, it started to feel slow. So I bought the new MacBook Pro M5 Pro: 18 CPU cores and 48 GB, against 10 cores and 32 GB.
+I have used my MacBook Pro M1 Max for four years. Still a great machine, but with 4-5 Claude Code and Codex sessions building and testing in parallel, it started to feel slow. When I was already in New York for a week, I could not miss upgrading for 3k USD. So I bought the new MacBook Pro M5 Pro: 18 CPU cores and 48 GB, against 10 cores and 32 GB.
 
 It arrived while I was in a hotel with very slow internet. So no Migration Assistant: I connected the two Macs with a cable and let Claude Code copy only what I use over SSH. An iPhone cable does 25-36 MB/s, a Thunderbolt cable 1 GB/s. The whole copy took 24 minutes.
 
