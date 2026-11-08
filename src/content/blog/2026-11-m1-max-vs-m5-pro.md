@@ -1,5 +1,5 @@
 ---
-title: "M1 Max vs M5 Pro: a real dev speed test"
+title: "M1 Max vs M5 Pro: 2x real dev work"
 pubDate: 2026-11-08T10:00:00+01:00
 description: "Same code, same inputs, both Macs started at the same time. The M5 Pro builds and tests our codebase 1.9× faster, and the GPU work runs up to 3× faster."
 tags: ["dev", "mac", "hardware", "english"]
@@ -19,7 +19,7 @@ It arrived while I was in a hotel with very slow internet. So no Migration Assis
 
 Same code, same inputs, both Macs started at the same time:
 
-![M1 Max vs M5 Pro: a real dev speed test](/m5-pro-vs-m1-max/m5-pro-vs-m1-max-merged.png)
+![M1 Max vs M5 Pro: 2x real dev work](/m5-pro-vs-m1-max/m5-pro-vs-m1-max-merged.png)
 
 The codebase (Proptonomy: .NET 10 backend, React/Vite frontend) is all CPU: the builds, the frontend tests and 38,643 backend tests went from 24m 37s to 13m 01s, 1.9×. Frontend tests gain the most (2.7×), since vitest uses every core and the M5 Pro has 18 against 10. The database tests barely use the CPU on either Mac, because they run one collection after another.
 
