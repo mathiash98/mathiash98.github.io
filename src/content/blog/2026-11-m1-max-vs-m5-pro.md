@@ -34,3 +34,5 @@ Half the waiting time on the same work. For me yes. With 4-5 agents building and
 But our database tests leave most of the CPU idle, so the new Mac's first job is making the tests faster. [Last time we did that](/blog/2026-10-ai-performance-optimization/), 2,805 tests went from 6.5 minutes to 77 seconds. Software is usually the cheaper upgrade.
 
 When did you last time your own build on new hardware?
+
+Discuss it on [X](https://x.com/mathiash98/status/2119451862730760420) or [Reddit](https://www.reddit.com/r/macbookpro/comments/1xr11z9/m5_pro_2x_faster_than_m1_max/).
